@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec='http://www.thymeleaf.org/extras/spring-security'>
+
+<head th:replace="fragments/commons::head"></head>
+
+<body>
+
+<header th:replace="fragments/commons::header"></header>
+
+<main>
+    <div class="container">
+        <h2 class="text-center text-white">Login</h2>
+        <form
+                th:action="@{/users/login}"
+                th:method="post"
+                th:object="${userLoginModel}"
+                class="main-form mx-auto col-md-8 d-flex flex-column justify-content-center">
+
+            <th:block th:each="err : ${#fields.errors()}">
+                <small th:text="${err}" class="text-danger">Error message</small>
+                <br/>
+            </th:block>
+
+            <small th:if="${notFound}" class="text-danger">Incorrect username or password!</small>
+
+            <div class="form-group">
+                <div class="label-holder text-white d-flex justify-content-center">
+                    <label for="username" class="h3 mb-2">Username</label>
+                </div>
+                <input
+                        th:field="*{username}"
+                        th:errorclass="bg-danger"
+                        type="text" class="form-control" id="username" name="username"/>
+            </div>
+
+            <div class="form-group">
+                <div class="label-holder text-white d-flex justify-content-center">
+                    <label for="password" class="h3 mb-2">Password</label>
+                </div>
+                <input
+                        th:field="*{password}"
+                        th:errorclass="bg-danger"
+                        type="password" class="form-control" id="password" name="password"/>
+            </div>
+
+            <!--        <p class="errors alert alert-danger">-->
+            <!--            Invalid username or password.-->
+            <!--        </p>-->
+
+            <div class="row">
+                <div class="col col-md-4">
+                    <div class="button-holder d-flex">
+                        <input type="submit" class="btn btn-info btn-lg" value="Login"/>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</main>
+
+<div th:replace="fragments/commons::footer"></div>
+
+
+</body>
+</html>
