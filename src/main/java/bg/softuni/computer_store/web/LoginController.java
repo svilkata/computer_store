@@ -15,54 +15,29 @@ import javax.validation.Valid;
 
 @Controller
 public class LoginController {
-
-//  @ModelAttribute("userLoginModel")
-//  public void initUserLoginModel(Model model){ //изпълнява се в рамките на текущия контролер само!!!
-//    model.addAttribute("userLoginModel", new UserLoginDto());
-//    model.addAttribute("notFound", false);
-//  }
-
     @GetMapping("/users/login")
     public String login(Model model) {
-        if (!model.containsAttribute("userLoginModel")) {
-            model.addAttribute("userLoginModel", new UserLoginDto());
+        if (!model.containsAttribute("userLoginDto")) {
+            model.addAttribute("userLoginDto", new UserLoginDto());
             model.addAttribute("notFound", false);
         }
 
         return "auth-login";
     }
 
-    @PostMapping("/users/login")
-    public String login(@Valid UserLoginDto userLoginDto,
-                        BindingResult bindingResult,
-                        RedirectAttributes redirectAttributes) {
-
-        if (bindingResult.hasErrors()) {
-            redirectAttributes.addFlashAttribute("userLoginDto", userLoginDto);
-            redirectAttributes.addFlashAttribute(
-                    "org.springframework.validation.BindingResult.userLoginDto", bindingResult);
-
-            return "redirect:/users/login";
-        }
-
-//        //User login
-//        if (!this.userAuthService.login(userLoginBindingDto)) {
-//            redirectAttributes.addFlashAttribute("userLoginBindingDto", userLoginBindingDto);
-//            redirectAttributes.addFlashAttribute("notFound", true);
-//
-//            return "redirect:login";
-//        }
-        return "redirect:/users/login";
-    }
-
     // NOTE: This should be post mapping!
     @PostMapping("/users/login-error")
     public String onFailedLogin(
-            @ModelAttribute(UsernamePasswordAuthenticationFilter.SPRING_SECURITY_FORM_USERNAME_KEY) String userName,
+            @ModelAttribute(UsernamePasswordAuthenticationFilter.SPRING_SECURITY_FORM_USERNAME_KEY) String username,
+            @Valid UserLoginDto userLoginDto,
+            BindingResult bindingResult,
             RedirectAttributes redirectAttributes) {
 
-        redirectAttributes.addFlashAttribute(UsernamePasswordAuthenticationFilter.SPRING_SECURITY_FORM_USERNAME_KEY, userName);
-        redirectAttributes.addFlashAttribute("notFound",
+        redirectAttributes.addFlashAttribute("userLoginDto", userLoginDto);
+        redirectAttributes.addFlashAttribute(
+                "org.springframework.validation.BindingResult.userLoginDto", bindingResult);
+        redirectAttributes.addFlashAttribute(UsernamePasswordAuthenticationFilter.SPRING_SECURITY_FORM_USERNAME_KEY, username);
+        redirectAttributes.addFlashAttribute("bad_credentials",
                 true);
 
         return "redirect:/users/login";

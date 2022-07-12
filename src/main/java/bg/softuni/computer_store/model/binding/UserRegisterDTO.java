@@ -4,6 +4,7 @@ import bg.softuni.computer_store.model.validation.email.UniqueUserEmail;
 import bg.softuni.computer_store.model.validation.password.FieldMatch;
 
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
@@ -17,22 +18,24 @@ public class UserRegisterDTO {
     @UniqueUserEmail(message = "User email should be unique")  //we override here the default error message
     private String email;
 
-    @NotEmpty
-    @Size(min = 2, max = 20)
+    @NotBlank(message = "Username cannot be empty")
+    @Size(min = 3, max = 20, message = "Username must be between 3 and 20 characters inclusive")
     private String username;
 
-    @NotEmpty
-    @Size(min = 2, max = 20)
+    @NotBlank(message = "First name cannot be empty")
+    @Size(min = 2, max = 20, message = "First name must be between 3 and 20 characters inclusive")
     private String firstName;
 
-    @NotEmpty
-    @Size(min = 2, max = 20)
+    @NotBlank(message = "Last name cannot be empty")
+    @Size(min = 2, max = 20, message = "Last name must be between 3 and 20 characters inclusive")
     private String lastName;
 
-    @NotEmpty
-    @Size(min = 5)
+    @NotBlank(message = "Password cannot be empty")
+    @Size(min = 3, max = 20, message = "Password must be between 3 and 20 characters inclusive")
     private String password;
 
+    @NotBlank(message = "confirmPassword cannot be empty")
+    @Size(min = 3, max = 20, message = "Password must be between 3 and 20 characters inclusive")
     private String confirmPassword;
 
     public String getFirstName() {

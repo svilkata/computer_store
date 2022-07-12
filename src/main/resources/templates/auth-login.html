@@ -15,7 +15,7 @@
         <form
                 th:action="@{/users/login}"
                 th:method="post"
-                th:object="${userLoginModel}"
+                th:object="${userLoginDto}"
                 class="main-form mx-auto col-md-8 d-flex flex-column justify-content-center">
 
             <th:block th:each="err : ${#fields.errors()}">
@@ -23,7 +23,7 @@
                 <br/>
             </th:block>
 
-            <small th:if="${notFound}" class="text-danger">Incorrect username or password!</small>
+            <small th:if="${bad_credentials}" class="text-danger">Incorrect username or password!</small>
 
             <div class="form-group">
                 <div class="label-holder text-white d-flex justify-content-center">
@@ -45,9 +45,15 @@
                         type="password" class="form-control" id="password" name="password"/>
             </div>
 
-            <!--        <p class="errors alert alert-danger">-->
+            <!--        <div class="errors alert alert-danger">-->
             <!--            Invalid username or password.-->
-            <!--        </p>-->
+            <!--        </div>-->
+
+<!--            <small-->
+<!--                    class="text-danger"-->
+<!--                    th:if="${#fields.hasErrors('username')}"-->
+<!--                    th:errors="*{username}"-->
+<!--            >Username error message</small>-->
 
             <div class="row">
                 <div class="col col-md-4">

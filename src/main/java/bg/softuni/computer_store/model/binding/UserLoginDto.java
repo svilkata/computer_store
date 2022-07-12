@@ -1,7 +1,15 @@
 package bg.softuni.computer_store.model.binding;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
+
 public class UserLoginDto {
+    @Size(min = 3, max = 20, message = "Username must be between 3 and 20 characters inclusive")
+    @NotBlank(message = "Username cannot be empty")
     private String username;
+
+    @Size(min = 3, max = 20, message = "Password must be between 3 and 20 characters inclusive")
+    @NotBlank(message = "Password cannot be empty")
     private String password;
 
     public String getUsername() {
