@@ -1,4 +1,4 @@
-package bg.softuni.computer_store.service;
+package bg.softuni.computer_store.user;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -8,15 +8,36 @@ import java.util.Collection;
 public class AppUser implements UserDetails {
     private final String username;
     private final String password;
+    private final String firstName;
+    private final String lastName;
     private final Collection<? extends GrantedAuthority> authorities;
 
     public AppUser(
             String username,
             String password,
+            String firstName,
+            String lastName,
             Collection<? extends GrantedAuthority> authorities) {
         this.username = username;
         this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.authorities = authorities;
+    }
+
+    public String getFullName() {
+        StringBuilder fullName = new StringBuilder();
+        if (getFirstName() != null) {
+            fullName.append(getFirstName());
+        }
+        if (getLastName() != null) {
+            if (!fullName.isEmpty()) {
+                fullName.append(" ");
+            }
+            fullName.append(getLastName());
+        }
+
+        return fullName.toString();
     }
 
 
@@ -33,6 +54,14 @@ public class AppUser implements UserDetails {
     @Override
     public String getUsername() {
         return username;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
     }
 
     @Override
@@ -58,8 +87,10 @@ public class AppUser implements UserDetails {
     @Override
     public String toString() {
         return "AppUser{" +
-                "password='" + password + '\'' +
-                ", userName='" + username + '\'' +
+                "username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
                 ", authorities=" + authorities +
                 '}';
     }

@@ -14,7 +14,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
-public class ApplicationSecurityConfiguration {
+public class SecurityConfig {
     //Here we have to expose 3 things:
     // 1. PasswordEncoder
     // 2. SecurityFilterChain
@@ -39,6 +39,8 @@ public class ApplicationSecurityConfiguration {
                         antMatchers("/pages/moderators").hasRole(UserRoleEnum.MODERATOR.name()).
                 // pages available only for admins
                         antMatchers("/pages/admins").hasRole(UserRoleEnum.ADMIN.name()).
+                //we permit the page below only only for admin users
+                        antMatchers("/statistics").hasRole(UserRoleEnum.ADMIN.toString()).
                 // all other pages are available for logger in users
                         anyRequest().
                 authenticated().
@@ -56,7 +58,7 @@ public class ApplicationSecurityConfiguration {
                 // where to go in case that the login failed
                         failureForwardUrl("/users/login-error").
                 and().
-                // configure logut
+                // configure logout
                         logout().
                 // which is the logout url
                         logoutUrl("/users/logout").

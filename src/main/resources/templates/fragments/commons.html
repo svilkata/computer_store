@@ -43,8 +43,9 @@
                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Admin
                     </a>
+
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="/">Action</a>
+                        <a class="dropdown-item" th:href="@{/statistics}">Statistics</a>
                         <a class="dropdown-item" href="/">Another action</a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="/">Something else here</a>
@@ -55,10 +56,11 @@
                 <li class="nav-item" sec:authorize="isAuthenticated()">
                     <div class="form-inline my-2 my-lg-0 border px-3">
                         <div class="text-white">Welcome,
-                            <th:block sec:authentication='name'></th:block>
+                            <th:block th:text="${#authentication.principal.fullName}">X</th:block>
+<!--                            <th:block sec:authentication='name'></th:block>-->
                         </div>
                         <form th:action="@{/users/logout}" th:method="post">
-                            <input class="nav-link" type="submit" value="Logout">
+                            <input class="btn btn-link nav-link" type="submit" value="Logout">
                         </form>
                     </div>
                 </li>

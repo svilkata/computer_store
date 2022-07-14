@@ -28,7 +28,7 @@ public class UserEntity extends BaseEntity {
     @Column(name = "image_url")
     private String imageUrl;
 
-    @ManyToMany (fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
     private List<UserRoleEntity> userRoles = new ArrayList<>();
 
     public String getEmail() {
@@ -99,6 +99,15 @@ public class UserEntity extends BaseEntity {
         return this;
     }
 
+    public String getUsername() {
+        return username;
+    }
+
+    public UserEntity setUsername(String username) {
+        this.username = username;
+        return this;
+    }
+
     @Override
     public String toString() {
         return "UserEntity{" +
@@ -110,14 +119,5 @@ public class UserEntity extends BaseEntity {
                 ", imageUrl='" + imageUrl + '\'' +
                 ", userRoles=" + userRoles +
                 '}';
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public UserEntity setUsername(String username) {
-        this.username = username;
-        return this;
     }
 }
