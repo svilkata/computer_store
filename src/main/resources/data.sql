@@ -1,4 +1,4 @@
--- INSERT INTO users (id, email, first_name, last_name, image_url, is_active, password, username)
+-- INSERT INTO users (id, emailUsername, first_name, last_name, image_url, is_active, password, username)
 -- VALUES (1, "svilen.velikov@gmail.com", "Svilen", "Velikov", null, 1,
 --         "fd9d0d64752fe063ec7bc519a01cdde03b746326812a56909ac941011d33f243cc8fa5ff728fa00f");
 

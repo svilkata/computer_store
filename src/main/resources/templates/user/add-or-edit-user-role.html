@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/commons::head"></head>
+
+<body>
+<header th:replace="fragments/commons::header"></header>
+
+<main>
+    <div class="container">
+        <h2 class="text-center text-white">Set user roles</h2>
+        <form method="post" th:action="@{/pages/admins/set-user-role}"
+              class="main-form mx-auto col-md-8 d-flex flex-column justify-content-center">
+            <div class="form-group">
+                <label class="text-white font-weight-bold" for="username">Username</label>
+                <select th:field="${userRolesBindingDTO.username}" name="username" id="username"
+                        class="custom-select">
+                    <option value="" selected>Select username</option>
+                    <option th:each="user : ${employees}" th:object="${user}" th:value="*{username}"
+                            th:text="*{username}">
+                        Select username
+                    </option>
+                </select>
+            </div>
+
+            <div th:each="role: ${T(bg.softuni.computerStore.model.enums.UserRoleEnum).values()}">
+                <div class="form-group">
+                    <label class="text-white font-weight-bold">
+                        <input
+                                th:field="${userRolesBindingDTO.roles}" name="roles" type="checkbox"
+                                th:value="${role}" th:text="| ${#strings.toLowerCase(role)}|"/>
+                    </label>
+                </div>
+            </div>
+            <div th:if="${employeeNotSelected}" class="alert alert-danger" role="alert">
+                Please Choose Employee User!
+            </div>
+            <div th:if="${atLeastTwoRolesShouldBeSelected}" class="alert alert-danger" role="alert">
+                Employee should have at least 2 user roles!
+            </div>
+            <div th:if="${oneAdminOnlyPossible}" class="alert alert-danger" role="alert">
+                There could be only 1 ADMIN user in the system. Please, demark ADMIN. You can use another section for switching from one ADMIN user to another.
+            </div>
+            <!--            <div th:if="${lastAdminToDelete}" class="alert alert-danger" role="alert"> System must have minimum one user with ADMIN role!</div>-->
+            <div class="button-holder d-flex">
+                <button type="submit" class="btn btn-info btn-sm">Set user roles</button>
+            </div>
+
+        </form>
+    </div>
+</main>
+
+<footer th:replace="fragments/commons::footer"></footer>
+
+</body>
+</html>
