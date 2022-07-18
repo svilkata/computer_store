@@ -1,7 +1,6 @@
 package bg.softuni.computerStore.web;
 
 import bg.softuni.computerStore.model.binding.UserRolesBindingDTO;
-import bg.softuni.computerStore.model.enums.UserRoleEnum;
 import bg.softuni.computerStore.service.StatsService;
 import bg.softuni.computerStore.service.UserService;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -14,7 +13,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @Controller
 @RequestMapping("/pages/admins")
