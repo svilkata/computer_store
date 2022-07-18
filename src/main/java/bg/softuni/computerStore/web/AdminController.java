@@ -1,7 +1,7 @@
 package bg.softuni.computerStore.web;
 
 import bg.softuni.computerStore.model.binding.UserRolesBindingDTO;
-import bg.softuni.computerStore.model.entity.users.UserEntity;
+import bg.softuni.computerStore.model.enums.UserRoleEnum;
 import bg.softuni.computerStore.service.StatsService;
 import bg.softuni.computerStore.service.UserService;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -84,7 +84,7 @@ public class AdminController {
     @PostMapping("/change-admin-user")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public String changeAdminUserConfirm(@Valid UserRolesBindingDTO userRolesBindingDTO,
-                                     RedirectAttributes redirectAttributes) {
+                                         RedirectAttributes redirectAttributes) {
         if (userRolesBindingDTO.getUsername().isEmpty()) {
             redirectAttributes.addFlashAttribute("userRolesBindingDTO", userRolesBindingDTO);
             redirectAttributes.addFlashAttribute("employeeNotSelected", true);

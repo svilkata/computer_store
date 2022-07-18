@@ -1,4 +1,4 @@
-package bg.softuni.computerStore.repository;
+package bg.softuni.computerStore.repository.products;
 
 import bg.softuni.computerStore.model.entity.products.ComputerEntity;
 import org.springframework.data.jpa.repository.JpaRepository;

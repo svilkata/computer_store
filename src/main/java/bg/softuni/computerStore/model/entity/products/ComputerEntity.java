@@ -2,20 +2,12 @@ package bg.softuni.computerStore.model.entity.products;
 
 import bg.softuni.computerStore.model.entity.BaseEntity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.math.BigDecimal;
 
 @Entity
 @Table(name = "computers")
-public class ComputerEntity extends BaseEntity {
-    @Column(nullable = false)
-    private String name;
-    @Column(name = "buying_price", nullable = false)
-    private BigDecimal buyingPrice;
-    @Column(name = "selling_price", nullable = false)
-    private BigDecimal sellingPrice;
+public class ComputerEntity extends ItemEntity {
     @Column(nullable = false)
     private String processor;
     @Column(name = "video_card", nullable = false)
@@ -27,35 +19,7 @@ public class ComputerEntity extends BaseEntity {
     @Column(name = "more_info")
     private String moreInfo;
 
-
     public ComputerEntity() {
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public ComputerEntity setName(String description) {
-        this.name = description;
-        return this;
-    }
-
-    public BigDecimal getBuyingPrice() {
-        return buyingPrice;
-    }
-
-    public ComputerEntity setBuyingPrice(BigDecimal buyingPrice) {
-        this.buyingPrice = buyingPrice;
-        return this;
-    }
-
-    public BigDecimal getSellingPrice() {
-        return sellingPrice;
-    }
-
-    public ComputerEntity setSellingPrice(BigDecimal sellingPrice) {
-        this.sellingPrice = sellingPrice;
-        return this;
     }
 
     public String getProcessor() {

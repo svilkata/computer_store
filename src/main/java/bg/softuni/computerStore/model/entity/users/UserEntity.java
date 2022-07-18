@@ -30,8 +30,10 @@ public class UserEntity extends BaseEntity {
     @Column(name = "image_url")
     private String imageUrl;
 
+
+
+    //    @ManyToMany
     @ManyToMany(fetch = FetchType.EAGER)
-//    @ManyToMany
     private List<UserRoleEntity> userRoles = new ArrayList<>();
 
     public String getEmail() {

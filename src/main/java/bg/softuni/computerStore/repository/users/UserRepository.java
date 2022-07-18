@@ -10,9 +10,9 @@ import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
-    Optional<UserEntity> findByUsername(String value);
+    Optional<UserEntity> findByUsername(String username);
 
-    Optional<UserEntity> findByEmail(String value);
+    Optional<UserEntity> findByEmail(String email);
 
     //A user with user roles size more than 1 is not a customer :)
     @Query("FROM UserEntity u" +

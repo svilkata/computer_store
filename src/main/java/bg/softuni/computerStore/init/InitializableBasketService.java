@@ -1,5 +1,5 @@
 package bg.softuni.computerStore.init;
 
-public interface InitializableService {
+public interface InitializableBasketService {
     void init();
 }

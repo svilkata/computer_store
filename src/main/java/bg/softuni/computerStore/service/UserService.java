@@ -1,6 +1,6 @@
 package bg.softuni.computerStore.service;
 
-import bg.softuni.computerStore.init.InitializableService;
+import bg.softuni.computerStore.init.InitializableUserService;
 import bg.softuni.computerStore.model.binding.UserRegisterBindingDTO;
 import bg.softuni.computerStore.model.binding.UserRolesBindingDTO;
 import bg.softuni.computerStore.model.entity.users.UserEntity;
@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class UserService implements InitializableService {
+public class UserService implements InitializableUserService {
     private final UserRepository userRepository;
     private final UserRoleRepository userRoleRepository;
     private final PasswordEncoder passwordEncoder;
@@ -183,6 +183,5 @@ public class UserService implements InitializableService {
 
         disablingCurrentAdminUser.getUserRoles().remove(userRoleEntityAdmin);
         userRepository.save(disablingCurrentAdminUser);
-        return;
     }
 }
