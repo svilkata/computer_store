@@ -27,7 +27,7 @@ public class RegistrationController {
 
     @GetMapping("/users/register")
     public String register() {
-        // когато зареждаме за първи път страницата, то автомиатично ще влезе към модела атрибут userModel == празен new UserRegisterBindingDto()
+        // когато зареждаме за първи път страницата, то автомиатично ще влезе към модела атрибут userRegistrationModel == празен new UserRegisterBindingDto()
         return "/user/auth-registerUser";
     }
 

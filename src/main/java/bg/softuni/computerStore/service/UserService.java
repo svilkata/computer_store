@@ -1,10 +1,13 @@
 package bg.softuni.computerStore.service;
 
 import bg.softuni.computerStore.init.InitializableUserService;
+import bg.softuni.computerStore.model.binding.ChangeUserPasswordDTO;
+import bg.softuni.computerStore.model.binding.EmployeeRegisterBindingDTO;
 import bg.softuni.computerStore.model.binding.UserRegisterBindingDTO;
 import bg.softuni.computerStore.model.binding.UserRolesBindingDTO;
 import bg.softuni.computerStore.model.entity.users.UserEntity;
 import bg.softuni.computerStore.model.entity.users.UserRoleEntity;
+import bg.softuni.computerStore.model.enums.UserRoleEmployeeEnum;
 import bg.softuni.computerStore.model.enums.UserRoleEnum;
 import bg.softuni.computerStore.model.view.UserViewModel;
 import bg.softuni.computerStore.repository.users.UserRepository;
@@ -19,7 +22,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.management.relation.Role;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -116,6 +122,7 @@ public class UserService implements InitializableUserService {
         userRepository.save(customer);
     }
 
+    //customers
     public void registerUserAndAutoLogin(UserRegisterBindingDTO userRegisterBindingDTO) {
         //The customer user role
         UserRoleEntity userRole = userRoleRepository.findById(4L).get();
@@ -183,5 +190,38 @@ public class UserService implements InitializableUserService {
 
         disablingCurrentAdminUser.getUserRoles().remove(userRoleEntityAdmin);
         userRepository.save(disablingCurrentAdminUser);
+    }
+
+    //admin is registering an employee
+    public void registerEmployee(EmployeeRegisterBindingDTO employeeRegistrationModel) {
+        //The employee user roles
+        List<UserRoleEntity> employeeRoleEntities = new ArrayList<>();
+        List<String> employeeRoles = employeeRegistrationModel.getRoles();
+
+        for (String employeeRole : employeeRoles) {
+            UserRoleEntity byUserRole = this.userRoleRepository.findByUserRole(UserRoleEnum.valueOf(employeeRole)).orElseThrow();
+            employeeRoleEntities.add(byUserRole);
+        }
+
+        UserEntity newEmployee =
+                new UserEntity().
+                        setUserRoles(employeeRoleEntities).
+                        setUsername(employeeRegistrationModel.getUsername()).
+                        setEmail(employeeRegistrationModel.getEmail()).
+                        setFirstName(employeeRegistrationModel.getFirstName()).
+                        setLastName(employeeRegistrationModel.getLastName()).
+                        setPassword(passwordEncoder.encode(employeeRegistrationModel.getPassword()));
+
+        userRepository.save(newEmployee);
+    }
+
+    public void changeCurrentUserPassword(ChangeUserPasswordDTO changeUserPasswordDTO) {
+        UserEntity userEntity = this.userRepository
+                .findByUsername(changeUserPasswordDTO.getUsername())
+                .orElseThrow();
+
+        userEntity.setPassword(this.passwordEncoder.encode(changeUserPasswordDTO.getNewPassword()));
+
+        userRepository.save(userEntity);
     }
 }

@@ -36,11 +36,11 @@ public class SecurityConfig {
                 // everyone can download static resources (css, js, images)
                         requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll().
                 // everyone can login and register
-                        antMatchers("/", "/users/login", "/users/register").permitAll().
+                        antMatchers("/", "/users/login", "/users/register", "/users/changepassword").permitAll().
                 // pages available only for purchase department
-                        antMatchers("/pages/purchases").hasRole(UserRoleEnum.EMPLOYEE_PURCHASES.name()).
+                        antMatchers("/pages/purchases/**").hasRole(UserRoleEnum.EMPLOYEE_PURCHASES.name()).
                 // pages available only for purchase department
-                        antMatchers("/pages/sales").hasRole(UserRoleEnum.EMPLOYEE_SALES.name()).
+                        antMatchers("/pages/sales/**").hasRole(UserRoleEnum.EMPLOYEE_SALES.name()).
                 // pages available only for admins
                         antMatchers("/pages/admins/**").hasRole(UserRoleEnum.ADMIN.name()).
                 //we permit the page below only only for admin users

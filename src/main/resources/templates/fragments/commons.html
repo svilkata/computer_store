@@ -37,6 +37,21 @@
                 <li class="nav-item" sec:authorize="isAuthenticated()">
                     <a class="nav-link" th:href="@{/offers/all}">All Offers</a>
                 </li>
+                <li class="nav-item" sec:authorize="isAuthenticated()">
+                    <a class="nav-link" th:href="@{/offers/all}">All Offers</a>
+                </li>
+
+                <li class="nav-item dropdown" sec:authorize="isAuthenticated() && !hasAnyRole('ADMIN')">
+                    <a class="nav-link dropdown-toggle" href="/" id="navbarDropdownUserSettings" role="button"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        User Settings
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownUserSettings">
+                        <a class="dropdown-item" th:href="@{/users/changepassword}">Change Password</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="/">Something else here</a>
+                    </div>
+                </li>
 
                 <li class="nav-item dropdown" sec:authorize="hasAnyRole('ADMIN')">
                     <a class="nav-link dropdown-toggle" href="/" id="navbarDropdownAdmin" role="button"
@@ -45,14 +60,14 @@
                     </a>
 
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownAdmin">
-                        <a class="dropdown-item" th:href="@{/pages/admins/statistics}">Statistics</a>
-                        <a class="dropdown-item" th:href="@{/pages/admins/set-user-role}">Set Users Roles</a>
+                        <a class="dropdown-item" th:href="@{/pages/admins/register-new-employee}">Create New Employee</a>
+                        <a class="dropdown-item" th:href="@{/pages/admins/set-user-role}">Set Employee Roles</a>
                         <a class="dropdown-item" th:href="@{/pages/admins/change-admin-user}">Change Admin User</a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="/">Something else here</a>
+                        <a class="dropdown-item" th:href="@{/pages/admins/statistics}">Statistics</a>
+                        <a class="dropdown-item" th:href="@{/users/changepassword}">Change Password</a>
                     </div>
                 </li>
-
 
                 <!-- Logout start -->
                 <li class="nav-item" sec:authorize="isAuthenticated()">

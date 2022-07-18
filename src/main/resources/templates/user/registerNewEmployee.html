@@ -11,10 +11,10 @@
 
 <main>
     <div class="container">
-        <h2 class="text-center text-white">Register Customer</h2>
-        <form th:action="@{/users/register}"
+        <h2 class="text-center text-white">Register New Employee</h2>
+        <form th:action="@{/pages/admins/register-new-employee}"
               th:method="post"
-              th:object="${userRegistrationModel}"
+              th:object="${employeeRegistrationModel}"
               class="main-form mx-auto col-md-8 d-flex flex-column justify-content-center">
             <div class="row">
                 <div class="form-group col-md-6 mb-3">
@@ -73,7 +73,7 @@
 
             <div class="row">
                 <div class="form-group col-md-6 mb-3">
-                    <label for="password" class="text-white font-weight-bold">Password</label>
+                    <label for="password" class="text-white font-weight-bold">Initial Employee Password</label>
                     <input id="password"
                            th:field="*{password}"
                            th:errorclass="is-invalid"
@@ -86,20 +86,19 @@
                 </div>
 
                 <div class="form-group col-md-6 mb-3">
-                    <label for="confirmPassword" class="text-white font-weight-bold">Confirm Password</label>
-                    <input id="confirmPassword"
-                           name="confirmPassword"
-                           th:field="*{confirmPassword}"
-                           th:errorclass="is-invalid"
-                           type="password"
-                           class="form-control"
-                           placeholder="confirmPassword"/>
-                    <div class="invalid-feedback errors alert alert-danger">
-                        <div th:each="err : ${#fields.errors('confirmPassword')}" th:text="${err}"/>
+                    <label class="text-white font-weight-bold">Choose employees roles</label>
+                    <div th:each="role: ${T(bg.softuni.computerStore.model.enums.UserRoleEmployeeEnum).values()}">
+                        <div class="form-group">
+                            <label class="text-white font-weight-bold">
+                                <input
+                                        th:field="${employeeRegistrationModel.roles}" name="roles" type="checkbox"
+                                        th:value="${role}" th:text="| ${#strings.toLowerCase(role)}|"/>
+                            </label>
+                        </div>
                     </div>
-                    <!--                <p class="invalid-feedback errors alert alert-danger">-->
-                    <!--                    Passwords should match.-->
-                    <!--                </p>-->
+                    <div th:if="${atLeastTwoRolesShouldBeSelected}" class="alert alert-danger" role="alert">
+                        Employee should have at least 2 user roles!
+                    </div>
                 </div>
             </div>
 

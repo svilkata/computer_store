@@ -8,7 +8,7 @@
 
 <main>
     <div class="container">
-        <h2 class="text-center text-white">Set user roles</h2>
+        <h2 class="text-center text-white">Set employee roles</h2>
         <form method="post" th:action="@{/pages/admins/set-user-role}"
               class="main-form mx-auto col-md-8 d-flex flex-column justify-content-center">
             <div class="form-group">
@@ -23,7 +23,7 @@
                 </select>
             </div>
 
-            <div th:each="role: ${T(bg.softuni.computerStore.model.enums.UserRoleFakeEnum).values()}">
+            <div th:each="role: ${T(bg.softuni.computerStore.model.enums.UserRoleEmployeeEnum).values()}">
                 <div class="form-group">
                     <label class="text-white font-weight-bold">
                         <input

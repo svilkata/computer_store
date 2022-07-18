@@ -27,8 +27,9 @@
                 <div class="form-group">
                     <label class="text-white font-weight-bold">
                         <input
-                                th:field="${userRolesBindingDTO.roles}" name="roles" type="checkbox" checked
+                                th:field="${userRolesBindingDTO.roles}" name="roles" type="checkbox"
                                 th:value="${role}" th:text="| ${#strings.toLowerCase(role)}|"/>
+                        <!--                                th:checked="${true}"-->
                     </label>
                 </div>
             </div>

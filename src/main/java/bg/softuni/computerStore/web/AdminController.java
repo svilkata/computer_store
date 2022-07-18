@@ -1,11 +1,14 @@
 package bg.softuni.computerStore.web;
 
+import bg.softuni.computerStore.model.binding.EmployeeRegisterBindingDTO;
+import bg.softuni.computerStore.model.binding.UserRegisterBindingDTO;
 import bg.softuni.computerStore.model.binding.UserRolesBindingDTO;
 import bg.softuni.computerStore.service.StatsService;
 import bg.softuni.computerStore.service.UserService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -102,7 +105,44 @@ public class AdminController {
         //Then, we set the Admin role for the desired employee
         this.userService.setEmployeeRoles(userRolesBindingDTO);
 
+        //Finally, we log out automatically
         return "redirect:/users/logout";
+    }
+
+    @GetMapping("/register-new-employee")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public String registerNewEmployee(Model model) {
+        if (!model.containsAttribute("employeeRegistrationModel")) {
+            model.addAttribute("employeeRegistrationModel", new EmployeeRegisterBindingDTO());
+        }
+        return "/user/registerNewEmployee";
+    }
+
+    @PostMapping("/register-new-employee")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public String register(@Valid EmployeeRegisterBindingDTO employeeRegistrationModel,
+                           BindingResult bindingResult,
+                           RedirectAttributes redirectAttributes) {
+
+        if (employeeRegistrationModel.getRoles().size() < 2) {
+            redirectAttributes.addFlashAttribute("atLeastTwoRolesShouldBeSelected", true);
+            redirectAttributes.addFlashAttribute("employeeRegistrationModel", employeeRegistrationModel);
+            if (bindingResult.hasErrors()) {
+                redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.employeeRegistrationModel",
+                        bindingResult);
+            }
+            return "redirect:/pages/admins/register-new-employee";
+        }
+
+        if (bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute("employeeRegistrationModel", employeeRegistrationModel);
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.employeeRegistrationModel",
+                    bindingResult);
+            return "redirect:/pages/admins/register-new-employee";
+        }
+
+        userService.registerEmployee(employeeRegistrationModel);
+        return "redirect:/";
     }
 
 }
