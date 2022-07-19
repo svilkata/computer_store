@@ -33,8 +33,11 @@ public class BasketService implements InitializableBasketService {
     public void init() {
         if (basketRepository.count() == 0) {
             basketInit();
+        } else {
+            readBaskets();
         }
     }
+
 
     private void basketInit() {
         UserEntity admin = userRepository.findByUsername("admin").orElseThrow();
@@ -49,5 +52,9 @@ public class BasketService implements InitializableBasketService {
                 .setProducts(allItemsInTheCurrentBasket);
 
         basketRepository.save(basketOrder);
+    }
+
+    private void readBaskets() {
+        BasketOrderEntity basketOrder1 = this.basketRepository.findById(1L).orElseThrow();
     }
 }

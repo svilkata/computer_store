@@ -11,8 +11,10 @@ import java.util.List;
 @Entity
 @Table(name = "baskets")
 public class BasketOrderEntity extends BaseEntity {
-    @OneToMany()
+//    @OneToMany(fetch = FetchType.EAGER)
+    @ManyToMany
     private List<ItemEntity> products;
+
 
     @ManyToOne
     private UserEntity user;

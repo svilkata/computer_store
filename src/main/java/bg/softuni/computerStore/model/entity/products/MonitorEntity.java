@@ -89,4 +89,17 @@ public class MonitorEntity extends ItemEntity {
         this.moreInfo = moreInfo;
         return this;
     }
+
+    @Override
+    public String toString() {
+        return super.toString() + "MonitorEntity{" +
+                "size='" + size + '\'' +
+                ", resolution='" + resolution + '\'' +
+                ", matrixType='" + matrixType + '\'' +
+                ", viewAngle='" + viewAngle + '\'' +
+                ", refreshRate='" + refreshRate + '\'' +
+                ", brightness='" + brightness + '\'' +
+                ", moreInfo='" + moreInfo + '\'' +
+                '}';
+    }
 }

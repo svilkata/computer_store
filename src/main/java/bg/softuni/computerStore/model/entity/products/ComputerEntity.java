@@ -75,4 +75,16 @@ public class ComputerEntity extends ItemEntity {
         this.moreInfo = moreInfo;
         return this;
     }
+
+    @Override
+    public String toString() {
+        return super.toString() + "ComputerEntity{" +
+                "processor='" + processor + '\'' +
+                ", videoCard='" + videoCard + '\'' +
+                ", ram='" + ram + '\'' +
+                ", disk='" + disk + '\'' +
+                ", ssd='" + ssd + '\'' +
+                ", moreInfo='" + moreInfo + '\'' +
+                '}';
+    }
 }

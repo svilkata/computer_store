@@ -4,6 +4,7 @@ import bg.softuni.computerStore.model.entity.orders.BasketOrderEntity;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.List;
 
 @Entity
 @Table(name = "all_items")
@@ -53,12 +54,24 @@ public abstract class ItemEntity {
         return this;
     }
 
-    public BasketOrderEntity getBasket() {
-        return basket;
+    public Long getItemId() {
+        return itemId;
     }
 
-    public ItemEntity setBasket(BasketOrderEntity basket) {
-        this.basket = basket;
+    public ItemEntity setItemId(Long itemId) {
+        this.itemId = itemId;
         return this;
+    }
+
+
+    @Override
+    public String toString() {
+        return "ItemEntity{" +
+                "itemId=" + itemId +
+                ", name='" + name + '\'' +
+                ", buyingPrice=" + buyingPrice +
+                ", sellingPrice=" + sellingPrice +
+                ", basket=" + basket +
+                '}';
     }
 }
