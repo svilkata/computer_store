@@ -1,6 +1,7 @@
 package bg.softuni.computerStore.model.entity.users;
 
 import bg.softuni.computerStore.model.entity.BaseEntity;
+import bg.softuni.computerStore.model.entity.orders.BasketOrderEntity;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -30,11 +31,12 @@ public class UserEntity extends BaseEntity {
     @Column(name = "image_url")
     private String imageUrl;
 
-
-
     //    @ManyToMany
     @ManyToMany(fetch = FetchType.EAGER)
     private List<UserRoleEntity> userRoles = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<BasketOrderEntity> basketsOfUser;
 
     public String getEmail() {
         return email;
@@ -110,6 +112,15 @@ public class UserEntity extends BaseEntity {
 
     public UserEntity setUsername(String username) {
         this.username = username;
+        return this;
+    }
+
+    public List<BasketOrderEntity> getBasketsOfUser() {
+        return basketsOfUser;
+    }
+
+    public UserEntity setBasketsOfUser(List<BasketOrderEntity> basketsOfUser) {
+        this.basketsOfUser = basketsOfUser;
         return this;
     }
 

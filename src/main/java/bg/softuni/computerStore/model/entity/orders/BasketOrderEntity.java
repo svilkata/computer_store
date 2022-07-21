@@ -1,7 +1,6 @@
 package bg.softuni.computerStore.model.entity.orders;
 
 import bg.softuni.computerStore.model.entity.BaseEntity;
-import bg.softuni.computerStore.model.entity.products.ComputerEntity;
 import bg.softuni.computerStore.model.entity.products.ItemEntity;
 import bg.softuni.computerStore.model.entity.users.UserEntity;
 
@@ -14,7 +13,6 @@ public class BasketOrderEntity extends BaseEntity {
 //    @OneToMany(fetch = FetchType.EAGER)
     @ManyToMany
     private List<ItemEntity> products;
-
 
     @ManyToOne
     private UserEntity user;
@@ -40,3 +38,5 @@ public class BasketOrderEntity extends BaseEntity {
         return this;
     }
 }
+
+

@@ -29,22 +29,16 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto col-12 justify-content-between">
                 <li class="nav-item" sec:authorize="isAuthenticated()">
-                    <a class="nav-link" th:href="@{/brands/all}">All Brands</a>
+                    <a class="nav-link" th:href="@{/items/all}">All Items</a>
                 </li>
-                <li class="nav-item" sec:authorize="isAuthenticated()">
-                    <a class="nav-link" th:href="@{/offers/add}">Add Offer</a>
-                </li>
-                <li class="nav-item" sec:authorize="isAuthenticated()">
-                    <a class="nav-link" th:href="@{/offers/all}">All Offers</a>
-                </li>
-                <li class="nav-item" sec:authorize="isAuthenticated()">
-                    <a class="nav-link" th:href="@{/offers/all}">All Offers</a>
+                <li class="nav-item" sec:authorize="hasAnyRole('ADMIN') || hasAnyRole('EMPLOYEE_PURCHASES')">
+                    <a class="nav-link" th:href="@{/items/add}">Add New Item</a>
                 </li>
 
                 <li class="nav-item dropdown" sec:authorize="isAuthenticated() && !hasAnyRole('ADMIN')">
                     <a class="nav-link dropdown-toggle" href="/" id="navbarDropdownUserSettings" role="button"
                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        User Settings
+                        Settings
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownUserSettings">
                         <a class="dropdown-item" th:href="@{/users/changepassword}">Change Password</a>

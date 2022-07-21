@@ -14,7 +14,8 @@ public class AppInit {
     private final InitializableBasketService allBasketServices;
 
     public AppInit(InitializableUserService allServices, List<InitializableProductService> allProductServices,
-                   InitializableBasketService allBasketServices) {
+                   InitializableBasketService allBasketServices
+    ) {
         this.allUserServices = allServices;
         this.allProductServices = allProductServices;
         this.allBasketServices = allBasketServices;

@@ -2,29 +2,31 @@ package bg.softuni.computerStore.model.entity.products;
 
 import bg.softuni.computerStore.model.entity.BaseEntity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.math.BigDecimal;
 
 @Entity
-@Table(name = "monitors")
+@DiscriminatorValue(value = "monitor")
 public class MonitorEntity extends ItemEntity {
-    @Column(nullable = false)
+    private static final String ITEM_TYPE = "monitor";
+
     private String size;
-    @Column(nullable = false)
     private String resolution;
-    @Column(nullable = false, name = "matrix_type")
+    @Column(name = "matrix_type")
     private String matrixType;
-    @Column(nullable = false, name = "view_angle")
+    @Column(name = "view_angle")
     private String viewAngle;
-    @Column(nullable = false, name = "refresh_rate")
+    @Column(name = "refresh_rate")
     private String refreshRate;
-    @Column(nullable = false)
     private String brightness;
     @Column(name = "more_info")
     private String moreInfo;
 
     public MonitorEntity() {
+    }
+
+    public MonitorEntity(String name, BigDecimal buyingPrice, BigDecimal sellingPrice, int newQuantity) {
+        super(ITEM_TYPE, name, buyingPrice, sellingPrice, newQuantity);
     }
 
     public String getSize() {

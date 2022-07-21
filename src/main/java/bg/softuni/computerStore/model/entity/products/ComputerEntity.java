@@ -6,13 +6,13 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 
 @Entity
-@Table(name = "computers")
+@DiscriminatorValue(value = "computer")
 public class ComputerEntity extends ItemEntity {
-    @Column(nullable = false)
+    private static final String ITEM_TYPE = "computer";
+
     private String processor;
-    @Column(name = "video_card", nullable = false)
+    @Column(name = "video_card")
     private String videoCard;
-    @Column(nullable = false)
     private String ram;
     private String disk;
     private String ssd;
@@ -20,6 +20,10 @@ public class ComputerEntity extends ItemEntity {
     private String moreInfo;
 
     public ComputerEntity() {
+    }
+
+    public ComputerEntity(String name, BigDecimal buyingPrice, BigDecimal sellingPrice, int newQuantity) {
+        super(ITEM_TYPE, name, buyingPrice, sellingPrice, newQuantity);
     }
 
     public String getProcessor() {

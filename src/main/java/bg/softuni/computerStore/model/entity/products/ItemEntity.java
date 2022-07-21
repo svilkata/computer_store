@@ -1,18 +1,23 @@
 package bg.softuni.computerStore.model.entity.products;
 
+
 import bg.softuni.computerStore.model.entity.orders.BasketOrderEntity;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.util.List;
 
 @Entity
 @Table(name = "all_items")
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "type")
 public abstract class ItemEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE)
     private Long itemId;
+
+    @Basic
+    @Column(insertable = false, updatable = false)
+    private String type;
 
     @Column(nullable = false)
     private String name;
@@ -20,11 +25,18 @@ public abstract class ItemEntity {
     private BigDecimal buyingPrice;
     @Column(name = "selling_price", nullable = false)
     private BigDecimal sellingPrice;
-
-    @ManyToOne
-    private BasketOrderEntity basket;
+    @Column(name = "quantity")
+    private int updatedQuantity;
 
     public ItemEntity() {
+    }
+
+    public ItemEntity(String type, String name, BigDecimal buyingPrice, BigDecimal sellingPrice, int newQuantity) {
+        this.type = type;
+        this.name = name;
+        this.buyingPrice = buyingPrice;
+        this.sellingPrice = sellingPrice;
+        this.updatedQuantity = newQuantity;
     }
 
     public String getName() {
@@ -63,15 +75,24 @@ public abstract class ItemEntity {
         return this;
     }
 
+    public String getType() {
+        return type;
+    }
+
+    public ItemEntity setType(String type) {
+        this.type = type;
+        return this;
+    }
+
 
     @Override
     public String toString() {
         return "ItemEntity{" +
                 "itemId=" + itemId +
+                ", type='" + type + '\'' +
                 ", name='" + name + '\'' +
                 ", buyingPrice=" + buyingPrice +
                 ", sellingPrice=" + sellingPrice +
-                ", basket=" + basket +
                 '}';
     }
 }
