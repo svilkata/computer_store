@@ -1,14 +1,16 @@
 package bg.softuni.computerStore.model.entity.products;
 
 import bg.softuni.computerStore.model.entity.BaseEntity;
+import bg.softuni.computerStore.model.enums.TypesOfProducts;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.Locale;
 
 @Entity
 @DiscriminatorValue(value = "monitor")
 public class MonitorEntity extends ItemEntity {
-    private static final String ITEM_TYPE = "monitor";
+    private static final String ITEM_TYPE = TypesOfProducts.MONITOR.name().toLowerCase(Locale.ROOT);
 
     private String size;
     private String resolution;
@@ -19,14 +21,12 @@ public class MonitorEntity extends ItemEntity {
     @Column(name = "refresh_rate")
     private String refreshRate;
     private String brightness;
-    @Column(name = "more_info")
-    private String moreInfo;
 
     public MonitorEntity() {
     }
 
-    public MonitorEntity(String name, BigDecimal buyingPrice, BigDecimal sellingPrice, int newQuantity) {
-        super(ITEM_TYPE, name, buyingPrice, sellingPrice, newQuantity);
+    public MonitorEntity(String brand, String model, BigDecimal buyingPrice, BigDecimal sellingPrice, int newQuantity, String moreInfo) {
+        super(ITEM_TYPE, brand, model, buyingPrice, sellingPrice, newQuantity, moreInfo);
     }
 
     public String getSize() {
@@ -83,15 +83,6 @@ public class MonitorEntity extends ItemEntity {
         return this;
     }
 
-    public String getMoreInfo() {
-        return moreInfo;
-    }
-
-    public MonitorEntity setMoreInfo(String moreInfo) {
-        this.moreInfo = moreInfo;
-        return this;
-    }
-
     @Override
     public String toString() {
         return super.toString() + "MonitorEntity{" +
@@ -101,7 +92,6 @@ public class MonitorEntity extends ItemEntity {
                 ", viewAngle='" + viewAngle + '\'' +
                 ", refreshRate='" + refreshRate + '\'' +
                 ", brightness='" + brightness + '\'' +
-                ", moreInfo='" + moreInfo + '\'' +
                 '}';
     }
 }

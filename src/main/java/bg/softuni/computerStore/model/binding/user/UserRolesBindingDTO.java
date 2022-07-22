@@ -1,4 +1,4 @@
-package bg.softuni.computerStore.model.binding;
+package bg.softuni.computerStore.model.binding.user;
 
 import java.util.List;
 

@@ -1,13 +1,12 @@
 package bg.softuni.computerStore.service;
 
 import bg.softuni.computerStore.init.InitializableUserService;
-import bg.softuni.computerStore.model.binding.ChangeUserPasswordDTO;
-import bg.softuni.computerStore.model.binding.EmployeeRegisterBindingDTO;
-import bg.softuni.computerStore.model.binding.UserRegisterBindingDTO;
-import bg.softuni.computerStore.model.binding.UserRolesBindingDTO;
+import bg.softuni.computerStore.model.binding.user.ChangeUserPasswordDTO;
+import bg.softuni.computerStore.model.binding.user.EmployeeRegisterBindingDTO;
+import bg.softuni.computerStore.model.binding.user.UserRegisterBindingDTO;
+import bg.softuni.computerStore.model.binding.user.UserRolesBindingDTO;
 import bg.softuni.computerStore.model.entity.users.UserEntity;
 import bg.softuni.computerStore.model.entity.users.UserRoleEntity;
-import bg.softuni.computerStore.model.enums.UserRoleEmployeeEnum;
 import bg.softuni.computerStore.model.enums.UserRoleEnum;
 import bg.softuni.computerStore.model.view.UserViewModel;
 import bg.softuni.computerStore.repository.users.UserRepository;
@@ -22,10 +21,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.management.relation.Role;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec='http://www.thymeleaf.org/extras/spring-security'>
+
+<head th:replace="fragments/commons::head"></head>
+
+<body>
+
+<header th:replace="fragments/commons::header"></header>
+
+<main>
+    <div class="container">
+        <h2 class="text-center text-white">Add New Item - part 1</h2>
+        <form
+                th:action="@{/pages/purchases/items/add}"
+                th:method="POST"
+                th:object="${productItemTypeBindingDTO}"
+                class="main-form mx-auto col-md-8 d-flex flex-column justify-content-center">
+
+            <div class="form-group col-md-6 mb-3">
+                <label class="text-center text-white font-weight-bold" for="type">Choose type of product</label>
+                <select id="type"
+                        name="type"
+                        th:errorclass="is-invalid"
+                        class="form-control">
+                    <option value="">- Choose type of product -</option>
+                    <option th:each="typeEnum: ${T(bg.softuni.computerStore.model.enums.TypesOfProducts).values()}"
+                            th:value="${typeEnum}"
+                            th:text="${typeEnum}"
+                            th:selected="${typeEnum} == *{type}">
+                    </option>
+                </select>
+                <p class="invalid-feedback errors alert alert-danger">
+                    Please, choose type of product!
+                </p>
+            </div>
+
+            <div class="row">
+                <div class="col col-md-4">
+                    <div class="button-holder d-flex">
+                        <input type="submit" class="btn btn-info btn-lg" value="Choose product type"/>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</main>
+
+
+<footer th:replace="fragments/commons::footer"></footer>
+
+</body>
+</html>

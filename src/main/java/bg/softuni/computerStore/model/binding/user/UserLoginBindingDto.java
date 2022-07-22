@@ -1,4 +1,4 @@
-package bg.softuni.computerStore.model.binding;
+package bg.softuni.computerStore.model.binding.user;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;

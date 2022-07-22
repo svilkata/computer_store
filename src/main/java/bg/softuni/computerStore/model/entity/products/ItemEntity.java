@@ -1,8 +1,6 @@
 package bg.softuni.computerStore.model.entity.products;
 
 
-import bg.softuni.computerStore.model.entity.orders.BasketOrderEntity;
-
 import javax.persistence.*;
 import java.math.BigDecimal;
 
@@ -15,36 +13,45 @@ public abstract class ItemEntity {
     @GeneratedValue(strategy = GenerationType.TABLE)
     private Long itemId;
 
+    //No setter for type!!!
     @Basic
     @Column(insertable = false, updatable = false)
     private String type;
 
     @Column(nullable = false)
-    private String name;
+    private String brand;
+    //Our model should be unique!!!
+    @Column(nullable = false, unique = true)
+    private String model;
     @Column(name = "buying_price", nullable = false)
     private BigDecimal buyingPrice;
     @Column(name = "selling_price", nullable = false)
     private BigDecimal sellingPrice;
     @Column(name = "quantity")
     private int updatedQuantity;
+    @Column(name = "more_info")
+    private String moreInfo;
 
     public ItemEntity() {
     }
 
-    public ItemEntity(String type, String name, BigDecimal buyingPrice, BigDecimal sellingPrice, int newQuantity) {
+    public ItemEntity(String type, String brand, String model, BigDecimal buyingPrice, BigDecimal sellingPrice,
+                      int newQuantity, String moreInfo) {
         this.type = type;
-        this.name = name;
+        this.brand = brand;
+        this.model = model;
         this.buyingPrice = buyingPrice;
         this.sellingPrice = sellingPrice;
         this.updatedQuantity = newQuantity;
+        this.moreInfo = moreInfo;
     }
 
-    public String getName() {
-        return name;
+    public String getModel() {
+        return model;
     }
 
-    public ItemEntity setName(String name) {
-        this.name = name;
+    public ItemEntity setModel(String name) {
+        this.model = name;
         return this;
     }
 
@@ -75,24 +82,44 @@ public abstract class ItemEntity {
         return this;
     }
 
-    public String getType() {
-        return type;
+    public String getMoreInfo() {
+        return moreInfo;
     }
 
-    public ItemEntity setType(String type) {
-        this.type = type;
+    public ItemEntity setMoreInfo(String moreInfo) {
+        this.moreInfo = moreInfo;
         return this;
     }
 
+    public String getBrand() {
+        return brand;
+    }
+
+    public ItemEntity setBrand(String brand) {
+        this.brand = brand;
+        return this;
+    }
+
+    public int getUpdatedQuantity() {
+        return updatedQuantity;
+    }
+
+    public ItemEntity setUpdatedQuantity(int updatedQuantity) {
+        this.updatedQuantity = updatedQuantity;
+        return this;
+    }
 
     @Override
     public String toString() {
         return "ItemEntity{" +
                 "itemId=" + itemId +
                 ", type='" + type + '\'' +
-                ", name='" + name + '\'' +
+                ", brand='" + brand + '\'' +
+                ", model='" + model + '\'' +
                 ", buyingPrice=" + buyingPrice +
                 ", sellingPrice=" + sellingPrice +
+                ", updatedQuantity=" + updatedQuantity +
+                ", moreInfo='" + moreInfo + '\'' +
                 '}';
     }
 }

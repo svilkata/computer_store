@@ -1,4 +1,4 @@
-package bg.softuni.computerStore.model.binding;
+package bg.softuni.computerStore.model.binding.user;
 
 import bg.softuni.computerStore.model.validation.password.FieldMatch;
 

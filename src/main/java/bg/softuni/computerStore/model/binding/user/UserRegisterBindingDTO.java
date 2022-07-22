@@ -1,6 +1,5 @@
-package bg.softuni.computerStore.model.binding;
+package bg.softuni.computerStore.model.binding.user;
 
-import bg.softuni.computerStore.model.enums.UserRoleEmployeeEnum;
 import bg.softuni.computerStore.model.validation.emailUsername.UniqueUserEmail;
 import bg.softuni.computerStore.model.validation.password.FieldMatch;
 
@@ -8,9 +7,12 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
-import java.util.List;
 
-public class EmployeeRegisterBindingDTO {
+@FieldMatch(firstField = "password",
+        secondField = "confirmPassword",
+        message = "Passwords do not match" //we override here the default error message
+)
+public class UserRegisterBindingDTO {
     @NotEmpty(message = "E-mail should be provided") //we override here the default error message
     @Email(message = "E-mail should be valid") //we override here the default error message
     @UniqueUserEmail(message = "Email already exists in the db. Please, think of another e-mail")  //we override here the default error message
@@ -33,16 +35,18 @@ public class EmployeeRegisterBindingDTO {
     @Size(min = 3, max = 20, message = "Password must be between 3 and 20 characters inclusive")
     private String password;
 
-    private List<String> roles;
+    @NotBlank(message = "confirmPassword cannot be empty")
+    @Size(min = 3, max = 20, message = "Password must be between 3 and 20 characters inclusive")
+    private String confirmPassword;
 
-    public EmployeeRegisterBindingDTO() {
+    public UserRegisterBindingDTO() {
     }
 
     public String getFirstName() {
         return firstName;
     }
 
-    public EmployeeRegisterBindingDTO setFirstName(String firstName) {
+    public UserRegisterBindingDTO setFirstName(String firstName) {
         this.firstName = firstName;
         return this;
     }
@@ -51,7 +55,7 @@ public class EmployeeRegisterBindingDTO {
         return lastName;
     }
 
-    public EmployeeRegisterBindingDTO setLastName(String lastName) {
+    public UserRegisterBindingDTO setLastName(String lastName) {
         this.lastName = lastName;
         return this;
     }
@@ -60,8 +64,17 @@ public class EmployeeRegisterBindingDTO {
         return password;
     }
 
-    public EmployeeRegisterBindingDTO setPassword(String password) {
+    public UserRegisterBindingDTO setPassword(String password) {
         this.password = password;
+        return this;
+    }
+
+    public String getConfirmPassword() {
+        return confirmPassword;
+    }
+
+    public UserRegisterBindingDTO setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
         return this;
     }
 
@@ -69,7 +82,7 @@ public class EmployeeRegisterBindingDTO {
         return email;
     }
 
-    public EmployeeRegisterBindingDTO setEmail(String email) {
+    public UserRegisterBindingDTO setEmail(String email) {
         this.email = email;
         return this;
     }
@@ -78,17 +91,8 @@ public class EmployeeRegisterBindingDTO {
         return username;
     }
 
-    public EmployeeRegisterBindingDTO setUsername(String username) {
+    public UserRegisterBindingDTO setUsername(String username) {
         this.username = username;
-        return this;
-    }
-
-    public List<String> getRoles() {
-        return roles;
-    }
-
-    public EmployeeRegisterBindingDTO setRoles(List<String> roles) {
-        this.roles = roles;
         return this;
     }
 }

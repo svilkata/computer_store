@@ -1,8 +1,7 @@
 package bg.softuni.computerStore.web;
 
-import bg.softuni.computerStore.model.binding.EmployeeRegisterBindingDTO;
-import bg.softuni.computerStore.model.binding.UserRegisterBindingDTO;
-import bg.softuni.computerStore.model.binding.UserRolesBindingDTO;
+import bg.softuni.computerStore.model.binding.user.EmployeeRegisterBindingDTO;
+import bg.softuni.computerStore.model.binding.user.UserRolesBindingDTO;
 import bg.softuni.computerStore.service.StatsService;
 import bg.softuni.computerStore.service.UserService;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -29,6 +28,7 @@ public class AdminController {
     }
 
     @GetMapping("/statistics")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     public ModelAndView statistics() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("stats", statsService.getStats());
@@ -37,7 +37,7 @@ public class AdminController {
     }
 
     @GetMapping("/set-user-role")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     public String addEmployeeRole(Model model) {
         model.addAttribute("employees", this.userService.getEmployeeUsers());
         if (!model.containsAttribute("userRolesBindingDTO")) {
@@ -120,7 +120,7 @@ public class AdminController {
 
     @PostMapping("/register-new-employee")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public String register(@Valid EmployeeRegisterBindingDTO employeeRegistrationModel,
+    public String registerNewEmployeeConfirm(@Valid EmployeeRegisterBindingDTO employeeRegistrationModel,
                            BindingResult bindingResult,
                            RedirectAttributes redirectAttributes) {
 

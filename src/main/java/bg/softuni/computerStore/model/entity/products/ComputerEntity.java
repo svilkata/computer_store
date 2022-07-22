@@ -1,14 +1,16 @@
 package bg.softuni.computerStore.model.entity.products;
 
 import bg.softuni.computerStore.model.entity.BaseEntity;
+import bg.softuni.computerStore.model.enums.TypesOfProducts;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.Locale;
 
 @Entity
 @DiscriminatorValue(value = "computer")
 public class ComputerEntity extends ItemEntity {
-    private static final String ITEM_TYPE = "computer";
+    private static final String ITEM_TYPE = TypesOfProducts.COMPUTER.toString().toLowerCase(Locale.ROOT);
 
     private String processor;
     @Column(name = "video_card")
@@ -16,14 +18,12 @@ public class ComputerEntity extends ItemEntity {
     private String ram;
     private String disk;
     private String ssd;
-    @Column(name = "more_info")
-    private String moreInfo;
 
     public ComputerEntity() {
     }
 
-    public ComputerEntity(String name, BigDecimal buyingPrice, BigDecimal sellingPrice, int newQuantity) {
-        super(ITEM_TYPE, name, buyingPrice, sellingPrice, newQuantity);
+    public ComputerEntity(String brand, String model, BigDecimal buyingPrice, BigDecimal sellingPrice, int newQuantity, String moreInfo) {
+        super(ITEM_TYPE, brand, model, buyingPrice, sellingPrice, newQuantity, moreInfo);
     }
 
     public String getProcessor() {
@@ -71,14 +71,6 @@ public class ComputerEntity extends ItemEntity {
         return this;
     }
 
-    public String getMoreInfo() {
-        return moreInfo;
-    }
-
-    public ComputerEntity setMoreInfo(String moreInfo) {
-        this.moreInfo = moreInfo;
-        return this;
-    }
 
     @Override
     public String toString() {
@@ -88,7 +80,6 @@ public class ComputerEntity extends ItemEntity {
                 ", ram='" + ram + '\'' +
                 ", disk='" + disk + '\'' +
                 ", ssd='" + ssd + '\'' +
-                ", moreInfo='" + moreInfo + '\'' +
                 '}';
     }
 }

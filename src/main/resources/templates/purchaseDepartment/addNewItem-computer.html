@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec='http://www.thymeleaf.org/extras/spring-security'>
+
+<head th:replace="fragments/commons::head"></head>
+
+<body>
+
+<header th:replace="fragments/commons::header"></header>
+
+<main>
+    <div class="container">
+        <h2 class="text-center text-white">Add New Computer</h2>
+        <form
+                th:action="@{/pages/purchases/items/add/computer}"
+                th:method="POST"
+                th:object="${addComputerBindingDTO}"
+                class="main-form mx-auto col-md-8 d-flex flex-column justify-content-center"
+                id="compform">
+
+            <div class="row">
+                <div class="form-group col-md-6 mb-3">
+                    <label for="brand" class="text-white font-weight-bold">Brand</label>
+                    <input
+                            id="brand"
+                            th:field="*{brand}"
+                            th:errorclass="is-invalid"
+                            type="text"
+                            class="form-control"
+                            placeholder="brand"/>
+                    <div class="invalid-feedback errors alert alert-danger">
+                        <div th:each="err : ${#fields.errors('brand')}" th:text="${err}"/>
+                    </div>
+                </div>
+                <div class="form-group col-md-6 mb-3">
+                    <label for="model" class="text-white font-weight-bold">Model Name</label>
+                    <input id="model"
+                           th:field="*{model}"
+                           th:errorclass="is-invalid"
+                           type="text"
+                           class="form-control"
+                           placeholder="model"/>
+                    <div class="invalid-feedback errors alert alert-danger">
+                        <div th:each="err : ${#fields.errors('model')}" th:text="${err}"/>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group col-md-6 mb-3">
+                    <label for="buyingPrice" class="text-white font-weight-bold">Buying price per Unit</label>
+                    <input id="buyingPrice"
+                           th:field="*{buyingPrice}"
+                           th:errorclass="is-invalid"
+                           type="text"
+                           class="form-control"
+                           placeholder="buyingPrice"/>
+                    <div class="invalid-feedback errors alert alert-danger">
+                        <div th:each="err : ${#fields.errors('buyingPrice')}" th:text="${err}"/>
+                    </div>
+                </div>
+                <div class="form-group col-md-6 mb-3">
+                    <label for="sellingPrice" class="text-white font-weight-bold">Selling price per Unit</label>
+                    <input id="sellingPrice"
+                           th:field="*{sellingPrice}"
+                           th:errorclass="is-invalid"
+                           type="text"
+                           class="form-control"
+                           placeholder="sellingPrice"/>
+                    <div class="invalid-feedback errors alert alert-danger">
+                        <div th:each="err : ${#fields.errors('sellingPrice')}" th:text="${err}"/>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="form-group col-md-6 mb-3">
+                    <label for="newQuantityToAdd" class="text-white font-weight-bold">Bought quantity</label>
+                    <input id="newQuantityToAdd"
+                           th:field="*{newQuantityToAdd}"
+                           th:errorclass="is-invalid"
+                           type="number" step="1"
+                           class="form-control"
+                           placeholder="newQuantityToAdd"/>
+                    <div class="invalid-feedback errors alert alert-danger">
+                        <div th:each="err : ${#fields.errors('newQuantityToAdd')}" th:text="${err}"/>
+                    </div>
+                </div>
+                <div class="form-group col-md-6 mb-3">
+                    <label for="processor" class="text-white font-weight-bold">Processor</label>
+                    <input id="processor"
+                           th:field="*{processor}"
+                           th:errorclass="is-invalid"
+                           type="text"
+                           class="form-control"
+                           placeholder="processor"/>
+                    <div class="invalid-feedback errors alert alert-danger">
+                        <div th:each="err : ${#fields.errors('processor')}" th:text="${err}"/>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="row">
+                <div class="form-group col-md-6 mb-3">
+                    <label for="videoCard" class="text-white font-weight-bold">Video Card</label>
+                    <input id="videoCard"
+                           th:field="*{videoCard}"
+                           th:errorclass="is-invalid"
+                           type="text"
+                           class="form-control"
+                           placeholder="videoCard"/>
+                    <div class="invalid-feedback errors alert alert-danger">
+                        <div th:each="err : ${#fields.errors('videoCard')}" th:text="${err}"/>
+                    </div>
+                </div>
+                <div class="form-group col-md-6 mb-3">
+                    <label for="ram" class="text-white font-weight-bold">Ram</label>
+                    <input id="ram"
+                           th:field="*{ram}"
+                           th:errorclass="is-invalid"
+                           type="text"
+                           class="form-control"
+                           placeholder="ram"/>
+                    <div class="invalid-feedback errors alert alert-danger">
+                        <div th:each="err : ${#fields.errors('ram')}" th:text="${err}"/>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group col-md-6 mb-3">
+                    <label for="disk" class="text-white font-weight-bold">Disk</label>
+                    <input id="disk"
+                           th:field="*{disk}"
+                           th:errorclass="is-invalid"
+                           type="text"
+                           class="form-control"
+                           placeholder="disk"/>
+                    <div class="invalid-feedback errors alert alert-danger">
+                        <div th:each="err : ${#fields.errors('disk')}" th:text="${err}"/>
+                    </div>
+                </div>
+                <div class="form-group col-md-6 mb-3">
+                    <label for="ssd" class="text-white font-weight-bold">SSD</label>
+                    <input id="ssd"
+                           th:field="*{ssd}"
+                           type="text"
+                           class="form-control"
+                           placeholder="ssd"/>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group col-md-6 mb-3">
+                    <label for="moreInfo" class="text-white font-weight-bold">More info</label>
+                    <textarea th:field="*{moreInfo}"
+                              id="moreInfo"
+                              form="compform"
+                              rows="4" cols="50"
+                              placeholder="Enter more info here..."></textarea>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col col-md-4">
+                    <div class="button-holder d-flex">
+                        <input type="submit" class="btn btn-info btn-lg" value="Upload offer"/>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+
+    </div>
+</main>
+
+
+<footer th:replace="fragments/commons::footer"></footer>
+
+</body>
+</html>

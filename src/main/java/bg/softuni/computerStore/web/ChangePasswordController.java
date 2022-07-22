@@ -1,7 +1,8 @@
 package bg.softuni.computerStore.web;
 
-import bg.softuni.computerStore.model.binding.ChangeUserPasswordDTO;
+import bg.softuni.computerStore.model.binding.user.ChangeUserPasswordDTO;
 import bg.softuni.computerStore.service.UserService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,6 +26,7 @@ public class ChangePasswordController {
     }
 
     @GetMapping("/users/changepassword")
+    @PreAuthorize("isAuthenticated()")
     public String changePassword(Model model) {
         String username = ((UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
         model.addAttribute("currentUsername", username);
@@ -35,6 +37,7 @@ public class ChangePasswordController {
     }
 
     @PostMapping("/users/changepassword")
+    @PreAuthorize("isAuthenticated()")
     public String register(@Valid ChangeUserPasswordDTO changeUserPasswordDTO,
                            BindingResult bindingResult,
                            RedirectAttributes redirectAttributes) {

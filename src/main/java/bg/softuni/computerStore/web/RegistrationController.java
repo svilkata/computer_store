@@ -1,6 +1,6 @@
 package bg.softuni.computerStore.web;
 
-import bg.softuni.computerStore.model.binding.UserRegisterBindingDTO;
+import bg.softuni.computerStore.model.binding.user.UserRegisterBindingDTO;
 import bg.softuni.computerStore.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
