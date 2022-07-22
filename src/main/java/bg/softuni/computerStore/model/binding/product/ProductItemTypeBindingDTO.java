@@ -6,6 +6,11 @@ public class ProductItemTypeBindingDTO {
     @NotBlank
     private String type;
 
+    @NotBlank
+    private String model;
+
+    private Long itemId;
+
     public ProductItemTypeBindingDTO() {
     }
 
@@ -15,6 +20,24 @@ public class ProductItemTypeBindingDTO {
 
     public ProductItemTypeBindingDTO setType(String type) {
         this.type = type;
+        return this;
+    }
+
+    public String getModel() {
+        return model;
+    }
+
+    public ProductItemTypeBindingDTO setModel(String model) {
+        this.model = model;
+        return this;
+    }
+
+    public Long getItemId() {
+        return itemId;
+    }
+
+    public ProductItemTypeBindingDTO setItemId(Long itemId) {
+        this.itemId = itemId;
         return this;
     }
 }

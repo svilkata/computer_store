@@ -8,7 +8,7 @@ import bg.softuni.computerStore.model.binding.user.UserRolesBindingDTO;
 import bg.softuni.computerStore.model.entity.users.UserEntity;
 import bg.softuni.computerStore.model.entity.users.UserRoleEntity;
 import bg.softuni.computerStore.model.enums.UserRoleEnum;
-import bg.softuni.computerStore.model.view.UserViewModel;
+import bg.softuni.computerStore.model.view.user.UserViewModel;
 import bg.softuni.computerStore.repository.users.UserRepository;
 import bg.softuni.computerStore.repository.users.UserRoleRepository;
 import org.modelmapper.ModelMapper;

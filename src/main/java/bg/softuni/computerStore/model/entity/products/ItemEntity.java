@@ -21,7 +21,7 @@ public abstract class ItemEntity {
     @Column(nullable = false)
     private String brand;
     //Our model should be unique!!!
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String model;
     @Column(name = "buying_price", nullable = false)
     private BigDecimal buyingPrice;

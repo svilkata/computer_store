@@ -1,5 +1,6 @@
 package bg.softuni.computerStore.model.binding.product;
 
+import javax.persistence.Column;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;

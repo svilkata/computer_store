@@ -1,4 +1,4 @@
-package bg.softuni.computerStore.model.view;
+package bg.softuni.computerStore.model.view.user;
 
 public class UserViewModel {
     private String username;

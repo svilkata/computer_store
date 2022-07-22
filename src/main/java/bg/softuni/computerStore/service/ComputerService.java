@@ -1,19 +1,27 @@
 package bg.softuni.computerStore.service;
 
+import bg.softuni.computerStore.config.mapper.StructMapper;
 import bg.softuni.computerStore.init.InitializableProductService;
 import bg.softuni.computerStore.model.binding.product.AddComputerBindingDTO;
 import bg.softuni.computerStore.model.entity.products.ComputerEntity;
+import bg.softuni.computerStore.model.entity.products.ItemEntity;
+import bg.softuni.computerStore.model.view.product.ComputerViewGeneralModel;
 import bg.softuni.computerStore.repository.products.AllItemsRepository;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ComputerService implements InitializableProductService {
     private final AllItemsRepository allItemsRepository;
+    private final StructMapper structMapper;
 
-    public ComputerService(AllItemsRepository allItemsRepository) {
+    public ComputerService(AllItemsRepository allItemsRepository, StructMapper structMapper) {
         this.allItemsRepository = allItemsRepository;
+        this.structMapper = structMapper;
     }
 
     @Override
@@ -26,7 +34,7 @@ public class ComputerService implements InitializableProductService {
 
             initOneComputer("Gigabyte", "Gigabyte Brix BRI5-10210E", 1550.2, 1650.75, 10,
                     "Intel Core i5-10210U (4.2 GHz, 6M)", "Intel UHD Graphics 620",
-                    "8 GB DDR4 SoDIMM", null, "256 GB SSD M.2 NVMe",
+                    "8 GB DDR4 SoDIMM", "256 GB SSD M.2 NVMe", "",
                     "24 месеца гаранция");
         }
     }
@@ -47,7 +55,7 @@ public class ComputerService implements InitializableProductService {
         this.allItemsRepository.save(toAdd);
     }
 
-    public Long saveComputer(AddComputerBindingDTO addComputerBindingDTO) {
+    public Long saveNewComputer(AddComputerBindingDTO addComputerBindingDTO) {
         ComputerEntity toAdd = new ComputerEntity(addComputerBindingDTO.getBrand(), addComputerBindingDTO.getModel(),
                 addComputerBindingDTO.getBuyingPrice(), addComputerBindingDTO.getSellingPrice(),
                 addComputerBindingDTO.getNewQuantityToAdd(), addComputerBindingDTO.getMoreInfo());
@@ -61,5 +69,27 @@ public class ComputerService implements InitializableProductService {
 
         ComputerEntity saved = this.allItemsRepository.save(toAdd);
         return saved.getItemId();
+    }
+
+    public List<ComputerViewGeneralModel> findAllComputers() {
+        List<ItemEntity> allComputers = this.allItemsRepository.findAllComputersByType("computer");
+        List<ComputerViewGeneralModel> allComputersView = new ArrayList<>();
+
+        for (ItemEntity item : allComputers) {
+            allComputersView.add(this.structMapper.computerEntityToComputerViewGeneralModel((ComputerEntity) item));
+        }
+
+
+        return allComputersView;
+    }
+
+    public void deleteComputerAndQuantity(Long id) {
+        this.allItemsRepository.deleteById(id);
+    }
+
+    public ComputerViewGeneralModel findOneComputerById(Long id) {
+        ItemEntity oneComputerById = this.allItemsRepository.findById(id).orElseThrow();
+
+        return this.structMapper.computerEntityToComputerViewGeneralModel((ComputerEntity) oneComputerById);
     }
 }
