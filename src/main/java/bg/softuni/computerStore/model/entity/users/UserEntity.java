@@ -5,7 +5,9 @@ import bg.softuni.computerStore.model.entity.orders.BasketOrderEntity;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -33,7 +35,7 @@ public class UserEntity extends BaseEntity {
 
     //    @ManyToMany
     @ManyToMany(fetch = FetchType.EAGER)
-    private List<UserRoleEntity> userRoles = new ArrayList<>();
+    private Set<UserRoleEntity> userRoles = new HashSet<>();
 
     @OneToMany(mappedBy = "user")
     private List<BasketOrderEntity> basketsOfUser;
@@ -92,11 +94,11 @@ public class UserEntity extends BaseEntity {
         return this;
     }
 
-    public List<UserRoleEntity> getUserRoles() {
+    public Set<UserRoleEntity> getUserRoles() {
         return userRoles;
     }
 
-    public UserEntity setUserRoles(List<UserRoleEntity> userRoles) {
+    public UserEntity setUserRoles(Set<UserRoleEntity> userRoles) {
         this.userRoles = userRoles;
         return this;
     }

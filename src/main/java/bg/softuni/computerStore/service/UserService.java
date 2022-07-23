@@ -21,8 +21,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -62,15 +63,15 @@ public class UserService implements InitializableUserService {
             salesRole = userRoleRepository.save(salesRole);
             customerRole = userRoleRepository.save(customerRole);
 
-            initAdmin(List.of(adminRole, purchaseRole, salesRole, customerRole));
-            initEmployeePurchases(List.of(purchaseRole, customerRole));
-            initEmployeeSales(List.of(salesRole, customerRole));
+            initAdmin(Set.of(adminRole, purchaseRole, salesRole, customerRole));
+            initEmployeePurchases(Set.of(purchaseRole, customerRole));
+            initEmployeeSales(Set.of(salesRole, customerRole));
 
-            initCustomer(List.of(customerRole));
+            initCustomer(Set.of(customerRole));
         }
     }
 
-    private void initAdmin(List<UserRoleEntity> roles) {
+    private void initAdmin(Set<UserRoleEntity> roles) {
         UserEntity admin = new UserEntity()
                 .setUserRoles(roles)
                 .setFirstName("Svilen")
@@ -82,7 +83,7 @@ public class UserService implements InitializableUserService {
         userRepository.save(admin);
     }
 
-    private void initEmployeePurchases(List<UserRoleEntity> roles) {
+    private void initEmployeePurchases(Set<UserRoleEntity> roles) {
         UserEntity employeePurchases = new UserEntity().
                 setUserRoles(roles).
                 setFirstName("Покукпо").
@@ -94,7 +95,7 @@ public class UserService implements InitializableUserService {
         userRepository.save(employeePurchases);
     }
 
-    private void initEmployeeSales(List<UserRoleEntity> roles) {
+    private void initEmployeeSales(Set<UserRoleEntity> roles) {
         UserEntity employeeSales = new UserEntity().
                 setUserRoles(roles).
                 setFirstName("Продавач").
@@ -107,7 +108,7 @@ public class UserService implements InitializableUserService {
     }
 
 
-    private void initCustomer(List<UserRoleEntity> roles) {
+    private void initCustomer(Set<UserRoleEntity> roles) {
         UserEntity customer = new UserEntity().
                 setUserRoles(roles).
                 setFirstName("User").
@@ -126,7 +127,7 @@ public class UserService implements InitializableUserService {
 
         UserEntity newCustomer =
                 new UserEntity().
-                        setUserRoles(List.of(userRole)).
+                        setUserRoles(Set.of(userRole)).
                         setUsername(userRegisterBindingDTO.getUsername()).
                         setEmail(userRegisterBindingDTO.getEmail()).
                         setFirstName(userRegisterBindingDTO.getFirstName()).
@@ -192,8 +193,8 @@ public class UserService implements InitializableUserService {
     //admin is registering an employee
     public void registerEmployee(EmployeeRegisterBindingDTO employeeRegistrationModel) {
         //The employee user roles
-        List<UserRoleEntity> employeeRoleEntities = new ArrayList<>();
-        List<String> employeeRoles = employeeRegistrationModel.getRoles();
+        Set<UserRoleEntity> employeeRoleEntities = new HashSet<>();
+        Set<String> employeeRoles = employeeRegistrationModel.getRoles();
 
         for (String employeeRole : employeeRoles) {
             UserRoleEntity byUserRole = this.userRoleRepository.findByUserRole(UserRoleEnum.valueOf(employeeRole)).orElseThrow();

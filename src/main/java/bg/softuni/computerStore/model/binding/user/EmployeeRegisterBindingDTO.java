@@ -7,6 +7,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.util.List;
+import java.util.Set;
 
 public class EmployeeRegisterBindingDTO {
     @NotEmpty(message = "E-mail should be provided") //we override here the default error message
@@ -31,7 +32,7 @@ public class EmployeeRegisterBindingDTO {
     @Size(min = 3, max = 20, message = "Password must be between 3 and 20 characters inclusive")
     private String password;
 
-    private List<String> roles;
+    private Set<String> roles;
 
     public EmployeeRegisterBindingDTO() {
     }
@@ -81,11 +82,11 @@ public class EmployeeRegisterBindingDTO {
         return this;
     }
 
-    public List<String> getRoles() {
+    public Set<String> getRoles() {
         return roles;
     }
 
-    public EmployeeRegisterBindingDTO setRoles(List<String> roles) {
+    public EmployeeRegisterBindingDTO setRoles(Set<String> roles) {
         this.roles = roles;
         return this;
     }
