@@ -6,6 +6,7 @@ import bg.softuni.computerStore.model.binding.product.AddUpdateComputerBindingDT
 import bg.softuni.computerStore.model.entity.products.ComputerEntity;
 import bg.softuni.computerStore.model.entity.products.ItemEntity;
 import bg.softuni.computerStore.model.view.product.ComputerViewGeneralModel;
+import bg.softuni.computerStore.repository.cloudinary.PictureRepository;
 import bg.softuni.computerStore.repository.products.AllItemsRepository;
 import org.springframework.stereotype.Service;
 
@@ -13,14 +14,19 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import static bg.softuni.computerStore.constants.Constants.IMAGE_URL_COMPUTER_1;
+import static bg.softuni.computerStore.constants.Constants.IMAGE_URL_COMPUTER_2;
+
 @Service
 public class ComputerService implements InitializableProductService {
     private final AllItemsRepository allItemsRepository;
     private final StructMapper structMapper;
+    private final PictureRepository pictureRepository;
 
-    public ComputerService(AllItemsRepository allItemsRepository, StructMapper structMapper) {
+    public ComputerService(AllItemsRepository allItemsRepository, StructMapper structMapper, PictureRepository pictureRepository) {
         this.allItemsRepository = allItemsRepository;
         this.structMapper = structMapper;
+        this.pictureRepository = pictureRepository;
     }
 
     @Override
@@ -29,18 +35,20 @@ public class ComputerService implements InitializableProductService {
             initOneComputer("Dell", "Dell Vostro 3681 SFF", 1000, 1150, 5,
                     "Intel Core i3-10100 (3.6/4.3GHz, 6M)", "Intel UHD Graphics 630",
                     "8 GB DDR4 2666 MHz", "1TB 7200rpm", "256 GB SSD M.2 NVMe",
-                    "36 месеца международна гаранция Next Business Day");
+                    "36 месеца международна гаранция Next Business Day",
+                    IMAGE_URL_COMPUTER_1);
 
             initOneComputer("Gigabyte", "Gigabyte Brix BRI5-10210E", 1550.2, 1650.75, 10,
                     "Intel Core i5-10210U (4.2 GHz, 6M)", "Intel UHD Graphics 620",
                     "8 GB DDR4 SoDIMM", "256 GB SSD M.2 NVMe", "",
-                    "24 месеца гаранция");
+                    "24 месеца гаранция",
+                    IMAGE_URL_COMPUTER_2);
         }
     }
 
     private void initOneComputer(String brand, String model, double buyAt, double sellAt, int newQuantity,
                                  String processor, String videoCard, String ram, String disk, String ssd,
-                                 String extraInfo) {
+                                 String extraInfo, String photoUrl) {
         //With constructor
         ComputerEntity toAdd = new ComputerEntity(brand, model, BigDecimal.valueOf(buyAt), BigDecimal.valueOf(sellAt),
                 newQuantity, extraInfo);
@@ -49,7 +57,8 @@ public class ComputerService implements InitializableProductService {
                 .setVideoCard(videoCard)
                 .setRam(ram)
                 .setDisk(disk)
-                .setSsd(ssd);
+                .setSsd(ssd)
+                .setPhotoUrl(photoUrl);
 
         this.allItemsRepository.save(toAdd);
     }
@@ -75,7 +84,8 @@ public class ComputerService implements InitializableProductService {
         List<ComputerViewGeneralModel> allComputersView = new ArrayList<>();
 
         for (ItemEntity item : allComputers) {
-            allComputersView.add(this.structMapper.computerEntityToComputerSalesViewGeneralModel((ComputerEntity) item));
+            allComputersView.add(this.structMapper
+                    .computerEntityToComputerSalesViewGeneralModel((ComputerEntity) item));
         }
 
 
@@ -86,10 +96,13 @@ public class ComputerService implements InitializableProductService {
         this.allItemsRepository.deleteById(id);
     }
 
-    public ComputerViewGeneralModel findOneComputerById(Long id) {
-        ItemEntity oneComputerById = this.allItemsRepository.findById(id).orElseThrow();
+    public ComputerViewGeneralModel findOneComputerById(Long itemId) {
+        ItemEntity oneComputerById = this.allItemsRepository.findById(itemId).orElseThrow();
 
-        return this.structMapper.computerEntityToComputerSalesViewGeneralModel((ComputerEntity) oneComputerById);
+        ComputerViewGeneralModel computerViewGeneralModel =
+                this.structMapper.computerEntityToComputerSalesViewGeneralModel((ComputerEntity) oneComputerById);
+
+        return computerViewGeneralModel;
     }
 
     public AddUpdateComputerBindingDTO findComputerByIdUpdatingItem(Long id) {

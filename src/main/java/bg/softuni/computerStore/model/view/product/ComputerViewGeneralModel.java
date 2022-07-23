@@ -14,6 +14,7 @@ public class ComputerViewGeneralModel {
     private String ssd;
     private String moreInfo;
     private Long currentQuantity;
+    private String photoUrl;
 
     public ComputerViewGeneralModel() {
     }
@@ -114,6 +115,15 @@ public class ComputerViewGeneralModel {
 
     public ComputerViewGeneralModel setCurrentQuantity(Long currentQuantity) {
         this.currentQuantity = currentQuantity;
+        return this;
+    }
+
+    public String getPhotoUrl() {
+        return photoUrl;
+    }
+
+    public ComputerViewGeneralModel setPhotoUrl(String photoUrl) {
+        this.photoUrl = photoUrl;
         return this;
     }
 }

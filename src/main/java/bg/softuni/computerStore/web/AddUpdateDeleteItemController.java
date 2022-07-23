@@ -119,8 +119,10 @@ public class AddUpdateDeleteItemController {
     }
 
     //IMPORTANT - once a customer puts an item in his/her basket, it is not possible to delete the item
+    //We better delete in the beginnig before ordering - in case we have done a mistake
     @DeleteMapping("/computers/delete/{id}")
     public String deleteComputer(@PathVariable Long id) {
+        //TODO изтриване на снимка от PictureRepositoty при изтриване на самия Item
         this.computerService.deleteComputerAndQuantity(id);
 
         return "redirect:/items/all/computers";
@@ -152,7 +154,6 @@ public class AddUpdateDeleteItemController {
             return "redirect:/pages/purchases/computers/" + id + "/edit";
         }
 
-        int a = 6;
         this.computerService.updateExistingComputer(addUpdateComputerBindingDTO);
 
         return "redirect:/items/all/computers/details/" + id;

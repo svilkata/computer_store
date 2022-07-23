@@ -12,53 +12,66 @@
 
 <main>
     <div class="container-fluid">
-        <h2 class="text-center text-white mt-5">Details</h2>
+        <h2 class="text-center text-white mt-5 greybg">..........Details...........</h2>
         <div class="offers row mx-auto d-flex flex-row justify-content-center .row-cols-auto">
-            <div class="offer card col-sm-2 col-md-3  col-lg-3 m-2 p-0"
-                 th:object="${oneComputer}">
-                <div class="card-body pb-1">
-                    <h5 class="card-title"
-                        th:text="' Model: ' + *{model}"> Model name</h5>
-                </div>
-                <ul class="offer-details list-group list-group-flush">
-                    <li class="list-group-item">
-                        <div class="card-text"><span th:text="'* ' + *{sellingPrice} + ' лв'">Selling price</span></div>
-                        <div class="card-text"><span th:text="'* ' + *{processor}">Processor</span></div>
-                        <div class="card-text"><span th:text="'* ' + *{videoCard}">Video card</span></div>
-                        <div class="card-text"><span th:text="'* ' + *{ram}">Ram</span></div>
-                        <div class="card-text"><span th:text="'* ' + *{disk}">Disk</span></div>
-                        <div th:if="*{!ssd.isBlank()}" class="card-text"><span th:text="'* ' + *{ssd}">SSD</span></div>
-                        <div th:if="*{!moreInfo.isBlank()}" class="card-text"><span th:text="'* ' + *{moreInfo}">More info</span>
+            <div class="row">
+                <div class="offer card col-sm-2 col-md-3  col-lg-3 m-2 p-0"
+                     th:object="${oneComputer}">
+                    <div class="card-body pb-1">
+                        <h5 class="card-title"
+                            th:text="' Model: ' + *{model}"> Model name</h5>
+                    </div>
+                    <ul class="offer-details list-group list-group-flush">
+                        <li class="list-group-item">
+                            <div class="card-text"><span th:text="'* ' + *{processor}">Processor</span></div>
+                            <div class="card-text"><span th:text="'* ' + *{videoCard}">Video card</span></div>
+                            <div class="card-text"><span th:text="'* ' + *{ram}">Ram</span></div>
+                            <div class="card-text"><span th:text="'* ' + *{disk}">Disk</span></div>
+                            <div th:if="*{!ssd.isBlank()}" class="card-text"><span th:text="'* ' + *{ssd}">SSD</span></div>
+                            <div th:if="*{!moreInfo.isBlank()}" class="card-text"><span th:text="'* ' + *{moreInfo}">More info</span>
+                            </div>
+                            <div sec:authorize="hasRole('ADMIN') || hasRole('EMPLOYEE_PURCHASES') || hasRole('EMPLOYEE_SALES')"
+                                 class="card-text"><span class="alert-danger"
+                                                         th:text="'* Current quantity: ' + *{currentQuantity}">Current quantity</span>
+                            </div>
+                            <div class="card-text"><span th:text="'We sell at: ' + *{sellingPrice} + ' лв'" style="font-weight: bold">Selling price</span></div>
+                        </li>
+                    </ul>
+
+                    <div class="card-body">
+                        <div class="row">
+                            <a sec:authorize="hasRole('CUSTOMER')" class="btn btn-link"
+                               th:href="@{/items/all/basket/{id} (id=*{itemId})}">Order Item</a>
+
+                            <th:block sec:authorize="hasRole('ADMIN') || hasRole('EMPLOYEE_PURCHASES')">
+                                <a class="btn btn-link alert-danger"
+                                   th:href="@{/pages/purchases/computers/{id}/edit (id=*{itemId})}">Update</a>
+
+                                <form th:action="@{/pages/purchases/computers/delete/{id} (id=*{itemId})}"
+                                      th:type="hidden"
+                                      th:method="delete">
+                                    <input type="submit" class="btn btn-link alert-danger" value="Delete"></input>
+                                </form>
+
+                                <form
+                                        th:action="@{/pages/purchases/computers/{id}/addpicture (id=*{itemId})}"
+                                        th:method="POST"
+                                        enctype="multipart/form-data">
+                                    <input name="picture" type="file"/>
+                                    <input class="btn btn-link alert-danger" type="submit" value="Upload new photo"/>
+                                </form>
+                            </th:block>
                         </div>
-                        <div sec:authorize="hasRole('ADMIN') || hasRole('EMPLOYEE_PURCHASES') || hasRole('EMPLOYEE_SALES')"
-                             class="card-text"><span class="alert-danger"
-                                th:text="'* Current quantity: ' + *{currentQuantity}">Current quantity</span></div>
-                    </li>
-                </ul>
-
-                <div class="card-body">
-                    <div class="row">
-                        <a sec:authorize="hasRole('CUSTOMER')" class="btn btn-link"
-                           th:href="@{/items/all/basket/{id} (id=*{itemId})}">Order Item</a>
-
-                        <th:block sec:authorize="hasRole('ADMIN') || hasRole('EMPLOYEE_PURCHASES')">
-                            <a class="btn btn-link alert-danger"
-                               th:href="@{/pages/purchases/computers/{id}/edit (id=*{itemId})}">Update</a>
-
-                            <form th:action="@{/pages/purchases/computers/delete/{id} (id=*{itemId})}"
-                                  th:method="delete">
-                                <input type="submit" class="btn btn-link alert-danger" value="Delete"></input>
-                            </form>
-                        </th:block>
                     </div>
                 </div>
+
+                <div class="offer col-sm-2 col-md-3  col-lg-3 m-2 p-0">
+                    <img class="img" alt="Computer image" th:src="${oneComputer.photoUrl}">
+                </div>
             </div>
+
         </div>
 
-        <div class="offer card col-sm-2 col-md-3  col-lg-4 m-1 p-0">
-            <img class="card-img-top" alt="Computer image">
-            <!--            th:src="*{getImageUrl()}"-->
-        </div>
     </div>
 </main>
 

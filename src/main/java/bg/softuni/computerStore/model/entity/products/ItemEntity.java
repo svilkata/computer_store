@@ -31,6 +31,7 @@ public abstract class ItemEntity {
     private int currentQuantity;
     @Column(name = "more_info")
     private String moreInfo;
+    private String photoUrl;
 
     public ItemEntity() {
     }
@@ -121,5 +122,14 @@ public abstract class ItemEntity {
                 ", updatedQuantity=" + currentQuantity +
                 ", moreInfo='" + moreInfo + '\'' +
                 '}';
+    }
+
+    public String getPhotoUrl() {
+        return photoUrl;
+    }
+
+    public ItemEntity setPhotoUrl(String photoUrl) {
+        this.photoUrl = photoUrl;
+        return this;
     }
 }
