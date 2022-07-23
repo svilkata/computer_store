@@ -9,10 +9,10 @@ import org.mapstruct.Mapping;
 public interface StructMapper {
 
     @Mapping(target = "itemId")
-    ComputerViewGeneralModel computerEntityToComputerViewGeneralModel(ComputerEntity computerEntity);
+    ComputerViewGeneralModel computerEntityToComputerSalesViewGeneralModel(ComputerEntity computerEntity);
 
-//    @Mapping(target = "id")
-//    TyreCreatedModifiedResponseJsonDTO tyreEntityToTyreCreatedModifiedResponseJsonDTO(TyreEntity tyreEntity);
+//    @Mapping(source = "currentQuantity",target = "newQuantityToAdd")
+//    AddUpdateComputerBindingDTO computerEntityToAddUpdateComputerBindingDTO(ComputerEntity computerEntity);
 
 }
 

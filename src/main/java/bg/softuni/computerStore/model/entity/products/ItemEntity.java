@@ -21,14 +21,14 @@ public abstract class ItemEntity {
     @Column(nullable = false)
     private String brand;
     //Our model should be unique!!!
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String model;
     @Column(name = "buying_price", nullable = false)
     private BigDecimal buyingPrice;
     @Column(name = "selling_price", nullable = false)
     private BigDecimal sellingPrice;
     @Column(name = "quantity")
-    private int updatedQuantity;
+    private int currentQuantity;
     @Column(name = "more_info")
     private String moreInfo;
 
@@ -42,7 +42,7 @@ public abstract class ItemEntity {
         this.model = model;
         this.buyingPrice = buyingPrice;
         this.sellingPrice = sellingPrice;
-        this.updatedQuantity = newQuantity;
+        this.currentQuantity = newQuantity;
         this.moreInfo = moreInfo;
     }
 
@@ -100,12 +100,12 @@ public abstract class ItemEntity {
         return this;
     }
 
-    public int getUpdatedQuantity() {
-        return updatedQuantity;
+    public int getCurrentQuantity() {
+        return currentQuantity;
     }
 
-    public ItemEntity setUpdatedQuantity(int updatedQuantity) {
-        this.updatedQuantity = updatedQuantity;
+    public ItemEntity setCurrentQuantity(int updatedQuantity) {
+        this.currentQuantity = updatedQuantity;
         return this;
     }
 
@@ -118,7 +118,7 @@ public abstract class ItemEntity {
                 ", model='" + model + '\'' +
                 ", buyingPrice=" + buyingPrice +
                 ", sellingPrice=" + sellingPrice +
-                ", updatedQuantity=" + updatedQuantity +
+                ", updatedQuantity=" + currentQuantity +
                 ", moreInfo='" + moreInfo + '\'' +
                 '}';
     }

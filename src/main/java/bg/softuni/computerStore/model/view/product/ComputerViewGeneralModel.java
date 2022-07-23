@@ -13,6 +13,7 @@ public class ComputerViewGeneralModel {
     private String disk;
     private String ssd;
     private String moreInfo;
+    private Long currentQuantity;
 
     public ComputerViewGeneralModel() {
     }
@@ -104,6 +105,15 @@ public class ComputerViewGeneralModel {
 
     public ComputerViewGeneralModel setMoreInfo(String moreInfo) {
         this.moreInfo = moreInfo;
+        return this;
+    }
+
+    public Long getCurrentQuantity() {
+        return currentQuantity;
+    }
+
+    public ComputerViewGeneralModel setCurrentQuantity(Long currentQuantity) {
+        this.currentQuantity = currentQuantity;
         return this;
     }
 }

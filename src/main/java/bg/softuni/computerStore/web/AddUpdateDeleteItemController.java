@@ -1,6 +1,6 @@
 package bg.softuni.computerStore.web;
 
-import bg.softuni.computerStore.model.binding.product.AddComputerBindingDTO;
+import bg.softuni.computerStore.model.binding.product.AddUpdateComputerBindingDTO;
 import bg.softuni.computerStore.model.binding.product.ProductItemTypeBindingDTO;
 import bg.softuni.computerStore.service.AllItemsService;
 import bg.softuni.computerStore.service.ComputerService;
@@ -48,7 +48,7 @@ public class AddUpdateDeleteItemController {
             @Valid ProductItemTypeBindingDTO productItemTypeBindingDTO,
             BindingResult bindingResult,
             RedirectAttributes redirectAttributes) {
-        Long itemModelIdPresent = -2L;
+        Long itemModelIdPresent = -1L;
         if (!productItemTypeBindingDTO.getModel().isBlank()) {
             itemModelIdPresent = this.allItemsService.isItemModelPresent(productItemTypeBindingDTO.getModel());
         }
@@ -76,7 +76,6 @@ public class AddUpdateDeleteItemController {
             productItemTypeBindingDTO.setItemId(itemModelIdPresent);
             redirectAttributes.addFlashAttribute("href", href);
 
-
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.productItemTypeBindingDTO",
                     bindingResult);
 
@@ -84,39 +83,39 @@ public class AddUpdateDeleteItemController {
         }
 
         //we go here for adding the relevant new item
-        return "redirect:/pages/purchases/items/add/" + type;
+        return "redirect:/pages/purchases/items/add/" + type + "/" + productItemTypeBindingDTO.getModel();
     }
 
-    @GetMapping("/items/add/computer")
+    @GetMapping("/items/add/computer/{modelName}")
 //    @PreAuthorize("hasRole('ROLE_ADMIN') || hasRole('ROLE_EMPLOYEE_PURCHASES')") //тези май не вършат работа
-    public String addNewComputer(Model model) {
+    public String addNewComputer(Model model, @PathVariable String modelName) {
+
         if (!model.containsAttribute("addComputerBindingDTO")) {
-            model.addAttribute("addComputerBindingDTO", new AddComputerBindingDTO());
+            AddUpdateComputerBindingDTO newComputerToAdd = new AddUpdateComputerBindingDTO();
+            newComputerToAdd.setModel(modelName);
+            model.addAttribute("addComputerBindingDTO", newComputerToAdd);
         }
 
         return "/purchaseDepartment/addNewItem-computer";
     }
 
-    @PostMapping("/items/add/computer")
+    @PostMapping("/items/add/computer/**")
 //    @PreAuthorize("hasRole('ROLE_ADMIN') || hasRole('ROLE_EMPLOYEE_PURCHASES')") //тези май не вършат работа
     public String addNewComputerConfirm(
-            @Valid AddComputerBindingDTO addComputerBindingDTO,
+            @Valid AddUpdateComputerBindingDTO addUpdateComputerBindingDTO,
             BindingResult bindingResult,
             RedirectAttributes redirectAttributes) {
 
         if (bindingResult.hasErrors()) {
-            redirectAttributes.addFlashAttribute("addComputerBindingDTO", addComputerBindingDTO);
+            redirectAttributes.addFlashAttribute("addComputerBindingDTO", addUpdateComputerBindingDTO);
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.addComputerBindingDTO",
                     bindingResult);
 
-            return "redirect:/pages/purchases/items/add/computer";
+            return "redirect:/pages/purchases/items/add/computer/**";
         }
 
-        //TODO да редиректнем със съобщение, че този модел компютър вече съществува
-
-
-        Long computerId = this.computerService.saveNewComputer(addComputerBindingDTO);
-        return "redirect:/items/all/computers" + computerId;
+        Long computerId = this.computerService.saveNewComputer(addUpdateComputerBindingDTO);
+        return "redirect:/items/all/computers/details/" + computerId;
     }
 
     //IMPORTANT - once a customer puts an item in his/her basket, it is not possible to delete the item
@@ -125,5 +124,37 @@ public class AddUpdateDeleteItemController {
         this.computerService.deleteComputerAndQuantity(id);
 
         return "redirect:/items/all/computers";
+    }
+
+    @GetMapping("/computers/{id}/edit")
+    public String updateComputer(@PathVariable Long id, Model model) {
+        AddUpdateComputerBindingDTO editComputer = this.computerService.findComputerByIdUpdatingItem(id);
+
+        if (!model.containsAttribute("editComputerBindingDTO")) {
+            model.addAttribute("editComputerBindingDTO", editComputer);
+        }
+
+        return "/purchaseDepartment/updateItem-computer";
+    }
+
+    @PatchMapping("/computers/{id}/edit")
+    public String updateComputerConfirm(@PathVariable Long id,
+                                        @Valid AddUpdateComputerBindingDTO addUpdateComputerBindingDTO,
+                                        BindingResult bindingResult,
+                                        RedirectAttributes redirectAttributes) {
+        addUpdateComputerBindingDTO.setItemId(id);
+
+        if (bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute("editComputerBindingDTO", addUpdateComputerBindingDTO);
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.editComputerBindingDTO",
+                    bindingResult);
+
+            return "redirect:/pages/purchases/computers/" + id + "/edit";
+        }
+
+        int a = 6;
+        this.computerService.updateExistingComputer(addUpdateComputerBindingDTO);
+
+        return "redirect:/items/all/computers/details/" + id;
     }
 }

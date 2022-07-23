@@ -38,4 +38,5 @@ public class ViewItemsController {
 
         return "/viewItems/one-computer-details";
     }
+
 }

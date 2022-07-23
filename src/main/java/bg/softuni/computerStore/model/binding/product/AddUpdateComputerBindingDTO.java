@@ -1,16 +1,18 @@
 package bg.softuni.computerStore.model.binding.product;
 
-import javax.persistence.Column;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import java.math.BigDecimal;
 
-public class AddComputerBindingDTO {
+public class AddUpdateComputerBindingDTO {
+    //No validation for itemId
+    private Long itemId;
     @NotBlank(message = "Computer brand cannot be empty")
     private String brand;
     @NotBlank(message = "Computer model cannot be empty")
     private String model;
+    private int currentQuantity;
     @NotNull(message = "Computer new bought quantity can not be null")
     @Positive(message = "Computer new bought quantity should be positive")
     private int newQuantityToAdd;
@@ -33,14 +35,14 @@ public class AddComputerBindingDTO {
     //this one can be empty, too :)
     private String moreInfo;
 
-    public AddComputerBindingDTO() {
+    public AddUpdateComputerBindingDTO() {
     }
 
     public BigDecimal getBuyingPrice() {
         return buyingPrice;
     }
 
-    public AddComputerBindingDTO setBuyingPrice(BigDecimal buyingPrice) {
+    public AddUpdateComputerBindingDTO setBuyingPrice(BigDecimal buyingPrice) {
         this.buyingPrice = buyingPrice;
         return this;
     }
@@ -49,7 +51,7 @@ public class AddComputerBindingDTO {
         return sellingPrice;
     }
 
-    public AddComputerBindingDTO setSellingPrice(BigDecimal sellingPrice) {
+    public AddUpdateComputerBindingDTO setSellingPrice(BigDecimal sellingPrice) {
         this.sellingPrice = sellingPrice;
         return this;
     }
@@ -58,7 +60,7 @@ public class AddComputerBindingDTO {
         return newQuantityToAdd;
     }
 
-    public AddComputerBindingDTO setNewQuantityToAdd(int newQuantityToAdd) {
+    public AddUpdateComputerBindingDTO setNewQuantityToAdd(int newQuantityToAdd) {
         this.newQuantityToAdd = newQuantityToAdd;
         return this;
     }
@@ -67,7 +69,7 @@ public class AddComputerBindingDTO {
         return processor;
     }
 
-    public AddComputerBindingDTO setProcessor(String processor) {
+    public AddUpdateComputerBindingDTO setProcessor(String processor) {
         this.processor = processor;
         return this;
     }
@@ -76,7 +78,7 @@ public class AddComputerBindingDTO {
         return videoCard;
     }
 
-    public AddComputerBindingDTO setVideoCard(String videoCard) {
+    public AddUpdateComputerBindingDTO setVideoCard(String videoCard) {
         this.videoCard = videoCard;
         return this;
     }
@@ -85,7 +87,7 @@ public class AddComputerBindingDTO {
         return ram;
     }
 
-    public AddComputerBindingDTO setRam(String ram) {
+    public AddUpdateComputerBindingDTO setRam(String ram) {
         this.ram = ram;
         return this;
     }
@@ -94,7 +96,7 @@ public class AddComputerBindingDTO {
         return disk;
     }
 
-    public AddComputerBindingDTO setDisk(String disk) {
+    public AddUpdateComputerBindingDTO setDisk(String disk) {
         this.disk = disk;
         return this;
     }
@@ -103,7 +105,7 @@ public class AddComputerBindingDTO {
         return ssd;
     }
 
-    public AddComputerBindingDTO setSsd(String ssd) {
+    public AddUpdateComputerBindingDTO setSsd(String ssd) {
         this.ssd = ssd;
         return this;
     }
@@ -112,7 +114,7 @@ public class AddComputerBindingDTO {
         return moreInfo;
     }
 
-    public AddComputerBindingDTO setMoreInfo(String moreInfo) {
+    public AddUpdateComputerBindingDTO setMoreInfo(String moreInfo) {
         this.moreInfo = moreInfo;
         return this;
     }
@@ -121,7 +123,7 @@ public class AddComputerBindingDTO {
         return brand;
     }
 
-    public AddComputerBindingDTO setBrand(String brand) {
+    public AddUpdateComputerBindingDTO setBrand(String brand) {
         this.brand = brand;
         return this;
     }
@@ -130,8 +132,26 @@ public class AddComputerBindingDTO {
         return model;
     }
 
-    public AddComputerBindingDTO setModel(String model) {
+    public AddUpdateComputerBindingDTO setModel(String model) {
         this.model = model;
+        return this;
+    }
+
+    public Long getItemId() {
+        return itemId;
+    }
+
+    public AddUpdateComputerBindingDTO setItemId(Long itemId) {
+        this.itemId = itemId;
+        return this;
+    }
+
+    public int getCurrentQuantity() {
+        return currentQuantity;
+    }
+
+    public AddUpdateComputerBindingDTO setCurrentQuantity(int currentQuantity) {
+        this.currentQuantity = currentQuantity;
         return this;
     }
 }

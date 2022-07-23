@@ -30,6 +30,9 @@
                         <div th:if="*{!ssd.isBlank()}" class="card-text"><span th:text="'* ' + *{ssd}">SSD</span></div>
                         <div th:if="*{!moreInfo.isBlank()}" class="card-text"><span th:text="'* ' + *{moreInfo}">More info</span>
                         </div>
+                        <div sec:authorize="hasRole('ADMIN') || hasRole('EMPLOYEE_PURCHASES') || hasRole('EMPLOYEE_SALES')"
+                             class="card-text"><span class="alert-danger"
+                                th:text="'* Current quantity: ' + *{currentQuantity}">Current quantity</span></div>
                     </li>
                 </ul>
 

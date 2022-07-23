@@ -19,4 +19,8 @@ public class AllItemsService {
 
         return byModel.isPresent() ? byModel.get().getItemId() : -1L;
     }
+
+    public ItemEntity getItemById(Long id){
+        return this.allItemsRepository.findById(id).orElseThrow();
+    }
 }

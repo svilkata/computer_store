@@ -2,7 +2,7 @@ package bg.softuni.computerStore.service;
 
 import bg.softuni.computerStore.config.mapper.StructMapper;
 import bg.softuni.computerStore.init.InitializableProductService;
-import bg.softuni.computerStore.model.binding.product.AddComputerBindingDTO;
+import bg.softuni.computerStore.model.binding.product.AddUpdateComputerBindingDTO;
 import bg.softuni.computerStore.model.entity.products.ComputerEntity;
 import bg.softuni.computerStore.model.entity.products.ItemEntity;
 import bg.softuni.computerStore.model.view.product.ComputerViewGeneralModel;
@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ComputerService implements InitializableProductService {
@@ -55,17 +54,17 @@ public class ComputerService implements InitializableProductService {
         this.allItemsRepository.save(toAdd);
     }
 
-    public Long saveNewComputer(AddComputerBindingDTO addComputerBindingDTO) {
-        ComputerEntity toAdd = new ComputerEntity(addComputerBindingDTO.getBrand(), addComputerBindingDTO.getModel(),
-                addComputerBindingDTO.getBuyingPrice(), addComputerBindingDTO.getSellingPrice(),
-                addComputerBindingDTO.getNewQuantityToAdd(), addComputerBindingDTO.getMoreInfo());
+    public Long saveNewComputer(AddUpdateComputerBindingDTO addUpdateComputerBindingDTO) {
+        ComputerEntity toAdd = new ComputerEntity(addUpdateComputerBindingDTO.getBrand(), addUpdateComputerBindingDTO.getModel(),
+                addUpdateComputerBindingDTO.getBuyingPrice(), addUpdateComputerBindingDTO.getSellingPrice(),
+                addUpdateComputerBindingDTO.getNewQuantityToAdd(), addUpdateComputerBindingDTO.getMoreInfo());
 
         toAdd
-                .setProcessor(addComputerBindingDTO.getProcessor())
-                .setVideoCard(addComputerBindingDTO.getVideoCard())
-                .setRam(addComputerBindingDTO.getRam())
-                .setDisk(addComputerBindingDTO.getDisk())
-                .setSsd(addComputerBindingDTO.getSsd());
+                .setProcessor(addUpdateComputerBindingDTO.getProcessor())
+                .setVideoCard(addUpdateComputerBindingDTO.getVideoCard())
+                .setRam(addUpdateComputerBindingDTO.getRam())
+                .setDisk(addUpdateComputerBindingDTO.getDisk())
+                .setSsd(addUpdateComputerBindingDTO.getSsd());
 
         ComputerEntity saved = this.allItemsRepository.save(toAdd);
         return saved.getItemId();
@@ -76,7 +75,7 @@ public class ComputerService implements InitializableProductService {
         List<ComputerViewGeneralModel> allComputersView = new ArrayList<>();
 
         for (ItemEntity item : allComputers) {
-            allComputersView.add(this.structMapper.computerEntityToComputerViewGeneralModel((ComputerEntity) item));
+            allComputersView.add(this.structMapper.computerEntityToComputerSalesViewGeneralModel((ComputerEntity) item));
         }
 
 
@@ -90,6 +89,52 @@ public class ComputerService implements InitializableProductService {
     public ComputerViewGeneralModel findOneComputerById(Long id) {
         ItemEntity oneComputerById = this.allItemsRepository.findById(id).orElseThrow();
 
-        return this.structMapper.computerEntityToComputerViewGeneralModel((ComputerEntity) oneComputerById);
+        return this.structMapper.computerEntityToComputerSalesViewGeneralModel((ComputerEntity) oneComputerById);
+    }
+
+    public AddUpdateComputerBindingDTO findComputerByIdUpdatingItem(Long id) {
+        ItemEntity oneComputerById = this.allItemsRepository.findById(id).orElseThrow();
+        ComputerEntity ce = (ComputerEntity) oneComputerById;
+
+        AddUpdateComputerBindingDTO addUpdateComputerBindingDTO = new AddUpdateComputerBindingDTO();
+        addUpdateComputerBindingDTO
+                .setItemId(id)
+                .setBrand(oneComputerById.getBrand())
+                .setModel(oneComputerById.getModel())
+                .setCurrentQuantity(oneComputerById.getCurrentQuantity())
+                .setNewQuantityToAdd(0)
+                .setBuyingPrice(oneComputerById.getBuyingPrice())
+                .setSellingPrice(oneComputerById.getSellingPrice())
+                .setProcessor(ce.getProcessor())
+                .setVideoCard(ce.getVideoCard())
+                .setRam(ce.getRam())
+                .setDisk(ce.getDisk())
+                .setSsd(ce.getSsd())
+                .setMoreInfo(ce.getMoreInfo());
+
+
+        return addUpdateComputerBindingDTO;
+    }
+
+    public Long updateExistingComputer(AddUpdateComputerBindingDTO addUpdateComputerBindingDTO) {
+        ItemEntity byId = this.allItemsRepository.findById(addUpdateComputerBindingDTO.getItemId()).orElseThrow();
+
+        ComputerEntity toUpdate = new ComputerEntity(addUpdateComputerBindingDTO.getBrand(), addUpdateComputerBindingDTO.getModel(),
+                addUpdateComputerBindingDTO.getBuyingPrice(), addUpdateComputerBindingDTO.getSellingPrice(),
+                addUpdateComputerBindingDTO.getNewQuantityToAdd() + byId.getCurrentQuantity(),
+                addUpdateComputerBindingDTO.getMoreInfo());
+
+        toUpdate.setItemId(addUpdateComputerBindingDTO.getItemId());
+
+        toUpdate
+                .setProcessor(addUpdateComputerBindingDTO.getProcessor())
+                .setVideoCard(addUpdateComputerBindingDTO.getVideoCard())
+                .setRam(addUpdateComputerBindingDTO.getRam())
+                .setDisk(addUpdateComputerBindingDTO.getDisk())
+                .setSsd(addUpdateComputerBindingDTO.getSsd());
+
+        ComputerEntity saved = this.allItemsRepository.save(toUpdate);
+
+        return saved.getItemId();
     }
 }
