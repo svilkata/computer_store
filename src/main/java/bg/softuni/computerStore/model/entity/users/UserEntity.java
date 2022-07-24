@@ -2,6 +2,7 @@ package bg.softuni.computerStore.model.entity.users;
 
 import bg.softuni.computerStore.model.entity.BaseEntity;
 import bg.softuni.computerStore.model.entity.orders.BasketOrderEntity;
+import bg.softuni.computerStore.model.entity.orders.FinalOrderEntity;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -39,6 +40,9 @@ public class UserEntity extends BaseEntity {
 
     @OneToMany(mappedBy = "user")
     private List<BasketOrderEntity> basketsOfUser;
+
+    @OneToMany(mappedBy = "user")
+    private List<FinalOrderEntity> userOrders;
 
     public String getEmail() {
         return email;
@@ -139,4 +143,12 @@ public class UserEntity extends BaseEntity {
                 '}';
     }
 
+    public List<FinalOrderEntity> getUserOrders() {
+        return userOrders;
+    }
+
+    public UserEntity setUserOrders(List<FinalOrderEntity> userOrders) {
+        this.userOrders = userOrders;
+        return this;
+    }
 }

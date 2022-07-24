@@ -27,25 +27,32 @@ public class BasketService implements InitializableBasketService {
     @Override
     public void init() {
         if (basketRepository.count() == 0) {
-            basketInit();
+            basketsInit();
         } else {
             readOneBasket();
         }
     }
 
 
-    private void basketInit() {
+    private void basketsInit() {
         UserEntity admin = userRepository.findByUsername("admin").orElseThrow();
         List<ItemEntity> allItemsInTheCurrentBasket = this.allItemsRepository.findAll();
 
-        BasketOrderEntity basketOrder = new BasketOrderEntity()
+        BasketOrderEntity basketOrder1 = new BasketOrderEntity()
                 .setUser(admin)
-                .setProducts(allItemsInTheCurrentBasket);
+                .setProducts(allItemsInTheCurrentBasket.subList(0, 3));
+        this.basketRepository.save(basketOrder1);
 
-        basketRepository.save(basketOrder);
+        UserEntity customer = userRepository.findByUsername("customer").orElseThrow();
+        BasketOrderEntity basketOrder2 = new BasketOrderEntity()
+                .setUser(customer)
+                .setProducts(allItemsInTheCurrentBasket.subList(3, 5));
+        this.basketRepository.save(basketOrder2);
+
     }
 
     private void readOneBasket() {
         BasketOrderEntity basketOrder1 = this.basketRepository.findById(1L).orElseThrow();
+        BasketOrderEntity basketOrder2 = this.basketRepository.findById(2L).orElseThrow();
     }
 }

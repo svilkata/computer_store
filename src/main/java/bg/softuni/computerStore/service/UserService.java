@@ -111,10 +111,10 @@ public class UserService implements InitializableUserService {
     private void initCustomer(Set<UserRoleEntity> roles) {
         UserEntity customer = new UserEntity().
                 setUserRoles(roles).
-                setFirstName("User").
-                setLastName("Userov").
+                setFirstName("Custom").
+                setLastName("Customorov").
                 setEmail("users@example.com").
-                setUsername("user").
+                setUsername("customer").
                 setPassword(passwordEncoder.encode(adminPass));
 
         userRepository.save(customer);
