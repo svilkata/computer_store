@@ -9,8 +9,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 /**
- * A table for all contact details /deliveries addresses and phone numbers/ of each user
- * After an order is done - a new or old contact detail is used
+ * A table for contact details for a specific final order /deliveries addresses, phone numbers and notes/
+ * We have connection with to FinalOrderEntity and to UserEntity
  */
 
 @Entity
@@ -22,9 +22,6 @@ public class ClientExtraInfoEntity extends BaseEntity {
 
     @ManyToOne
     private UserEntity user;
-
-    @OneToOne
-    private FinalOrderEntity finalOrderEntity;
 
     public ClientExtraInfoEntity() {
     }
