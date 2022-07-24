@@ -5,10 +5,11 @@ import bg.softuni.computerStore.model.entity.cloudinary.PictureEntity;
 import bg.softuni.computerStore.service.cloudinary.CloudinaryImage;
 import bg.softuni.computerStore.service.cloudinary.CloudinaryService;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.transaction.Transactional;
 import java.io.IOException;
 
 @Controller
@@ -25,7 +26,6 @@ public class PictureController {
     public String addPicture(PictureBindingModel bindingModel, @PathVariable("id") Long itemId) throws IOException {
         var picture = createPictureEntity(bindingModel.getPicture(), itemId);
 
-        //TODO при презаписване на снимка
         this.cloudinaryService.savePhoto(picture);
 
         return "redirect:/items/all/computers/details/" + itemId;

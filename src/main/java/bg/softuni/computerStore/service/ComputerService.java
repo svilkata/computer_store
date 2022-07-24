@@ -8,25 +8,27 @@ import bg.softuni.computerStore.model.entity.products.ItemEntity;
 import bg.softuni.computerStore.model.view.product.ComputerViewGeneralModel;
 import bg.softuni.computerStore.repository.cloudinary.PictureRepository;
 import bg.softuni.computerStore.repository.products.AllItemsRepository;
+import bg.softuni.computerStore.service.cloudinary.CloudinaryService;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-import static bg.softuni.computerStore.constants.Constants.IMAGE_URL_COMPUTER_1;
-import static bg.softuni.computerStore.constants.Constants.IMAGE_URL_COMPUTER_2;
+import static bg.softuni.computerStore.constants.Constants.*;
 
 @Service
 public class ComputerService implements InitializableProductService {
     private final AllItemsRepository allItemsRepository;
     private final StructMapper structMapper;
-    private final PictureRepository pictureRepository;
+    private final CloudinaryService cloudinaryService;
 
-    public ComputerService(AllItemsRepository allItemsRepository, StructMapper structMapper, PictureRepository pictureRepository) {
+    public ComputerService(AllItemsRepository allItemsRepository, StructMapper structMapper, PictureRepository pictureRepository, CloudinaryService cloudinaryService) {
         this.allItemsRepository = allItemsRepository;
         this.structMapper = structMapper;
-        this.pictureRepository = pictureRepository;
+        this.cloudinaryService = cloudinaryService;
     }
 
     @Override
@@ -43,6 +45,18 @@ public class ComputerService implements InitializableProductService {
                     "8 GB DDR4 SoDIMM", "256 GB SSD M.2 NVMe", "",
                     "24 месеца гаранция",
                     IMAGE_URL_COMPUTER_2);
+
+            initOneComputer("Ardes", "Ardes Game - AGR54500RX6500XT", 1020.2, 1110.48, 8,
+                    "AMD Ryzen 5 4500 (3.6/4.1GHz, 8M)", "AMD RX 6500 XT 4GB",
+                    "8 GB DDR4 3200 MHz", "500 GB SSD M.2 NVMe", "",
+                    "36 месеца гаранция",
+                    IMAGE_URL_COMPUTER_3);
+
+            initOneComputer("Lenovo", "Lenovo ThinkCentre Neo 50s SFF - 11SX002VBL", 730, 840, 3,
+                    "Intel Core i3-12100 (3.30 - 4.30 GHz, 12 MB Cache)", "Intel UHD Graphics 730",
+                    "8 GB DDR4 3200 MHz", "256 GB SSD M.2 NVMe", "",
+                    "36 месеца гаранция",
+                    IMAGE_URL_COMPUTER_4);
         }
     }
 
@@ -92,7 +106,17 @@ public class ComputerService implements InitializableProductService {
         return allComputersView;
     }
 
+    @Transactional
     public void deleteComputerAndQuantity(Long id) {
+        //Изтриване на снимка от PictureRepositoty при изтриване на самия Item
+        ItemEntity itemEntityToDelete = this.allItemsRepository.findById(id).orElseThrow();
+        List<String> collect = Arrays.stream(itemEntityToDelete.getPhotoUrl().split("/")).toList();
+        String publicId = collect.get(collect.size()-1);
+        publicId = publicId.substring(0, publicId.length()-4);
+        if (this.cloudinaryService.deleteFromCloudinary(publicId)) {
+            this.cloudinaryService.deleteFromPictureRepository(publicId);
+        }
+
         this.allItemsRepository.deleteById(id);
     }
 

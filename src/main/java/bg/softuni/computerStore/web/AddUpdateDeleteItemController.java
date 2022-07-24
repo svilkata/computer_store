@@ -122,7 +122,6 @@ public class AddUpdateDeleteItemController {
     //We better delete in the beginnig before ordering - in case we have done a mistake
     @DeleteMapping("/computers/delete/{id}")
     public String deleteComputer(@PathVariable Long id) {
-        //TODO изтриване на снимка от PictureRepositoty при изтриване на самия Item
         this.computerService.deleteComputerAndQuantity(id);
 
         return "redirect:/items/all/computers";

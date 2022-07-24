@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;
+import java.util.Optional;
 
 import static bg.softuni.computerStore.constants.Constants.*;
 
@@ -37,6 +38,8 @@ public class CloudinaryService implements InitializablePictureService {
         if (pictureRepository.count() == 0) {
             initOnePicture(1L, IMAGE_PUBLIC_ID_COMPUTER_1, IMAGE_URL_COMPUTER_1);
             initOnePicture(2L, IMAGE_PUBLIC_ID_COMPUTER_2, IMAGE_URL_COMPUTER_2);
+            initOnePicture(3L, IMAGE_PUBLIC_ID_COMPUTER_3, IMAGE_URL_COMPUTER_3);
+            initOnePicture(4L, IMAGE_PUBLIC_ID_COMPUTER_4, IMAGE_URL_COMPUTER_4);
         }
 
     }
@@ -62,7 +65,7 @@ public class CloudinaryService implements InitializablePictureService {
 //                    .upload(tempFile, Map.of("use_filename"));
 
             //The long string is a funny photo for Error
-            String url = uploadResult.getOrDefault(URL, "https://thumbs.dreamstime.com/b/illustration-internet-connection-problem-concept-error-page-not-found-isolated-white-background-funny-blue-dinosaur-230224212.jpg");
+            String url = uploadResult.getOrDefault(URL, FUNNY_PHOTO_FOR_ERROR);
             String publicId = uploadResult.getOrDefault(PUBLIC_ID, "");
 
             var result = new CloudinaryImage()
@@ -75,7 +78,37 @@ public class CloudinaryService implements InitializablePictureService {
         }
     }
 
-    public boolean delete(String publicId) {
+
+    public void savePhoto(PictureEntity picture) {
+        Optional<PictureEntity> pictureEntityOpt =
+                this.pictureRepository.findPictureEntitiesByItemId(picture.getItemId());
+        PictureEntity savedPhoto = null;
+        if (pictureEntityOpt.isPresent()) {
+            PictureEntity updatedPictureEntity = pictureEntityOpt.get();
+            String oldPublicId = updatedPictureEntity.getPublicId();
+
+            //deleting from cloudinary the old photo with the old publicId
+            deleteFromCloudinary(oldPublicId);
+
+            updatedPictureEntity
+                    .setUrl(picture.getUrl())
+                    .setPublicId(picture.getPublicId());
+
+
+            //Here we update the row in the table PictureRepository
+            savedPhoto = this.pictureRepository.save(updatedPictureEntity);
+        } else {
+            //We save in a new row in the table PictureRepository
+            savedPhoto = this.pictureRepository.save(picture);
+        }
+
+        //We update the all Items Repository here with the new url
+        ItemEntity byId = allItemsRepository.findById(savedPhoto.getItemId()).orElseThrow();
+        byId.setPhotoUrl(savedPhoto.getUrl()); //we set the new url
+        this.allItemsRepository.save(byId);
+    }
+
+    public boolean deleteFromCloudinary(String publicId) {
         try {
             this.cloudinary.uploader().destroy(publicId, Map.of());
         } catch (IOException e) {
@@ -85,21 +118,7 @@ public class CloudinaryService implements InitializablePictureService {
         return true;
     }
 
-    public void savePhoto(PictureEntity picture) {
-        //TODO delete old picture
-        PictureEntity updatedPicture = new PictureEntity();
-        Long id = picture.getId();
-        updatedPicture.setId(picture.getId())
-                .setItemId(picture.getItemId())
-                .setPublicId(picture.getPublicId())
-                .setPublicId(picture.getUrl());
-
-
-        PictureEntity savedPhoto = this.pictureRepository.save(updatedPicture);
-        ItemEntity byId = allItemsRepository.findById(savedPhoto.getItemId()).orElseThrow();
-        byId.setPhotoUrl(savedPhoto.getUrl());
-        this.allItemsRepository.save(byId);
+    public void deleteFromPictureRepository(String publicId) {
+        this.pictureRepository.deleteByPublicId(publicId);
     }
-
-
 }
