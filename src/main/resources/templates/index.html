@@ -11,7 +11,7 @@
 
 <main>
     <div class="container-fluid">
-        <h5 class="text-center text-white bg-dark mt-5"> Welcome to Computer Store,
+        <h5 class="text-center text-white mt-5 greybg"> Welcome to Computer Store,
             <span sec:authorize="isAuthenticated()">
 <!--                <th:block sec:authentication='name'></th:block>-->
                 <th:block th:text="${#authentication.principal.fullName}">X</th:block>

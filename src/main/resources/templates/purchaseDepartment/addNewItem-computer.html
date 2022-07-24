@@ -28,7 +28,8 @@
                             th:errorclass="is-invalid"
                             type="text"
                             class="form-control"
-                            placeholder="brand"/>
+                            placeholder="brand"
+                            required/>
                     <div class="invalid-feedback errors alert alert-danger">
                         <div th:each="err : ${#fields.errors('brand')}" th:text="${err}"/>
                     </div>
@@ -56,7 +57,8 @@
                            th:errorclass="is-invalid"
                            type="text"
                            class="form-control"
-                           placeholder="buyingPrice"/>
+                           placeholder="buyingPrice"
+                           required/>
                     <div class="invalid-feedback errors alert alert-danger">
                         <div th:each="err : ${#fields.errors('buyingPrice')}" th:text="${err}"/>
                     </div>
@@ -68,7 +70,8 @@
                            th:errorclass="is-invalid"
                            type="text"
                            class="form-control"
-                           placeholder="sellingPrice"/>
+                           placeholder="sellingPrice"
+                           required/>
                     <div class="invalid-feedback errors alert alert-danger">
                         <div th:each="err : ${#fields.errors('sellingPrice')}" th:text="${err}"/>
                     </div>
@@ -84,7 +87,8 @@
                            th:errorclass="is-invalid"
                            type="number" step="1"
                            class="form-control"
-                           placeholder="newQuantityToAdd"/>
+                           placeholder="newQuantityToAdd"
+                           required/>
                     <div class="invalid-feedback errors alert alert-danger">
                         <div th:each="err : ${#fields.errors('newQuantityToAdd')}" th:text="${err}"/>
                     </div>
@@ -96,7 +100,8 @@
                            th:errorclass="is-invalid"
                            type="text"
                            class="form-control"
-                           placeholder="processor"/>
+                           placeholder="processor"
+                           required/>
                     <div class="invalid-feedback errors alert alert-danger">
                         <div th:each="err : ${#fields.errors('processor')}" th:text="${err}"/>
                     </div>
@@ -112,7 +117,8 @@
                            th:errorclass="is-invalid"
                            type="text"
                            class="form-control"
-                           placeholder="videoCard"/>
+                           placeholder="videoCard"
+                           required/>
                     <div class="invalid-feedback errors alert alert-danger">
                         <div th:each="err : ${#fields.errors('videoCard')}" th:text="${err}"/>
                     </div>
@@ -124,7 +130,8 @@
                            th:errorclass="is-invalid"
                            type="text"
                            class="form-control"
-                           placeholder="ram"/>
+                           placeholder="ram"
+                           required/>
                     <div class="invalid-feedback errors alert alert-danger">
                         <div th:each="err : ${#fields.errors('ram')}" th:text="${err}"/>
                     </div>
@@ -139,7 +146,8 @@
                            th:errorclass="is-invalid"
                            type="text"
                            class="form-control"
-                           placeholder="disk"/>
+                           placeholder="disk"
+                           required/>
                     <div class="invalid-feedback errors alert alert-danger">
                         <div th:each="err : ${#fields.errors('disk')}" th:text="${err}"/>
                     </div>

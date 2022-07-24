@@ -11,7 +11,7 @@
 
 <main>
     <div class="container">
-        <h2 class="text-center text-white">Register New Employee</h2>
+        <h2 class="text-center text-white greybg">....Register New Employee....</h2>
         <form th:action="@{/pages/admins/register-new-employee}"
               th:method="post"
               th:object="${employeeRegistrationModel}"
@@ -25,7 +25,8 @@
                             th:errorclass="is-invalid"
                             type="text"
                             class="form-control"
-                            placeholder="First name"/>
+                            placeholder="First name"
+                            required minlength="2" maxlength="20"/>
                     <div class="invalid-feedback errors alert alert-danger">
                         <div th:each="err : ${#fields.errors('firstName')}" th:text="${err}"/>
                     </div>
@@ -37,7 +38,8 @@
                            th:errorclass="is-invalid"
                            type="text"
                            class="form-control"
-                           placeholder="Last name"/>
+                           placeholder="Last name"
+                           required minlength="2" maxlength="20"/>
                     <div class="invalid-feedback errors alert alert-danger">
                         <div th:each="err : ${#fields.errors('lastName')}" th:text="${err}"/>
                     </div>
@@ -50,9 +52,10 @@
                     <input id="email"
                            th:field="*{email}"
                            th:errorclass="is-invalid"
-                           type="text"
+                           type="email"
                            class="form-control"
-                           placeholder="email"/>
+                           placeholder="email"
+                           required/>
                     <div class="invalid-feedback errors alert alert-danger">
                         <div th:each="err : ${#fields.errors('email')}" th:text="${err}"/>
                     </div>
@@ -64,7 +67,8 @@
                            th:errorclass="is-invalid"
                            type="text"
                            class="form-control"
-                           placeholder="username"/>
+                           placeholder="username"
+                           required minlength="3" maxlength="20"/>
                     <div class="invalid-feedback errors alert alert-danger">
                         <div th:each="err : ${#fields.errors('username')}" th:text="${err}"/>
                     </div>
@@ -79,7 +83,8 @@
                            th:errorclass="is-invalid"
                            type="password"
                            class="form-control"
-                           placeholder="Password"/>
+                           placeholder="Password"
+                           required minlength="3" maxlength="20"/>
                     <div class="invalid-feedback errors alert alert-danger">
                         <div th:each="err : ${#fields.errors('password')}" th:text="${err}"/>
                     </div>

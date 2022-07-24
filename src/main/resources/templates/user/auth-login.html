@@ -11,8 +11,8 @@
 
 <main>
     <div class="container">
-<!--        Login customer or employee-->
-        <h2 class="text-center text-white">Login</h2>
+        <!--        Login customer or employee-->
+        <h2 class="text-center text-white greybg">..... ...Login...   ......</h2>
         <form
                 th:action="@{/users/login}"
                 th:method="post"
@@ -33,7 +33,8 @@
                 <input
                         th:field="*{username}"
                         th:errorclass="bg-danger"
-                        type="text" class="form-control" id="username" name="username"/>
+                        type="text" class="form-control" id="username" name="username"
+                        required minlength="3" maxlength="20"/>
             </div>
 
             <div class="form-group">
@@ -43,18 +44,9 @@
                 <input
                         th:field="*{password}"
                         th:errorclass="bg-danger"
-                        type="password" class="form-control" id="password" name="password"/>
+                        type="password" class="form-control" id="password" name="password"
+                        required minlength="3" maxlength="20"/>
             </div>
-
-            <!--        <div class="errors alert alert-danger">-->
-            <!--            Invalid username or password.-->
-            <!--        </div>-->
-
-<!--            <small-->
-<!--                    class="text-danger"-->
-<!--                    th:if="${#fields.hasErrors('username')}"-->
-<!--                    th:errors="*{username}"-->
-<!--            >Username error message</small>-->
 
             <div class="row">
                 <div class="col col-md-4">

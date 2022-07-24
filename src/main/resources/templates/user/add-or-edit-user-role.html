@@ -8,12 +8,13 @@
 
 <main>
     <div class="container">
-        <h2 class="text-center text-white">Set employee roles</h2>
+        <h2 class="text-center text-white greybg">....Set employee roles....</h2>
         <form method="post" th:action="@{/pages/admins/set-user-role}"
               class="main-form mx-auto col-md-8 d-flex flex-column justify-content-center">
             <div class="form-group">
                 <label class="text-white font-weight-bold" for="username">Username</label>
                 <select th:field="${userRolesBindingDTO.username}" name="username" id="username"
+                        required minlength="3" maxlength="20"
                         class="custom-select">
                     <option value="" selected>Select username</option>
                     <option th:each="user : ${employees}" th:object="${user}" th:value="*{username}"
@@ -39,7 +40,8 @@
                 Employee should have at least 2 user roles!
             </div>
             <div th:if="${oneAdminOnlyPossible}" class="alert alert-danger" role="alert">
-                There could be only 1 ADMIN user in the system. Please, demark ADMIN. You can use another section for switching from one ADMIN user to another.
+                There could be only 1 ADMIN user in the system. Please, demark ADMIN. You can use another section for
+                switching from one ADMIN user to another.
             </div>
             <!--            <div th:if="${lastAdminToDelete}" class="alert alert-danger" role="alert"> System must have minimum one user with ADMIN role!</div>-->
             <div class="button-holder d-flex">
