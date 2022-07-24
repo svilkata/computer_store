@@ -89,7 +89,7 @@ public class UserService implements InitializableUserService {
                 setFirstName("Покукпо").
                 setLastName("Покупков").
                 setEmail("purchase@pcstore.com").
-                setUsername("purchaseGuy").
+                setUsername("purchase").
                 setPassword(passwordEncoder.encode(adminPass));
 
         userRepository.save(employeePurchases);
@@ -101,7 +101,7 @@ public class UserService implements InitializableUserService {
                 setFirstName("Продавач").
                 setLastName("Продавачов").
                 setEmail("sales@pcstore.com").
-                setUsername("salesGuy").
+                setUsername("sales").
                 setPassword(passwordEncoder.encode(adminPass));
 
         userRepository.save(employeeSales);
@@ -114,7 +114,7 @@ public class UserService implements InitializableUserService {
                 setFirstName("User").
                 setLastName("Userov").
                 setEmail("users@example.com").
-                setUsername("users").
+                setUsername("user").
                 setPassword(passwordEncoder.encode(adminPass));
 
         userRepository.save(customer);
