@@ -12,11 +12,15 @@ import java.util.Locale;
 public class ComputerEntity extends ItemEntity {
     private static final String ITEM_TYPE = TypesOfProducts.COMPUTER.toString().toLowerCase(Locale.ROOT);
 
+    @Column(nullable = true)
     private String processor;
-    @Column(name = "video_card")
+    @Column(name = "video_card", nullable = true)
     private String videoCard;
+    @Column(nullable = true)
     private String ram;
+    @Column(nullable = true)
     private String disk;
+    //not mandatory
     private String ssd;
 
     public ComputerEntity() {

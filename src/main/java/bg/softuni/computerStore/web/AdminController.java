@@ -28,7 +28,7 @@ public class AdminController {
     }
 
     @GetMapping("/statistics")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+//    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     public ModelAndView statistics() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("stats", statsService.getStats());
@@ -37,7 +37,7 @@ public class AdminController {
     }
 
     @GetMapping("/set-user-role")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+//    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     public String addEmployeeRole(Model model) {
         model.addAttribute("employees", this.userService.getEmployeeUsers());
         if (!model.containsAttribute("userRolesBindingDTO")) {
@@ -47,7 +47,7 @@ public class AdminController {
     }
 
     @PostMapping("/set-user-role")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+//    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public String addUserRoleConfirm(@Valid UserRolesBindingDTO userRolesBindingDTO, RedirectAttributes redirectAttributes) {
         if (userRolesBindingDTO.getUsername().isEmpty()) {
             redirectAttributes.addFlashAttribute("userRolesBindingDTO", userRolesBindingDTO);
@@ -72,7 +72,7 @@ public class AdminController {
     }
 
     @GetMapping("/change-admin-user")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+//    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public String changeAdminUser(Model model) {
         model.addAttribute("employees", this.userService.getEmployeeUsers());
 
@@ -83,7 +83,7 @@ public class AdminController {
     }
 
     @PostMapping("/change-admin-user")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+//    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public String changeAdminUserConfirm(@Valid UserRolesBindingDTO userRolesBindingDTO,
                                          RedirectAttributes redirectAttributes) {
         if (userRolesBindingDTO.getUsername().isEmpty()) {

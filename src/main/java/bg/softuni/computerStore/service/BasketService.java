@@ -5,6 +5,7 @@ import bg.softuni.computerStore.init.InitializableBasketService;
 import bg.softuni.computerStore.model.entity.orders.BasketOrderEntity;
 import bg.softuni.computerStore.model.entity.products.ItemEntity;
 import bg.softuni.computerStore.model.entity.users.UserEntity;
+import bg.softuni.computerStore.model.enums.BasketStatus;
 import bg.softuni.computerStore.repository.orders.BasketRepository;
 import bg.softuni.computerStore.repository.products.AllItemsRepository;
 import bg.softuni.computerStore.repository.users.UserRepository;
@@ -28,8 +29,6 @@ public class BasketService implements InitializableBasketService {
     public void init() {
         if (basketRepository.count() == 0) {
             basketsInit();
-        } else {
-            readOneBasket();
         }
     }
 
@@ -40,19 +39,26 @@ public class BasketService implements InitializableBasketService {
 
         BasketOrderEntity basketOrder1 = new BasketOrderEntity()
                 .setUser(admin)
-                .setProducts(allItemsInTheCurrentBasket.subList(0, 3));
+                .setProducts(allItemsInTheCurrentBasket.subList(0, 3))
+                .setBasketStatus(BasketStatus.OPEN);
         this.basketRepository.save(basketOrder1);
 
         UserEntity customer = userRepository.findByUsername("customer").orElseThrow();
         BasketOrderEntity basketOrder2 = new BasketOrderEntity()
                 .setUser(customer)
-                .setProducts(allItemsInTheCurrentBasket.subList(3, 5));
+                .setProducts(allItemsInTheCurrentBasket.subList(3, 5))
+                .setBasketStatus(BasketStatus.OPEN);
         this.basketRepository.save(basketOrder2);
 
     }
 
-    private void readOneBasket() {
-        BasketOrderEntity basketOrder1 = this.basketRepository.findById(1L).orElseThrow();
-        BasketOrderEntity basketOrder2 = this.basketRepository.findById(2L).orElseThrow();
+    public BasketOrderEntity readOneBasket(Long basketId) {
+        BasketOrderEntity basketOrder1 = this.basketRepository.findBasketById(basketId).orElseThrow();
+        return basketOrder1;
+//        BasketOrderEntity basketOrder2 = this.basketRepository.findById(2L).orElseThrow();
+    }
+
+    public void deleteOneBasket(Long basketId) {
+        this.basketRepository.deleteById(basketId);
     }
 }

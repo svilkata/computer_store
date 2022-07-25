@@ -12,14 +12,17 @@ import java.util.Locale;
 public class MonitorEntity extends ItemEntity {
     private static final String ITEM_TYPE = TypesOfProducts.MONITOR.name().toLowerCase(Locale.ROOT);
 
+    @Column(nullable = true)
     private String size;
+    @Column(nullable = true)
     private String resolution;
-    @Column(name = "matrix_type")
+    @Column(nullable = true, name = "matrix_type")
     private String matrixType;
-    @Column(name = "view_angle")
+    @Column(nullable = true, name = "view_angle")
     private String viewAngle;
-    @Column(name = "refresh_rate")
+    @Column(nullable = true, name = "refresh_rate")
     private String refreshRate;
+    //not mandatory
     private String brightness;
 
     public MonitorEntity() {

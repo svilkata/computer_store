@@ -26,7 +26,7 @@ public class ChangePasswordController {
     }
 
     @GetMapping("/users/changepassword")
-    @PreAuthorize("isAuthenticated()")
+//    @PreAuthorize("isAuthenticated()")
     public String changePassword(Model model) {
         String username = ((UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
         model.addAttribute("currentUsername", username);
@@ -37,7 +37,7 @@ public class ChangePasswordController {
     }
 
     @PostMapping("/users/changepassword")
-    @PreAuthorize("isAuthenticated()")
+//    @PreAuthorize("isAuthenticated()")
     public String register(@Valid ChangeUserPasswordDTO changeUserPasswordDTO,
                            BindingResult bindingResult,
                            RedirectAttributes redirectAttributes) {

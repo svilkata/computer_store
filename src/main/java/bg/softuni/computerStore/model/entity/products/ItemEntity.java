@@ -29,7 +29,7 @@ public abstract class ItemEntity {
     private BigDecimal sellingPrice;
     @Column(name = "quantity")
     private int currentQuantity;
-    @Column(name = "more_info")
+    @Column(name = "more_info", columnDefinition = "TEXT")
     private String moreInfo;
     private String photoUrl;
 

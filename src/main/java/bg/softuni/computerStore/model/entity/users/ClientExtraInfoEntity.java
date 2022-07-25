@@ -1,11 +1,10 @@
 package bg.softuni.computerStore.model.entity.users;
 
 import bg.softuni.computerStore.model.entity.BaseEntity;
-import bg.softuni.computerStore.model.entity.orders.FinalOrderEntity;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 /**
@@ -16,8 +15,11 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "clients_extra_info")
 public class ClientExtraInfoEntity extends BaseEntity {
+    @Column(name = "delivery_address", nullable = false)
     private String deliveryAddress;
+    @Column(name = "phone_number", nullable = false)
     private String phoneNumber;
+    @Column(columnDefinition = "TEXT")
     private String extraNotes;
 
     @ManyToOne
@@ -50,6 +52,15 @@ public class ClientExtraInfoEntity extends BaseEntity {
 
     public ClientExtraInfoEntity setExtraNotes(String extraNotes) {
         this.extraNotes = extraNotes;
+        return this;
+    }
+
+    public UserEntity getUser() {
+        return user;
+    }
+
+    public ClientExtraInfoEntity setUser(UserEntity user) {
+        this.user = user;
         return this;
     }
 }

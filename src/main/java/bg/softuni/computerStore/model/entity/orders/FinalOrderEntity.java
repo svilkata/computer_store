@@ -1,19 +1,31 @@
 package bg.softuni.computerStore.model.entity.orders;
 
-import bg.softuni.computerStore.model.entity.BaseEntity;
 import bg.softuni.computerStore.model.entity.products.ItemEntity;
 import bg.softuni.computerStore.model.entity.users.ClientExtraInfoEntity;
 import bg.softuni.computerStore.model.entity.users.UserEntity;
 import bg.softuni.computerStore.model.enums.OrderStatusEnum;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Table(name = "orders")
-public class FinalOrderEntity extends BaseEntity {
+public class FinalOrderEntity {
+    @Id
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(
+            name = "UUID",
+            strategy = "org.hibernate.id.UUIDGenerator"
+    )
+    @Type(type = "uuid-char")
+    private UUID id;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private OrderStatusEnum status;
-    private String customerOrderNumber;
 
     @ManyToMany
     private List<ItemEntity> products;
@@ -33,15 +45,6 @@ public class FinalOrderEntity extends BaseEntity {
 
     public FinalOrderEntity setStatus(OrderStatusEnum status) {
         this.status = status;
-        return this;
-    }
-
-    public String getCustomerOrderNumber() {
-        return customerOrderNumber;
-    }
-
-    public FinalOrderEntity setCustomerOrderNumber(String customerOrderNumber) {
-        this.customerOrderNumber = customerOrderNumber;
         return this;
     }
 
@@ -69,6 +72,15 @@ public class FinalOrderEntity extends BaseEntity {
 
     public FinalOrderEntity setExtraInfoForCurrentOrder(ClientExtraInfoEntity extraInfoForCurrentOrder) {
         this.extraInfoForCurrentOrder = extraInfoForCurrentOrder;
+        return this;
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public FinalOrderEntity setId(UUID id) {
+        this.id = id;
         return this;
     }
 }

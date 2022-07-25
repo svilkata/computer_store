@@ -9,25 +9,28 @@ import java.util.List;
 public class AppInit {
     //Всички service класове, които сме имплементирали с InitializableService interface,
     // тук ни се зареждат автоматично - Open-Close principle
-    private final InitializableUserService allUserServices;
+    private final InitializableUserService userServices;
     private final List<InitializableProductService> allProductServices;
-    private final InitializableBasketService allBasketServices;
+    private final InitializableBasketService basketServices;
     private final InitializablePictureService pictureService;
+    private final InitializableFinalOrderService finalOrderService;
 
-    public AppInit(InitializableUserService allServices, List<InitializableProductService> allProductServices,
-                   InitializableBasketService allBasketServices,
-                   InitializablePictureService pictureService) {
-        this.allUserServices = allServices;
+    public AppInit(InitializableUserService userServices, List<InitializableProductService> allProductServices,
+                   InitializableBasketService basketServices, InitializablePictureService pictureService,
+                   InitializableFinalOrderService finalOrderService) {
+        this.userServices = userServices;
         this.allProductServices = allProductServices;
-        this.allBasketServices = allBasketServices;
+        this.basketServices = basketServices;
         this.pictureService = pictureService;
+        this.finalOrderService = finalOrderService;
     }
 
     @PostConstruct
     public void beginInit() {
-        this.allUserServices.init();  //1 init method
+        this.userServices.init();  //1 init method
         this.pictureService.init();  //1 init method
         this.allProductServices.forEach(srvc -> srvc.init()); //many independent not in any order inits methods of eacg product
-        this.allBasketServices.init();  //1 init method
+        this.basketServices.init();  //1 init method
+        this.finalOrderService.init(); //1 init method
     }
 }
