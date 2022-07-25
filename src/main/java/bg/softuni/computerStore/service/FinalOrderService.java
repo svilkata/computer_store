@@ -69,12 +69,8 @@ public class FinalOrderService implements InitializableFinalOrderService {
 //        UUID uuid
 //        Optional<FinalOrderEntity> currentOrder = this.finalOrderRepository.findById(uuid);
 
-        //Lazy version
-//        FinalOrderEntity currentOrder = this.finalOrderRepository.findByOrderNumber(orderNumber).orElseThrow();
-        UUID uuid = this.finalOrderRepository.findByOrderNumber(orderNumber).get().getId();
-
-        FinalOrderEntity currentOrder = this.finalOrderRepository
-                .findByOrderNumberEager(uuid).orElseThrow();
+        //The lazy way
+        FinalOrderEntity currentOrder = this.finalOrderRepository.findByOrderNumber(orderNumber).orElseThrow();
         currentOrder.setStatus(OrderStatusEnum.CONFIRMED_BY_STORE);
 
         this.finalOrderRepository.save(currentOrder);
@@ -83,6 +79,7 @@ public class FinalOrderService implements InitializableFinalOrderService {
     public void markOrderAsDelivered(String orderNumber) {
         UUID uuid = this.finalOrderRepository.findByOrderNumber(orderNumber).get().getId();
 
+        //The eager way
         FinalOrderEntity currentOrder = this.finalOrderRepository
                 .findByOrderNumberEager(uuid).orElseThrow();
         currentOrder.setStatus(OrderStatusEnum.DELIVERED);
