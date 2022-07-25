@@ -8,8 +8,11 @@ public class PictureEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(name = "item_id", nullable = true)
     private Long itemId;
+    @Column(nullable = false)
     private String url;
+    @Column(name = "public_id", nullable = false)
     private String publicId;
 
     public PictureEntity() {

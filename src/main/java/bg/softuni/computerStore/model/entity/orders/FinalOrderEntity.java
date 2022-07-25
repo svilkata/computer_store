@@ -8,6 +8,7 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -53,7 +54,7 @@ public class FinalOrderEntity {
     }
 
     public List<ItemEntity> getProducts() {
-        return products;
+        return Collections.unmodifiableList(products);
     }
 
     public FinalOrderEntity setProducts(List<ItemEntity> products) {

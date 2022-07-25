@@ -28,7 +28,8 @@ public class FinalOrderService implements InitializableFinalOrderService {
     @Override
     public void init() {
         if (finalOrderRepository.count() == 0) {
-            processOrder(1L);
+//            processOrder(1L);
+//            processOrder(2L);
         } else {
 //            confirmOrderByStore(UUID_ORDER_NUMBER_TESTING);
             markOrderAsDelivered(UUID_ORDER_NUMBER_TESTING);

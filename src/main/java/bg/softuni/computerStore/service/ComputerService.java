@@ -8,7 +8,7 @@ import bg.softuni.computerStore.model.entity.products.ItemEntity;
 import bg.softuni.computerStore.model.view.product.ComputerViewGeneralModel;
 import bg.softuni.computerStore.repository.cloudinary.PictureRepository;
 import bg.softuni.computerStore.repository.products.AllItemsRepository;
-import bg.softuni.computerStore.service.cloudinary.CloudinaryService;
+import bg.softuni.computerStore.service.picturesServices.CloudinaryAndPictureService;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -23,12 +23,12 @@ import static bg.softuni.computerStore.constants.Constants.*;
 public class ComputerService implements InitializableProductService {
     private final AllItemsRepository allItemsRepository;
     private final StructMapper structMapper;
-    private final CloudinaryService cloudinaryService;
+    private final CloudinaryAndPictureService cloudinaryAndPictureService;
 
-    public ComputerService(AllItemsRepository allItemsRepository, StructMapper structMapper, PictureRepository pictureRepository, CloudinaryService cloudinaryService) {
+    public ComputerService(AllItemsRepository allItemsRepository, StructMapper structMapper, PictureRepository pictureRepository, CloudinaryAndPictureService cloudinaryAndPictureService) {
         this.allItemsRepository = allItemsRepository;
         this.structMapper = structMapper;
-        this.cloudinaryService = cloudinaryService;
+        this.cloudinaryAndPictureService = cloudinaryAndPictureService;
     }
 
     @Override
@@ -57,6 +57,12 @@ public class ComputerService implements InitializableProductService {
                     "8 GB DDR4 3200 MHz", "256 GB SSD M.2 NVMe", "",
                     "36 месеца гаранция",
                     IMAGE_URL_COMPUTER_4);
+
+            initOneComputer("HP", "HP Pavilion 24-k1024nu All-in-One - 5Z7T6EA", 1700, 1807, 4,
+                    "Intel Core i5-11500T (1.5/3.9GHz, 12M)",  "Intel UHD Graphics 750",
+                    "8 GB DDR4 2933 MHz SoDIMM", "512 GB SSD M.2 NVMe", "",
+                    "23.8 (60.45cm) 1920x1080 IPS матов дисплей; 24 месеца гаранция",
+                    IMAGE_URL_COMPUTER_5);
         }
     }
 
@@ -77,6 +83,27 @@ public class ComputerService implements InitializableProductService {
         this.allItemsRepository.save(toAdd);
     }
 
+    public ComputerViewGeneralModel findOneComputerById(Long itemId) {
+        ItemEntity oneComputerById = this.allItemsRepository.findById(itemId).orElseThrow();
+
+        ComputerViewGeneralModel computerViewGeneralModel =
+                this.structMapper.computerEntityToComputerSalesViewGeneralModel((ComputerEntity) oneComputerById);
+
+        return computerViewGeneralModel;
+    }
+
+    public List<ComputerViewGeneralModel> findAllComputers() {
+        List<ItemEntity> allComputers = this.allItemsRepository.findAllItemsByType("computer");
+        List<ComputerViewGeneralModel> allComputersView = new ArrayList<>();
+
+        for (ItemEntity item : allComputers) {
+            allComputersView.add(this.structMapper
+                    .computerEntityToComputerSalesViewGeneralModel((ComputerEntity) item));
+        }
+
+        return allComputersView;
+    }
+
     public Long saveNewComputer(AddUpdateComputerBindingDTO addUpdateComputerBindingDTO) {
         ComputerEntity toAdd = new ComputerEntity(addUpdateComputerBindingDTO.getBrand(), addUpdateComputerBindingDTO.getModel(),
                 addUpdateComputerBindingDTO.getBuyingPrice(), addUpdateComputerBindingDTO.getSellingPrice(),
@@ -93,40 +120,18 @@ public class ComputerService implements InitializableProductService {
         return saved.getItemId();
     }
 
-    public List<ComputerViewGeneralModel> findAllComputers() {
-        List<ItemEntity> allComputers = this.allItemsRepository.findAllComputersByType("computer");
-        List<ComputerViewGeneralModel> allComputersView = new ArrayList<>();
-
-        for (ItemEntity item : allComputers) {
-            allComputersView.add(this.structMapper
-                    .computerEntityToComputerSalesViewGeneralModel((ComputerEntity) item));
-        }
-
-
-        return allComputersView;
-    }
-
     @Transactional
     public void deleteComputerAndQuantity(Long id) {
         //Изтриване на снимка от PictureRepositoty при изтриване на самия Item
         ItemEntity itemEntityToDelete = this.allItemsRepository.findById(id).orElseThrow();
         List<String> collect = Arrays.stream(itemEntityToDelete.getPhotoUrl().split("/")).toList();
-        String publicId = collect.get(collect.size()-1);
-        publicId = publicId.substring(0, publicId.length()-4);
-        if (this.cloudinaryService.deleteFromCloudinary(publicId)) {
-            this.cloudinaryService.deleteFromPictureRepository(publicId);
+        String publicId = collect.get(collect.size() - 1);
+        publicId = publicId.substring(0, publicId.length() - 4);
+        if (this.cloudinaryAndPictureService.deleteFromCloudinary(publicId)) {
+            this.cloudinaryAndPictureService.deleteFromPictureRepository(publicId);
         }
 
         this.allItemsRepository.deleteById(id);
-    }
-
-    public ComputerViewGeneralModel findOneComputerById(Long itemId) {
-        ItemEntity oneComputerById = this.allItemsRepository.findById(itemId).orElseThrow();
-
-        ComputerViewGeneralModel computerViewGeneralModel =
-                this.structMapper.computerEntityToComputerSalesViewGeneralModel((ComputerEntity) oneComputerById);
-
-        return computerViewGeneralModel;
     }
 
     public AddUpdateComputerBindingDTO findComputerByIdUpdatingItem(Long id) {

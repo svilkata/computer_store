@@ -17,10 +17,13 @@ spring:
     hibernate:
       ddl-auto: update
     defer-datasource-initialization: true
+#    show_sql: true
 
   sql:
     init:
       mode: never
+
+
 
 app:
   default:

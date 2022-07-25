@@ -1,4 +1,4 @@
-package bg.softuni.computerStore.model.view;
+package bg.softuni.computerStore.model.view.stats;
 
 public class StatsViewModel {
     private final int authRequests;

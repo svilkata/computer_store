@@ -3,8 +3,12 @@
 
 ## Functionality
 ### Инициализация на първоначални данни
-* Инициализация на първоначални данни - чрез InitialazbleService интерфейси съгласно Open-Close принципа,
-  както и от initMoreData.sql
+* Инициализация на първоначални данни - чрез InitialazbleService интерфейси съгласно Open-Close принципа - в init/AppInit.java class в @PostConstruct анотирания метод.
+* Накрая, след като минe през @PostConstruct и за демо, се инициализират и 2 монитора от data.sql файла.
+* След това задаваме 'never' веднага преди ново пускане на системата 
+sql:
+  init:
+    mode: never
 
 ### ADMIN панел функционалност - **само от ADMIN**
 * Служител е user с роля/роли EMPLOYEE_PURCHASES или EMPLOYEE_SALES
@@ -27,7 +31,7 @@
   * при добавяне на нов item, ако моделът му съществува, то зареждаме формата за Update/Едит и само го update-ваме с нови данни.
   * приемаме, че при update/edit реално ако залагаме нови покупни и продажни цени, то тези цени са за всички бройки артикули от този модел. Променяме (добавяме) главно количество.
   * once a customer puts an item in his/her basket, it is not possible to delete the item
-  * Може да има и редакция на снимка – чрез PUT заявка. Трием снимка, и слагаме нова. Но към базата само Update-ваме новия public_id на снимката в Cloudinary.
+  * Може да има и редакция на снимка – чрез PAtCH заявка. Трием снимка, и слагаме нова. Но към базата само Update-ваме новия public_id на снимката в Cloudinary.
 
 
 ### Избор на продукти в Basket кошницата - само за логнати клиенти - **всеки потребител, който има и роля CUSTOMER**
@@ -48,7 +52,9 @@
 * Статус поръчка – проверка дали дадена поръчка е на статус CONFIRMED_BY_CUSTOMER, CONFIRMED_BY_STORE, DELIVERED. – от USER, EMPLOYEE_SALES, ADMIN.
 
 
+### Search in category by  ...
 
+Добавянето на Item-s в кошницата може да става с @RestController :)
 
 
 **Other**

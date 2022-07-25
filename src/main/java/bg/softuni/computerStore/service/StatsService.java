@@ -1,6 +1,6 @@
 package bg.softuni.computerStore.service;
 
-import bg.softuni.computerStore.model.view.StatsViewModel;
+import bg.softuni.computerStore.model.view.stats.StatsViewModel;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;

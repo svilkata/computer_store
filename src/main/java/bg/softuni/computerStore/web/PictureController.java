@@ -2,8 +2,8 @@ package bg.softuni.computerStore.web;
 
 import bg.softuni.computerStore.model.binding.cloudinary.PictureBindingModel;
 import bg.softuni.computerStore.model.entity.cloudinary.PictureEntity;
-import bg.softuni.computerStore.service.cloudinary.CloudinaryImage;
-import bg.softuni.computerStore.service.cloudinary.CloudinaryService;
+import bg.softuni.computerStore.service.picturesServices.CloudinaryImage;
+import bg.softuni.computerStore.service.picturesServices.CloudinaryAndPictureService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,24 +15,32 @@ import java.io.IOException;
 @Controller
 @RequestMapping("/pages/purchases")
 public class PictureController {
-    private final CloudinaryService cloudinaryService;
+    private final CloudinaryAndPictureService cloudinaryAndPictureService;
 
-
-    public PictureController(CloudinaryService cloudinaryService) {
-        this.cloudinaryService = cloudinaryService;
+    public PictureController(CloudinaryAndPictureService cloudinaryAndPictureService) {
+        this.cloudinaryAndPictureService = cloudinaryAndPictureService;
     }
 
     @PostMapping("/computers/{id}/addpicture")
-    public String addPicture(PictureBindingModel bindingModel, @PathVariable("id") Long itemId) throws IOException {
+    public String addComputerPicture(PictureBindingModel bindingModel, @PathVariable("id") Long itemId) throws IOException {
         var picture = createPictureEntity(bindingModel.getPicture(), itemId);
 
-        this.cloudinaryService.savePhoto(picture);
+        this.cloudinaryAndPictureService.savePhoto(picture);
 
         return "redirect:/items/all/computers/details/" + itemId;
     }
 
+    @PostMapping("/monitors/{id}/addpicture")
+    public String addMonitorPicture(PictureBindingModel bindingModel, @PathVariable("id") Long itemId) throws IOException {
+        var picture = createPictureEntity(bindingModel.getPicture(), itemId);
+
+        this.cloudinaryAndPictureService.savePhoto(picture);
+
+        return "redirect:/items/all/monitors/details/" + itemId;
+    }
+
     private PictureEntity createPictureEntity(MultipartFile multipartFile, Long itemId) throws IOException {
-        final CloudinaryImage uploaded = this.cloudinaryService.upload(multipartFile);
+        final CloudinaryImage uploaded = this.cloudinaryAndPictureService.upload(multipartFile);
 
         return new PictureEntity()
                 .setPublicId(uploaded.getPublicId())
@@ -41,13 +49,4 @@ public class PictureController {
     }
 
 
-//    @Transactional
-//    @DeleteMapping("/pictures/delete")
-//    public String delete(@RequestParam("public_id") String publicId){
-//        if (cloudinaryService.delete(publicId)) {
-//            pictureRepository.deleteByPublicId(publicId);
-//        }
-//
-//        return "redirect:/pictures/all";
-//    }
 }

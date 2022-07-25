@@ -3,18 +3,24 @@ package bg.softuni.computerStore.model.view.product;
 import java.math.BigDecimal;
 
 public class ComputerViewGeneralModel {
+    //From ItemEntity
     private Long itemId;
     private String brand;
     private String model;
     private BigDecimal sellingPrice;
+    private Long currentQuantity;
+    private String moreInfo;
+    private String photoUrl;
+
+    //From ComputerEntity
     private String processor;
     private String videoCard;
     private String ram;
     private String disk;
     private String ssd;
-    private String moreInfo;
-    private Long currentQuantity;
-    private String photoUrl;
+
+
+
 
     public ComputerViewGeneralModel() {
     }

@@ -35,7 +35,6 @@ public class UserService implements InitializableUserService {
     private final String adminPass;
     private final ModelMapper modelMapper;
 
-
     public UserService(
             UserRepository userRepository, UserRoleRepository userRoleRepository,
             PasswordEncoder passwordEncoder,
@@ -111,9 +110,9 @@ public class UserService implements InitializableUserService {
     private void initCustomer(Set<UserRoleEntity> roles) {
         UserEntity customer = new UserEntity().
                 setUserRoles(roles).
-                setFirstName("Custom").
-                setLastName("Customorov").
-                setEmail("users@example.com").
+                setFirstName("Клиент").
+                setLastName("Клиентов").
+                setEmail("user@example.com").
                 setUsername("customer").
                 setPassword(passwordEncoder.encode(adminPass));
 

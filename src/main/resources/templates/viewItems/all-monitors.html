@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec='http://www.thymeleaf.org/extras/spring-security'>
+
+<head th:replace="fragments/commons::head"></head>
+
+<body>
+
+<header th:replace="fragments/commons::header"></header>
+
+<main>
+    <div class="container-fluid">
+        <h2 class="text-center text-white mt-5 greybg">.........All Computers.......</h2>
+        <div class="offers row mx-auto d-flex flex-row justify-content-center .row-cols-auto">
+            <div
+                    th:each="m : ${monitors}" th:object="${m}"
+                    class="offer card col-sm-2 col-md-3  col-lg-3 m-2 p-0">
+
+                <div class="card-img-top-wrapper" style="height: 20rem">
+                    <img
+                            class="card-img-top"
+                            alt="Computer image"
+                            th:src="*{photoUrl}">
+                </div>
+
+                <div class="card-body pb-1">
+                    <h5 class="card-title"
+                        th:text="' Model: ' + *{model}">
+                        Model name</h5>
+                </div>
+
+                <ul class="offer-details list-group list-group-flush">
+                    <li class="list-group-item">
+                        <div class="card-text"><span th:text="'*Size: ' + *{size}">Size in inches</span></div>
+                        <div class="card-text"><span th:text="'*Resolution: ' + *{resolution}">Resolution</span></div>
+                        <div class="card-text"><span th:text="'*Matrix type: ' + *{matrixType}">Matrix type</span></div>
+                        <div class="card-text"><span th:text="'*View angle: ' + *{viewAngle}">View angle</span></div>
+                        <div class="card-text"><span th:text="'*Refresh rate: ' + *{refreshRate}">Refresh rate</span></div>
+                        <div th:if="*{!brightness.isBlank()}" class="card-text"><span th:text="'*Brightness: ' + *{brightness}">Brightness</span></div>
+                        <div th:if="*{!moreInfo.isBlank()}" class="card-text"><span th:text="'* ' + *{moreInfo}">More info</span></div>
+                        <div class="card-text"><span th:text="'We sell at: ' + *{sellingPrice} + ' лв'" style="font-weight: bold">Selling price</span></div>
+                    </li>
+                </ul>
+                <div class="card-body">
+                    <div class="row">
+                        <a class="btn btn-link"
+                           th:href="@{/items/all/monitors/details/{id} (id=*{itemId})}">Details</a>
+
+                        <th:block sec:authorize="hasRole('ADMIN') || hasRole('EMPLOYEE_PURCHASES')">
+                            <a class="btn btn-link alert-danger"
+                               th:href="@{/pages/purchases/monitors/{id}/edit (id=*{itemId})}">Update</a>
+
+                            <form th:action="@{/pages/purchases/monitors/delete/{id} (id=*{itemId})}"
+                                  th:method="delete">
+                                <input type="submit" class="btn btn-link alert-danger" value="Delete"></input>
+                            </form>
+                        </th:block>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+
+<footer th:replace="fragments/commons::footer"></footer>
+
+</body>
+</html>

@@ -16,7 +16,9 @@ public interface AllItemsRepository extends JpaRepository<ItemEntity, Long> {
 
 
     @Query("SELECT c FROM ItemEntity c WHERE c.type = :type")
-    List<ItemEntity> findAllComputersByType(String type);
+    List<ItemEntity> findAllItemsByType(String type);
 
     Optional<ItemEntity> findByModel(String model);
+
+
 }

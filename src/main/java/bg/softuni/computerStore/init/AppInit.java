@@ -28,8 +28,8 @@ public class AppInit {
     @PostConstruct
     public void beginInit() {
         this.userServices.init();  //1 init method
-        this.pictureService.init();  //1 init method
         this.allProductServices.forEach(srvc -> srvc.init()); //many independent not in any order inits methods of eacg product
+        this.pictureService.init();  //1 init method
         this.basketServices.init();  //1 init method
         this.finalOrderService.init(); //1 init method
     }

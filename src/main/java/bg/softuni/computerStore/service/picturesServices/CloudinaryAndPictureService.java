@@ -1,4 +1,4 @@
-package bg.softuni.computerStore.service.cloudinary;
+package bg.softuni.computerStore.service.picturesServices;
 
 import bg.softuni.computerStore.init.InitializablePictureService;
 import bg.softuni.computerStore.model.entity.cloudinary.PictureEntity;
@@ -18,7 +18,7 @@ import java.util.Optional;
 import static bg.softuni.computerStore.constants.Constants.*;
 
 @Service
-public class CloudinaryService implements InitializablePictureService {
+public class CloudinaryAndPictureService implements InitializablePictureService {
     private final Cloudinary cloudinary;
     private final PictureRepository pictureRepository;
     private final AllItemsRepository allItemsRepository;
@@ -27,7 +27,7 @@ public class CloudinaryService implements InitializablePictureService {
     private static final String PUBLIC_ID = "public_id";
 
     @Autowired
-    public CloudinaryService(Cloudinary cloudinary, PictureRepository pictureRepository, AllItemsRepository allItemsRepository) {
+    public CloudinaryAndPictureService(Cloudinary cloudinary, PictureRepository pictureRepository, AllItemsRepository allItemsRepository) {
         this.cloudinary = cloudinary;
         this.pictureRepository = pictureRepository;
         this.allItemsRepository = allItemsRepository;
@@ -40,8 +40,11 @@ public class CloudinaryService implements InitializablePictureService {
             initOnePicture(2L, IMAGE_PUBLIC_ID_COMPUTER_2, IMAGE_URL_COMPUTER_2);
             initOnePicture(3L, IMAGE_PUBLIC_ID_COMPUTER_3, IMAGE_URL_COMPUTER_3);
             initOnePicture(4L, IMAGE_PUBLIC_ID_COMPUTER_4, IMAGE_URL_COMPUTER_4);
+            initOnePicture(5L, IMAGE_PUBLIC_ID_COMPUTER_5, IMAGE_URL_COMPUTER_5);
+            initOnePicture(6L, IMAGE_PUBLIC_ID_MONITOR_1, IMAGE_URL_MONITOR_1);
+            initOnePicture(7L, IMAGE_PUBLIC_ID_MONITOR_2, IMAGE_URL_MONITOR_2);
+            initOnePicture(8L, IMAGE_PUBLIC_ID_MONITOR_3, IMAGE_URL_MONITOR_3);
         }
-
     }
 
     private void initOnePicture(Long itemId, String publicId, String imageUrl) {
@@ -87,7 +90,7 @@ public class CloudinaryService implements InitializablePictureService {
             PictureEntity updatedPictureEntity = pictureEntityOpt.get();
             String oldPublicId = updatedPictureEntity.getPublicId();
 
-            //deleting from cloudinary the old photo with the old publicId
+            //deleting from picturesServices the old photo with the old publicId
             deleteFromCloudinary(oldPublicId);
 
             updatedPictureEntity

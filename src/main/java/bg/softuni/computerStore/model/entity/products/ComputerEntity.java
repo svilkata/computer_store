@@ -1,9 +1,10 @@
 package bg.softuni.computerStore.model.entity.products;
 
-import bg.softuni.computerStore.model.entity.BaseEntity;
 import bg.softuni.computerStore.model.enums.TypesOfProducts;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
 import java.math.BigDecimal;
 import java.util.Locale;
 
@@ -12,6 +13,8 @@ import java.util.Locale;
 public class ComputerEntity extends ItemEntity {
     private static final String ITEM_TYPE = TypesOfProducts.COMPUTER.toString().toLowerCase(Locale.ROOT);
 
+    //TODO - Issue with SINGLE Table Inheritance strategy
+    // how to adjust nullable = false and if null given somehow, some default value to be set for empty data
     @Column(nullable = true)
     private String processor;
     @Column(name = "video_card", nullable = true)
