@@ -20,8 +20,12 @@ public class FinalOrderEntity {
             name = "UUID",
             strategy = "org.hibernate.id.UUIDGenerator"
     )
+    //    @Type(type = "uuid-binary")
     @Type(type = "uuid-char")
     private UUID id;
+
+    @Column(name = "order_number")
+    private String orderNumber;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -81,6 +85,15 @@ public class FinalOrderEntity {
 
     public FinalOrderEntity setId(UUID id) {
         this.id = id;
+        return this;
+    }
+
+    public String getOrderNumber() {
+        return orderNumber;
+    }
+
+    public FinalOrderEntity setOrderNumber(String orderNumber) {
+        this.orderNumber = orderNumber;
         return this;
     }
 }
