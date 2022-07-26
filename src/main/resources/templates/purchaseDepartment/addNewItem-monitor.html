@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec='http://www.thymeleaf.org/extras/spring-security'>
+
+<head th:replace="fragments/commons::head"></head>
+
+<body>
+
+<header th:replace="fragments/commons::header"></header>
+
+<main>
+    <div class="container">
+        <h2 class="text-center text-white greybg">...Add New Monitor....</h2>
+        <form
+                th:action="@{/pages/purchases/items/add/monitor}"
+                th:method="POST"
+                th:object="${addMonitorBindingDTO}"
+                class="main-form mx-auto col-md-8 d-flex flex-column justify-content-center"
+                id="compform">
+
+            <div class="row">
+                <div class="form-group col-md-6 mb-3">
+                    <label for="brand" class="text-white font-weight-bold">Brand</label>
+                    <input
+                            id="brand"
+                            th:field="*{brand}"
+                            th:errorclass="is-invalid"
+                            type="text"
+                            class="form-control"
+                            placeholder="brand"
+                            required/>
+                    <div class="invalid-feedback errors alert alert-danger">
+                        <div th:each="err : ${#fields.errors('brand')}" th:text="${err}"/>
+                    </div>
+                </div>
+                <div class="form-group col-md-6 mb-3">
+                    <label for="model" class="text-white font-weight-bold">Model Name</label>
+                    <input id="model"
+                           th:field="*{model}"
+                           th:errorclass="is-invalid"
+                           type="text"
+                           class="form-control"
+                           placeholder="model"
+                           readonly/>
+                    <div class="invalid-feedback errors alert alert-danger">
+                        <div th:each="err : ${#fields.errors('model')}" th:text="${err}"/>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group col-md-6 mb-3">
+                    <label for="buyingPrice" class="text-white font-weight-bold">Buying price per Unit</label>
+                    <input id="buyingPrice"
+                           th:field="*{buyingPrice}"
+                           th:errorclass="is-invalid"
+                           type="text"
+                           class="form-control"
+                           placeholder="buyingPrice"
+                           required/>
+                    <div class="invalid-feedback errors alert alert-danger">
+                        <div th:each="err : ${#fields.errors('buyingPrice')}" th:text="${err}"/>
+                    </div>
+                </div>
+                <div class="form-group col-md-6 mb-3">
+                    <label for="sellingPrice" class="text-white font-weight-bold">Selling price per Unit</label>
+                    <input id="sellingPrice"
+                           th:field="*{sellingPrice}"
+                           th:errorclass="is-invalid"
+                           type="text"
+                           class="form-control"
+                           placeholder="sellingPrice"
+                           required/>
+                    <div class="invalid-feedback errors alert alert-danger">
+                        <div th:each="err : ${#fields.errors('sellingPrice')}" th:text="${err}"/>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="form-group col-md-6 mb-3">
+                    <label for="newQuantityToAdd" class="text-white font-weight-bold">Initial quantity to add</label>
+                    <input id="newQuantityToAdd"
+                           th:field="*{newQuantityToAdd}"
+                           th:errorclass="is-invalid"
+                           type="number" step="1"
+                           class="form-control"
+                           placeholder="newQuantityToAdd"
+                           required/>
+                    <div class="invalid-feedback errors alert alert-danger">
+                        <div th:each="err : ${#fields.errors('newQuantityToAdd')}" th:text="${err}"/>
+                    </div>
+                </div>
+                <div class="form-group col-md-6 mb-3">
+                    <label for="size" class="text-white font-weight-bold">Size in inches</label>
+                    <input id="size"
+                           th:field="*{size}"
+                           th:errorclass="is-invalid"
+                           type="text"
+                           class="form-control"
+                           placeholder="Size in inches"
+                           required/>
+                    <div class="invalid-feedback errors alert alert-danger">
+                        <div th:each="err : ${#fields.errors('size')}" th:text="${err}"/>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="row">
+                <div class="form-group col-md-6 mb-3">
+                    <label for="resolution" class="text-white font-weight-bold">Resolution</label>
+                    <input id="resolution"
+                           th:field="*{resolution}"
+                           th:errorclass="is-invalid"
+                           type="text"
+                           class="form-control"
+                           placeholder="resolution"
+                           required/>
+                    <div class="invalid-feedback errors alert alert-danger">
+                        <div th:each="err : ${#fields.errors('resolution')}" th:text="${err}"/>
+                    </div>
+                </div>
+                <div class="form-group col-md-6 mb-3">
+                    <label for="matrixType" class="text-white font-weight-bold">Matrix type</label>
+                    <input id="matrixType"
+                           th:field="*{matrixType}"
+                           th:errorclass="is-invalid"
+                           type="text"
+                           class="form-control"
+                           placeholder="Matrix type"
+                           required/>
+                    <div class="invalid-feedback errors alert alert-danger">
+                        <div th:each="err : ${#fields.errors('matrixType')}" th:text="${err}"/>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group col-md-6 mb-3">
+                    <label for="viewAngle" class="text-white font-weight-bold">View Angle</label>
+                    <input id="viewAngle"
+                           th:field="*{viewAngle}"
+                           th:errorclass="is-invalid"
+                           type="text"
+                           class="form-control"
+                           placeholder="View Angle"
+                           required/>
+                    <div class="invalid-feedback errors alert alert-danger">
+                        <div th:each="err : ${#fields.errors('viewAngle')}" th:text="${err}"/>
+                    </div>
+                </div>
+                <div class="form-group col-md-6 mb-3">
+                    <label for="refreshRate" class="text-white font-weight-bold">Refresh rate</label>
+                    <input id="refreshRate"
+                           th:field="*{refreshRate}"
+                           type="text"
+                           class="form-control"
+                           placeholder="Refresh rate"
+                           required/>
+                    <div class="invalid-feedback errors alert alert-danger">
+                        <div th:each="err : ${#fields.errors('refreshRate')}" th:text="${err}"/>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group col-md-6 mb-3">
+                    <label for="brightness" class="text-white font-weight-bold">Brightness</label>
+                    <input id="brightness"
+                           th:field="*{brightness}"
+                           type="text"
+                           class="form-control"
+                           placeholder="brightness"/>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group col-md-6 mb-3">
+                    <label for="moreInfo" class="text-white font-weight-bold">More info</label>
+                    <textarea th:field="*{moreInfo}"
+                              id="moreInfo"
+                              form="compform"
+                              rows="4" cols="80"
+                              placeholder="Enter more info here..."></textarea>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col col-md-4">
+                    <div class="button-holder d-flex">
+                        <input type="submit" class="btn btn-info btn-lg" value="Upload offer"/>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+
+    </div>
+</main>
+
+
+<footer th:replace="fragments/commons::footer"></footer>
+
+</body>
+</html>

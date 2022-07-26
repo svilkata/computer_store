@@ -2,6 +2,9 @@ package bg.softuni.computerStore.service;
 
 import bg.softuni.computerStore.config.mapper.StructMapper;
 import bg.softuni.computerStore.init.InitializableProductService;
+import bg.softuni.computerStore.model.binding.product.AddUpdateComputerBindingDTO;
+import bg.softuni.computerStore.model.binding.product.AddUpdateMonitorBindingDTO;
+import bg.softuni.computerStore.model.entity.products.ComputerEntity;
 import bg.softuni.computerStore.model.entity.products.ItemEntity;
 import bg.softuni.computerStore.model.entity.products.MonitorEntity;
 import bg.softuni.computerStore.model.view.product.MonitorViewGeneralModel;
@@ -9,8 +12,10 @@ import bg.softuni.computerStore.repository.products.AllItemsRepository;
 import bg.softuni.computerStore.service.picturesServices.CloudinaryAndPictureService;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static bg.softuni.computerStore.constants.Constants.*;
@@ -90,4 +95,96 @@ public class MonitorService implements InitializableProductService {
         return allMonitorsView;
     }
 
+    public Long saveNewMonitor(AddUpdateMonitorBindingDTO addUpdateMonitorBindingDTO) {
+        //From ItemEntity
+        MonitorEntity toAdd = new MonitorEntity(addUpdateMonitorBindingDTO.getBrand(), addUpdateMonitorBindingDTO.getModel(),
+                addUpdateMonitorBindingDTO.getBuyingPrice(), addUpdateMonitorBindingDTO.getSellingPrice(),
+                addUpdateMonitorBindingDTO.getNewQuantityToAdd(), addUpdateMonitorBindingDTO.getMoreInfo());
+
+        //From MonitorEntity
+        toAdd
+                .setSize(addUpdateMonitorBindingDTO.getSize())
+                .setResolution(addUpdateMonitorBindingDTO.getResolution())
+                .setMatrixType(addUpdateMonitorBindingDTO.getMatrixType())
+                .setViewAngle(addUpdateMonitorBindingDTO.getViewAngle())
+                .setRefreshRate(addUpdateMonitorBindingDTO.getRefreshRate())
+                .setBrightness(addUpdateMonitorBindingDTO.getBrightness());
+
+        MonitorEntity saved = this.allItemsRepository.save(toAdd);
+        return saved.getItemId();
+    }
+
+    @Transactional
+    public void deleteMonitorAndQuantity(Long id) {
+        //Изтриване на снимка от PictureRepositoty при изтриване на самия Item
+        ItemEntity itemEntityToDelete = this.allItemsRepository.findById(id).orElseThrow();
+
+        if (itemEntityToDelete.getPhotoUrl() != null) {
+            List<String> collect = Arrays.stream(itemEntityToDelete.getPhotoUrl().split("/")).toList();
+            String publicId = collect.get(collect.size() - 1);
+            publicId = publicId.substring(0, publicId.length() - 4);
+            if (this.cloudinaryAndPictureService.deleteFromCloudinary(publicId)) {
+                this.cloudinaryAndPictureService.deleteFromPictureRepository(publicId);
+            }
+        }
+
+        this.allItemsRepository.deleteById(id);
+    }
+
+    public AddUpdateMonitorBindingDTO findMonitorByIdUpdatingItem(Long id) {
+        ItemEntity oneMonitorById = this.allItemsRepository.findById(id).orElseThrow();
+        MonitorEntity me = (MonitorEntity) oneMonitorById;
+
+        AddUpdateMonitorBindingDTO addUpdateMonitorBindingDTO = new AddUpdateMonitorBindingDTO();
+        //From ItemEntity
+        addUpdateMonitorBindingDTO
+                .setItemId(id)
+                .setBrand(oneMonitorById.getBrand())
+                .setModel(oneMonitorById.getModel())
+                .setCurrentQuantity(oneMonitorById.getCurrentQuantity())
+                .setBuyingPrice(oneMonitorById.getBuyingPrice())
+                .setSellingPrice(oneMonitorById.getSellingPrice())
+                .setMoreInfo(oneMonitorById.getMoreInfo());
+
+        //From AddUpdateMonitorBindingDTO
+        addUpdateMonitorBindingDTO.setNewQuantityToAdd(0);
+
+        //From MonitorEntity
+        addUpdateMonitorBindingDTO
+                .setSize(me.getSize())
+                .setResolution(me.getResolution())
+                .setMatrixType(me.getMatrixType())
+                .setViewAngle(me.getViewAngle())
+                .setRefreshRate(me.getRefreshRate())
+                .setBrightness(me.getBrightness());
+
+        return addUpdateMonitorBindingDTO;
+    }
+
+    public Long updateExistingMonitor(AddUpdateMonitorBindingDTO addUpdateMonitorBindingDTO) {
+        ItemEntity me = this.allItemsRepository.findById(addUpdateMonitorBindingDTO.getItemId()).orElseThrow();
+        MonitorEntity toUpdate = (MonitorEntity) me;
+
+        //From ItemEntity
+        toUpdate
+                .setBrand(addUpdateMonitorBindingDTO.getBrand())
+                .setModel(addUpdateMonitorBindingDTO.getModel())
+                .setBuyingPrice(addUpdateMonitorBindingDTO.getBuyingPrice())
+                .setSellingPrice(addUpdateMonitorBindingDTO.getSellingPrice())
+                .setCurrentQuantity(addUpdateMonitorBindingDTO.getNewQuantityToAdd() + toUpdate.getCurrentQuantity())
+                .setMoreInfo(addUpdateMonitorBindingDTO.getMoreInfo());
+
+        //From MonitorEntity
+        toUpdate
+                .setSize(addUpdateMonitorBindingDTO.getSize())
+                .setResolution(addUpdateMonitorBindingDTO.getResolution())
+                .setMatrixType(addUpdateMonitorBindingDTO.getMatrixType())
+                .setViewAngle(addUpdateMonitorBindingDTO.getViewAngle())
+                .setRefreshRate(addUpdateMonitorBindingDTO.getRefreshRate())
+                .setBrightness(addUpdateMonitorBindingDTO.getBrightness());
+
+        MonitorEntity saved = this.allItemsRepository.save(toUpdate);
+
+        return saved.getItemId();
+    }
 }

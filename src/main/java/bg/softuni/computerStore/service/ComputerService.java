@@ -59,7 +59,7 @@ public class ComputerService implements InitializableProductService {
                     IMAGE_URL_COMPUTER_4);
 
             initOneComputer("HP", "HP Pavilion 24-k1024nu All-in-One - 5Z7T6EA", 1700, 1807, 4,
-                    "Intel Core i5-11500T (1.5/3.9GHz, 12M)",  "Intel UHD Graphics 750",
+                    "Intel Core i5-11500T (1.5/3.9GHz, 12M)", "Intel UHD Graphics 750",
                     "8 GB DDR4 2933 MHz SoDIMM", "512 GB SSD M.2 NVMe", "",
                     "23.8 (60.45cm) 1920x1080 IPS матов дисплей; 24 месеца гаранция",
                     IMAGE_URL_COMPUTER_5);
@@ -105,10 +105,12 @@ public class ComputerService implements InitializableProductService {
     }
 
     public Long saveNewComputer(AddUpdateComputerBindingDTO addUpdateComputerBindingDTO) {
+        //From ItemEntity
         ComputerEntity toAdd = new ComputerEntity(addUpdateComputerBindingDTO.getBrand(), addUpdateComputerBindingDTO.getModel(),
                 addUpdateComputerBindingDTO.getBuyingPrice(), addUpdateComputerBindingDTO.getSellingPrice(),
                 addUpdateComputerBindingDTO.getNewQuantityToAdd(), addUpdateComputerBindingDTO.getMoreInfo());
 
+        //From ComputerEntity
         toAdd
                 .setProcessor(addUpdateComputerBindingDTO.getProcessor())
                 .setVideoCard(addUpdateComputerBindingDTO.getVideoCard())
@@ -124,11 +126,14 @@ public class ComputerService implements InitializableProductService {
     public void deleteComputerAndQuantity(Long id) {
         //Изтриване на снимка от PictureRepositoty при изтриване на самия Item
         ItemEntity itemEntityToDelete = this.allItemsRepository.findById(id).orElseThrow();
-        List<String> collect = Arrays.stream(itemEntityToDelete.getPhotoUrl().split("/")).toList();
-        String publicId = collect.get(collect.size() - 1);
-        publicId = publicId.substring(0, publicId.length() - 4);
-        if (this.cloudinaryAndPictureService.deleteFromCloudinary(publicId)) {
-            this.cloudinaryAndPictureService.deleteFromPictureRepository(publicId);
+
+        if (itemEntityToDelete.getPhotoUrl() != null) {
+            List<String> collect = Arrays.stream(itemEntityToDelete.getPhotoUrl().split("/")).toList();
+            String publicId = collect.get(collect.size() - 1);
+            publicId = publicId.substring(0, publicId.length() - 4);
+            if (this.cloudinaryAndPictureService.deleteFromCloudinary(publicId)) {
+                this.cloudinaryAndPictureService.deleteFromPictureRepository(publicId);
+            }
         }
 
         this.allItemsRepository.deleteById(id);
@@ -139,35 +144,44 @@ public class ComputerService implements InitializableProductService {
         ComputerEntity ce = (ComputerEntity) oneComputerById;
 
         AddUpdateComputerBindingDTO addUpdateComputerBindingDTO = new AddUpdateComputerBindingDTO();
+        //From ItemEntity
         addUpdateComputerBindingDTO
                 .setItemId(id)
                 .setBrand(oneComputerById.getBrand())
                 .setModel(oneComputerById.getModel())
                 .setCurrentQuantity(oneComputerById.getCurrentQuantity())
-                .setNewQuantityToAdd(0)
                 .setBuyingPrice(oneComputerById.getBuyingPrice())
                 .setSellingPrice(oneComputerById.getSellingPrice())
+                .setMoreInfo(oneComputerById.getMoreInfo());
+
+        //From AddUpdateComputerBindingDTO
+        addUpdateComputerBindingDTO.setNewQuantityToAdd(0);
+
+        //From ComputerEntity
+        addUpdateComputerBindingDTO
                 .setProcessor(ce.getProcessor())
                 .setVideoCard(ce.getVideoCard())
                 .setRam(ce.getRam())
                 .setDisk(ce.getDisk())
-                .setSsd(ce.getSsd())
-                .setMoreInfo(ce.getMoreInfo());
-
+                .setSsd(ce.getSsd());
 
         return addUpdateComputerBindingDTO;
     }
 
     public Long updateExistingComputer(AddUpdateComputerBindingDTO addUpdateComputerBindingDTO) {
-        ItemEntity byId = this.allItemsRepository.findById(addUpdateComputerBindingDTO.getItemId()).orElseThrow();
+        ItemEntity ce = this.allItemsRepository.findById(addUpdateComputerBindingDTO.getItemId()).orElseThrow();
+        ComputerEntity toUpdate = (ComputerEntity) ce;
 
-        ComputerEntity toUpdate = new ComputerEntity(addUpdateComputerBindingDTO.getBrand(), addUpdateComputerBindingDTO.getModel(),
-                addUpdateComputerBindingDTO.getBuyingPrice(), addUpdateComputerBindingDTO.getSellingPrice(),
-                addUpdateComputerBindingDTO.getNewQuantityToAdd() + byId.getCurrentQuantity(),
-                addUpdateComputerBindingDTO.getMoreInfo());
+        //From ItemEntity
+        toUpdate
+                .setBrand(addUpdateComputerBindingDTO.getBrand())
+                .setModel(addUpdateComputerBindingDTO.getModel())
+                .setBuyingPrice(addUpdateComputerBindingDTO.getBuyingPrice())
+                .setSellingPrice(addUpdateComputerBindingDTO.getSellingPrice())
+                .setCurrentQuantity(addUpdateComputerBindingDTO.getNewQuantityToAdd() + toUpdate.getCurrentQuantity())
+                .setMoreInfo(addUpdateComputerBindingDTO.getMoreInfo());
 
-        toUpdate.setItemId(addUpdateComputerBindingDTO.getItemId());
-
+        //From MonitorEntity
         toUpdate
                 .setProcessor(addUpdateComputerBindingDTO.getProcessor())
                 .setVideoCard(addUpdateComputerBindingDTO.getVideoCard())

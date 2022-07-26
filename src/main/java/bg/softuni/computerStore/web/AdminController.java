@@ -110,7 +110,7 @@ public class AdminController {
     }
 
     @GetMapping("/register-new-employee")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+//    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public String registerNewEmployee(Model model) {
         if (!model.containsAttribute("employeeRegistrationModel")) {
             model.addAttribute("employeeRegistrationModel", new EmployeeRegisterBindingDTO());
@@ -119,7 +119,7 @@ public class AdminController {
     }
 
     @PostMapping("/register-new-employee")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+//    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public String registerNewEmployeeConfirm(@Valid EmployeeRegisterBindingDTO employeeRegistrationModel,
                            BindingResult bindingResult,
                            RedirectAttributes redirectAttributes) {

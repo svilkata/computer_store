@@ -3,25 +3,33 @@ package bg.softuni.computerStore.model.binding.product;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 import java.math.BigDecimal;
 
 public class AddUpdateComputerBindingDTO {
+    //From ItemEntity
     //No validation for itemId
     private Long itemId;
     @NotBlank(message = "Computer brand cannot be empty")
     private String brand;
     @NotBlank(message = "Computer model cannot be empty")
     private String model;
-    private int currentQuantity;
-    @NotNull(message = "Computer new bought quantity can not be null")
-    @Positive(message = "Computer new bought quantity should be positive")
-    private int newQuantityToAdd;
     @NotNull(message = "Computer buying price can not be null")
     @Positive(message = "Computer buying price should be positive")
     private BigDecimal buyingPrice;
     @NotNull(message = "Computer selling price can not be null")
     @Positive(message = "Computer selling price should be positive")
     private BigDecimal sellingPrice;
+    //No need for validation for current quantity
+    private int currentQuantity;
+    @NotNull(message = "Computer new bought quantity can not be null")
+    @PositiveOrZero(message = "Computer new bought quantity should be positive or zero")
+    private int newQuantityToAdd;
+    //this one can be empty, too :)
+    private String moreInfo;
+
+
+    //From ComputerEntity
     @NotBlank(message = "Processor cannot be empty")
     private String processor;
     @NotBlank(message = "Video card cannot be empty")
@@ -32,8 +40,7 @@ public class AddUpdateComputerBindingDTO {
     private String disk;
     //this one can be empty :)
     private String ssd;
-    //this one can be empty, too :)
-    private String moreInfo;
+
 
     public AddUpdateComputerBindingDTO() {
     }
