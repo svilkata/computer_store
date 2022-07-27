@@ -1,5 +1,5 @@
 # We should define strongly the final id and item_id for the below insert operations,
-# as they are executed last and after the @PostConstruct annotated method in init/AppInit.java class
+# as they are executed last and after the @PostConstruct annotated method in initSeed/AppInit.java class
 USE computerstore;
 
 select tbl.next_val from hibernate_sequences tbl where tbl.sequence_name='default' for update;

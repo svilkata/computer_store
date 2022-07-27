@@ -46,7 +46,7 @@
                 <div class="card-body">
                     <div class="row">
                         <a class="btn btn-link"
-                           th:href="@{/items/all/computers/details/{id} (id=*{itemId})}">Details</a>
+                           th:href="@{/items/all/computer/details/{id} (id=*{itemId})}">Details</a>
 
                         <th:block sec:authorize="hasRole('ADMIN') || hasRole('EMPLOYEE_PURCHASES')">
                             <a class="btn btn-link alert-danger"

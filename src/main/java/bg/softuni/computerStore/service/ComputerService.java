@@ -1,7 +1,7 @@
 package bg.softuni.computerStore.service;
 
 import bg.softuni.computerStore.config.mapper.StructMapper;
-import bg.softuni.computerStore.init.InitializableProductService;
+import bg.softuni.computerStore.initSeed.InitializableProductService;
 import bg.softuni.computerStore.model.binding.product.AddUpdateComputerBindingDTO;
 import bg.softuni.computerStore.model.entity.products.ComputerEntity;
 import bg.softuni.computerStore.model.entity.products.ItemEntity;

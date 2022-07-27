@@ -1,6 +1,6 @@
 package bg.softuni.computerStore.service;
 
-import bg.softuni.computerStore.init.InitializableUserService;
+import bg.softuni.computerStore.initSeed.InitializableUserService;
 import bg.softuni.computerStore.model.binding.user.ChangeUserPasswordDTO;
 import bg.softuni.computerStore.model.binding.user.EmployeeRegisterBindingDTO;
 import bg.softuni.computerStore.model.binding.user.UserRegisterBindingDTO;

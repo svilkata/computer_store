@@ -1,4 +1,4 @@
-package bg.softuni.computerStore.init;
+package bg.softuni.computerStore.initSeed;
 
 public interface InitializableBasketService {
     void init();

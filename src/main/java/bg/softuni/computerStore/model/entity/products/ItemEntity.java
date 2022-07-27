@@ -132,4 +132,8 @@ public abstract class ItemEntity {
         this.photoUrl = photoUrl;
         return this;
     }
+    public String getType() {
+        return type;
+    }
+
 }

@@ -44,14 +44,14 @@ public class StatsService {
         totals[1] = new BigDecimal(0);  //totalExpenditure
         int[] totalItems = new int[1];  //total number of items
 
-        allOrders.forEach(ord -> {
-            ord.getProducts().stream()
-                    .forEach(produt -> {
-                        totals[0] = totals[0].add(produt.getSellingPrice());
-                        totals[1] = totals[1].add(produt.getBuyingPrice());
-                        totalItems[0] += 1;
-                    });
-        });
+//        allOrders.forEach(ord -> {
+//            ord.getProducts().stream()
+//                    .forEach(produt -> {
+//                        totals[0] = totals[0].add(produt.getSellingPrice());
+//                        totals[1] = totals[1].add(produt.getBuyingPrice());
+//                        totalItems[0] += 1;
+//                    });
+//        });
 
         StatsViewModelReportSales sales = new StatsViewModelReportSales();
         sales

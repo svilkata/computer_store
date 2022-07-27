@@ -1,6 +1,6 @@
 package bg.softuni.computerStore.service.picturesServices;
 
-import bg.softuni.computerStore.init.InitializablePictureService;
+import bg.softuni.computerStore.initSeed.InitializablePictureService;
 import bg.softuni.computerStore.model.entity.cloudinary.PictureEntity;
 import bg.softuni.computerStore.model.entity.products.ItemEntity;
 import bg.softuni.computerStore.repository.cloudinary.PictureRepository;

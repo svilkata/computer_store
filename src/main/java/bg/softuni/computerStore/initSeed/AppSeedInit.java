@@ -1,4 +1,4 @@
-package bg.softuni.computerStore.init;
+package bg.softuni.computerStore.initSeed;
 
 import org.springframework.stereotype.Component;
 
@@ -6,7 +6,7 @@ import javax.annotation.PostConstruct;
 import java.util.List;
 
 @Component
-public class AppInit {
+public class AppSeedInit {
     //Всички service класове, които сме имплементирали с InitializableService interface,
     // тук ни се зареждат автоматично - Open-Close principle
     private final InitializableUserService userServices;
@@ -15,9 +15,9 @@ public class AppInit {
     private final InitializablePictureService pictureService;
     private final InitializableFinalOrderService finalOrderService;
 
-    public AppInit(InitializableUserService userServices, List<InitializableProductService> allProductServices,
-                   InitializableBasketService basketServices, InitializablePictureService pictureService,
-                   InitializableFinalOrderService finalOrderService) {
+    public AppSeedInit(InitializableUserService userServices, List<InitializableProductService> allProductServices,
+                       InitializableBasketService basketServices, InitializablePictureService pictureService,
+                       InitializableFinalOrderService finalOrderService) {
         this.userServices = userServices;
         this.allProductServices = allProductServices;
         this.basketServices = basketServices;
@@ -27,10 +27,10 @@ public class AppInit {
 
     @PostConstruct
     public void beginInit() {
-        this.userServices.init();  //1 init method
+        this.userServices.init();  //1 initSeed method
         this.allProductServices.forEach(srvc -> srvc.init()); //many independent not in any order inits methods of eacg product
-        this.pictureService.init();  //1 init method
-        this.basketServices.init();  //1 init method
-        this.finalOrderService.init(); //1 init method
+        this.pictureService.init();  //1 initSeed method
+        this.basketServices.init();  //1 initSeed method
+        this.finalOrderService.init(); //1 initSeed method
     }
 }

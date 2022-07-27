@@ -53,15 +53,6 @@ public class FinalOrderEntity {
         return this;
     }
 
-    public List<ItemEntity> getProducts() {
-        return Collections.unmodifiableList(products);
-    }
-
-    public FinalOrderEntity setProducts(List<ItemEntity> products) {
-        this.products = products;
-        return this;
-    }
-
     public UserEntity getUser() {
         return user;
     }
@@ -95,6 +86,15 @@ public class FinalOrderEntity {
 
     public FinalOrderEntity setOrderNumber(String orderNumber) {
         this.orderNumber = orderNumber;
+        return this;
+    }
+
+    public List<ItemEntity> getProducts() {
+        return Collections.unmodifiableList(products);
+    }
+
+    public FinalOrderEntity setProducts(List<ItemEntity> products) {
+        this.products = products;
         return this;
     }
 }

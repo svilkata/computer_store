@@ -23,7 +23,7 @@ public class ViewItemsController {
         this.monitorService = monitorService;
     }
 
-    @GetMapping("/computers/details/{id}")
+    @GetMapping("/computer/details/{id}")
     public String viewOneComputer(Model model, @PathVariable Long id) {
         if (!model.containsAttribute("oneComputer")) {
             ComputerViewGeneralModel oneComputer = this.computerService.findOneComputerById(id);
@@ -33,7 +33,7 @@ public class ViewItemsController {
         return "/viewItems/one-computer-details";
     }
 
-    @GetMapping("/computers")
+    @GetMapping("/computer")
     public String viewAllComputers(Model model) {
         if (!model.containsAttribute("computers")) {
             List<ComputerViewGeneralModel> computers = this.computerService.findAllComputers();
@@ -44,7 +44,7 @@ public class ViewItemsController {
     }
 
 
-    @GetMapping("/monitors/details/{id}")
+    @GetMapping("/monitor/details/{id}")
     public String viewOneMonitor(Model model, @PathVariable Long id) {
         if (!model.containsAttribute("oneMonitor")) {
             MonitorViewGeneralModel oneMonitor = this.monitorService.findOneMonitorById(id);
@@ -54,7 +54,7 @@ public class ViewItemsController {
         return "/viewItems/one-monitor-details";
     }
 
-    @GetMapping("/monitors")
+    @GetMapping("/monitor")
     public String viewAllMonitors(Model model) {
         if (!model.containsAttribute("monitors")) {
             List<MonitorViewGeneralModel> monitors = this.monitorService.findAllMonitors();
