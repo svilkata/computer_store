@@ -3,6 +3,7 @@ package bg.softuni.computerStore.service;
 import bg.softuni.computerStore.config.mapper.StructMapper;
 import bg.softuni.computerStore.initSeed.InitializableProductService;
 import bg.softuni.computerStore.model.binding.product.AddUpdateMonitorBindingDTO;
+import bg.softuni.computerStore.model.entity.cloudinary.PictureEntity;
 import bg.softuni.computerStore.model.entity.products.ItemEntity;
 import bg.softuni.computerStore.model.entity.products.MonitorEntity;
 import bg.softuni.computerStore.model.view.product.MonitorViewGeneralModel;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -37,24 +39,24 @@ public class MonitorService implements InitializableProductService {
                     "29\" (73.66 cm)", "2560 x 1080", "IPS", "178/178",
                     "75 Hz", "250 cd/m2",
                     "G-Sync/FreeSync: AMD FreeSync; Интерфейси: Аудио изход за слушалки, 2 x HDMI",
-                    IMAGE_URL_MONITOR_1);
+                    IMAGE_PUBLIC_ID_MONITOR_1);
 
             initOneMonitor("ASUS", "ASUS VA27EHE - 90LM0550-B01170", 301.01, 349.00, 4,
                     "27\" (68.58 cm)", "1920 x 1080", "IPS", "178/178",
                     "75 Hz", "250 cd/m2", "G-Sync/FreeSync: AMD FreeSync; Интерфейси: VGA, 1 x HDMI",
-                    IMAGE_URL_MONITOR_2);
+                    IMAGE_PUBLIC_ID_MONITOR_2);
 
             initOneMonitor("Acer", "Acer SB220QBI - SB220QBI", 238.01, 277.43, 4,
                     "21.5\" (54.61 cm)", "1920 x 1080", "IPS", "178/178",
                     "75 Hz", "250 cd/m2", "Интерфейси: VGA, 1 x HDMI 1.4",
-                    IMAGE_URL_MONITOR_3);
+                    IMAGE_PUBLIC_ID_MONITOR_3);
         }
     }
 
     private void initOneMonitor(String brand, String model, double buyAt, double sellAt, int newQuantity,
                                 String sizeInInches, String resolution, String matrixType, String viewAngle,
                                 String refreshRate, String brightness,
-                                String moreInfo, String photoUrl) {
+                                String moreInfo, String photoPublicId) {
 
         MonitorEntity toAdd =
                 new MonitorEntity(brand, model, BigDecimal.valueOf(buyAt), BigDecimal.valueOf(sellAt), newQuantity, moreInfo);
@@ -66,10 +68,12 @@ public class MonitorService implements InitializableProductService {
                 .setViewAngle(viewAngle)
                 .setRefreshRate(refreshRate)
                 .setBrightness(brightness)
-                .setMoreInfo(moreInfo)
-                .setPhotoUrl(photoUrl);
+                .setMoreInfo(moreInfo);
 
-        this.allItemsRepository.save(toAdd);
+        PictureEntity picture = this.cloudinaryAndPictureService.getPictureByPublicId(photoPublicId);
+        toAdd.setPhoto(picture);
+
+        this.allItemsRepository.save(toAdd.setCreationDateTime(LocalDateTime.now()));
     }
 
     public MonitorViewGeneralModel findOneMonitorById(Long itemId) {
@@ -106,7 +110,8 @@ public class MonitorService implements InitializableProductService {
                 .setMatrixType(addUpdateMonitorBindingDTO.getMatrixType())
                 .setViewAngle(addUpdateMonitorBindingDTO.getViewAngle())
                 .setRefreshRate(addUpdateMonitorBindingDTO.getRefreshRate())
-                .setBrightness(addUpdateMonitorBindingDTO.getBrightness());
+                .setBrightness(addUpdateMonitorBindingDTO.getBrightness())
+                .setCreationDateTime(LocalDateTime.now());
 
         MonitorEntity saved = this.allItemsRepository.save(toAdd);
         return saved.getItemId();
@@ -117,8 +122,8 @@ public class MonitorService implements InitializableProductService {
         //Изтриване на снимка от PictureRepositoty при изтриване на самия Item
         ItemEntity itemEntityToDelete = this.allItemsRepository.findById(id).orElseThrow();
 
-        if (itemEntityToDelete.getPhotoUrl() != null) {
-            List<String> collect = Arrays.stream(itemEntityToDelete.getPhotoUrl().split("/")).toList();
+        if (itemEntityToDelete.getPhoto() != null) {
+            List<String> collect = Arrays.stream(itemEntityToDelete.getPhoto().getUrl().split("/")).toList();
             String publicId = collect.get(collect.size() - 1);
             publicId = publicId.substring(0, publicId.length() - 4);
             if (this.cloudinaryAndPictureService.deleteFromCloudinary(publicId)) {

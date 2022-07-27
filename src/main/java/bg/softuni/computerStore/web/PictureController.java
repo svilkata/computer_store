@@ -27,7 +27,7 @@ public class PictureController {
 
         this.cloudinaryAndPictureService.savePhoto(picture);
 
-        return "redirect:/items/all/computers/details/" + itemId;
+        return "redirect:/items/all/computer/details/" + itemId;
     }
 
     @PostMapping("/monitors/{id}/addpicture")
@@ -36,7 +36,7 @@ public class PictureController {
 
         this.cloudinaryAndPictureService.savePhoto(picture);
 
-        return "redirect:/items/all/monitors/details/" + itemId;
+        return "redirect:/items/all/monitor/details/" + itemId;
     }
 
     private PictureEntity createPictureEntity(MultipartFile multipartFile, Long itemId) throws IOException {

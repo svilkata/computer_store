@@ -1,8 +1,11 @@
 package bg.softuni.computerStore.model.entity.products;
 
 
+import bg.softuni.computerStore.model.entity.cloudinary.PictureEntity;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "all_items")
@@ -31,7 +34,12 @@ public abstract class ItemEntity {
     private int currentQuantity;
     @Column(name = "more_info", columnDefinition = "TEXT")
     private String moreInfo;
-    private String photoUrl;
+//    private String photoUrl;
+    @OneToOne
+    private PictureEntity photo;
+
+    @Column(name = "creation_date_time", nullable = false)
+    private LocalDateTime creationDateTime;
 
     public ItemEntity() {
     }
@@ -124,16 +132,25 @@ public abstract class ItemEntity {
                 '}';
     }
 
-    public String getPhotoUrl() {
-        return photoUrl;
-    }
-
-    public ItemEntity setPhotoUrl(String photoUrl) {
-        this.photoUrl = photoUrl;
-        return this;
-    }
     public String getType() {
         return type;
     }
 
+    public LocalDateTime getCreationDateTime() {
+        return creationDateTime;
+    }
+
+    public ItemEntity setCreationDateTime(LocalDateTime creationDateTime) {
+        this.creationDateTime = creationDateTime;
+        return this;
+    }
+
+    public PictureEntity getPhoto() {
+        return photo;
+    }
+
+    public ItemEntity setPhoto(PictureEntity photo) {
+        this.photo = photo;
+        return this;
+    }
 }

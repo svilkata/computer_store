@@ -6,13 +6,14 @@ import bg.softuni.computerStore.model.entity.orders.FinalOrderEntity;
 import bg.softuni.computerStore.model.entity.orders.ItemQuantityInBasketEntity;
 import bg.softuni.computerStore.model.entity.orders.ItemQuantityInOrderEntity;
 import bg.softuni.computerStore.model.entity.products.ItemEntity;
-import bg.softuni.computerStore.model.entity.users.ClientExtraInfoEntity;
+import bg.softuni.computerStore.model.entity.orders.ClientOrderExtraInfoEntity;
 import bg.softuni.computerStore.model.enums.OrderStatusEnum;
 import bg.softuni.computerStore.repository.orders.FinalOrderRepository;
 import bg.softuni.computerStore.repository.orders.QuantitiesItemsInOrderRepository;
 import bg.softuni.computerStore.repository.users.ClientExtraInfoRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -43,13 +44,13 @@ public class FinalOrderService implements InitializableFinalOrderService {
 
     public void processOrder(Long basketId) {
         BasketOrderEntity basketOrder = this.basketService.readOneBasket(basketId);
-        ClientExtraInfoEntity clientExtraInfoEntity = new ClientExtraInfoEntity()
+        ClientOrderExtraInfoEntity clientOrderExtraInfoEntity = new ClientOrderExtraInfoEntity()
                 .setDeliveryAddress("Ivan Rilski 5, Sofia")
                 .setPhoneNumber("0898822977")
                 .setExtraNotes("bla bla bla bla bla")
                 .setUser(basketOrder.getUser());
 
-        clientExtraInfoEntity = this.clientExtraInfoRepository.save(clientExtraInfoEntity);
+        clientOrderExtraInfoEntity = this.clientExtraInfoRepository.save(clientOrderExtraInfoEntity);
 
         FinalOrderEntity finalOrderEntity = new FinalOrderEntity();
         finalOrderEntity
@@ -57,7 +58,7 @@ public class FinalOrderService implements InitializableFinalOrderService {
                 .setUser(basketOrder.getUser());
 
         //TODO we wait the client to enter his extra info details for the current order
-        finalOrderEntity.setExtraInfoForCurrentOrder(clientExtraInfoEntity);
+        finalOrderEntity.setExtraInfoForCurrentOrder(clientOrderExtraInfoEntity);
         //TODO we wait the client to finally confirm the current order
         finalOrderEntity.setStatus(OrderStatusEnum.CONFIRMED_BY_CUSTOMER);
 
@@ -68,7 +69,7 @@ public class FinalOrderService implements InitializableFinalOrderService {
         // because after a save, the id UUID is generated automatically
 
         //Saving the final confirmed order
-        FinalOrderEntity savedFinalOrder = this.finalOrderRepository.save(finalOrderEntity);
+        FinalOrderEntity savedFinalOrder = this.finalOrderRepository.save(finalOrderEntity.setCreationDateTime(LocalDateTime.now()));
 
         //Then from basket tables saving quantities to table orders_item_quantity
         List<ItemEntity> order1Items = savedFinalOrder.getProducts();
@@ -107,7 +108,7 @@ public class FinalOrderService implements InitializableFinalOrderService {
 
         //The eager way
         FinalOrderEntity currentOrder = this.finalOrderRepository
-                .findByOrderNumberEager(uuid).orElseThrow();
+                .findByOrderNumberByUUIDPrimaryEager(uuid).orElseThrow();
         currentOrder.setStatus(OrderStatusEnum.DELIVERED);
 
         this.finalOrderRepository.save(currentOrder);
@@ -115,6 +116,16 @@ public class FinalOrderService implements InitializableFinalOrderService {
 
     public List<FinalOrderEntity> getAllOrdersEager() {
         return this.finalOrderRepository.findAllOrderAndItemsEager();
+    }
+
+    public List<FinalOrderEntity> getAllOrdersLazy() {
+        return this.finalOrderRepository.findAllOrdersLazy();
+    }
+
+    //iqo from ItemQuantityInOrderEntity
+    public List<ItemQuantityInOrderEntity> findIQO(UUID uuid){
+        List<ItemQuantityInOrderEntity> allByUUIDPrimary = this.quantitiesItemsInOrderRepository.findAllByUUIDPrimary(uuid);
+        return allByUUIDPrimary;
     }
 
 

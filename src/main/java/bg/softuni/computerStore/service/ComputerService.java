@@ -3,6 +3,7 @@ package bg.softuni.computerStore.service;
 import bg.softuni.computerStore.config.mapper.StructMapper;
 import bg.softuni.computerStore.initSeed.InitializableProductService;
 import bg.softuni.computerStore.model.binding.product.AddUpdateComputerBindingDTO;
+import bg.softuni.computerStore.model.entity.cloudinary.PictureEntity;
 import bg.softuni.computerStore.model.entity.products.ComputerEntity;
 import bg.softuni.computerStore.model.entity.products.ItemEntity;
 import bg.softuni.computerStore.model.view.product.ComputerViewGeneralModel;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -38,37 +40,37 @@ public class ComputerService implements InitializableProductService {
                     "Intel Core i3-10100 (3.6/4.3GHz, 6M)", "Intel UHD Graphics 630",
                     "8 GB DDR4 2666 MHz", "1TB 7200rpm", "256 GB SSD M.2 NVMe",
                     "36 месеца международна гаранция Next Business Day",
-                    IMAGE_URL_COMPUTER_1);
+                    IMAGE_PUBLIC_ID_COMPUTER_1);
 
             initOneComputer("Gigabyte", "Gigabyte Brix BRI5-10210E", 1550.2, 1650.75, 10,
                     "Intel Core i5-10210U (4.2 GHz, 6M)", "Intel UHD Graphics 620",
                     "8 GB DDR4 SoDIMM", "256 GB SSD M.2 NVMe", "",
                     "24 месеца гаранция",
-                    IMAGE_URL_COMPUTER_2);
+                    IMAGE_PUBLIC_ID_COMPUTER_2);
 
             initOneComputer("Ardes", "Ardes Game - AGR54500RX6500XT", 1020.2, 1110.48, 8,
                     "AMD Ryzen 5 4500 (3.6/4.1GHz, 8M)", "AMD RX 6500 XT 4GB",
                     "8 GB DDR4 3200 MHz", "500 GB SSD M.2 NVMe", "",
                     "36 месеца гаранция",
-                    IMAGE_URL_COMPUTER_3);
+                    IMAGE_PUBLIC_ID_COMPUTER_3);
 
             initOneComputer("Lenovo", "Lenovo ThinkCentre Neo 50s SFF - 11SX002VBL", 730, 840, 3,
                     "Intel Core i3-12100 (3.30 - 4.30 GHz, 12 MB Cache)", "Intel UHD Graphics 730",
                     "8 GB DDR4 3200 MHz", "256 GB SSD M.2 NVMe", "",
                     "36 месеца гаранция",
-                    IMAGE_URL_COMPUTER_4);
+                    IMAGE_PUBLIC_ID_COMPUTER_4);
 
             initOneComputer("HP", "HP Pavilion 24-k1024nu All-in-One - 5Z7T6EA", 1700, 1807, 4,
                     "Intel Core i5-11500T (1.5/3.9GHz, 12M)", "Intel UHD Graphics 750",
                     "8 GB DDR4 2933 MHz SoDIMM", "512 GB SSD M.2 NVMe", "",
                     "23.8 (60.45cm) 1920x1080 IPS матов дисплей; 24 месеца гаранция",
-                    IMAGE_URL_COMPUTER_5);
+                    IMAGE_PUBLIC_ID_COMPUTER_5);
         }
     }
 
     private void initOneComputer(String brand, String model, double buyAt, double sellAt, int newQuantity,
                                  String processor, String videoCard, String ram, String disk, String ssd,
-                                 String extraInfo, String photoUrl) {
+                                 String extraInfo, String photoPublicId) {
         //With constructor
         ComputerEntity toAdd = new ComputerEntity(brand, model, BigDecimal.valueOf(buyAt), BigDecimal.valueOf(sellAt),
                 newQuantity, extraInfo);
@@ -77,10 +79,12 @@ public class ComputerService implements InitializableProductService {
                 .setVideoCard(videoCard)
                 .setRam(ram)
                 .setDisk(disk)
-                .setSsd(ssd)
-                .setPhotoUrl(photoUrl);
+                .setSsd(ssd);
 
-        this.allItemsRepository.save(toAdd);
+        PictureEntity picture = this.cloudinaryAndPictureService.getPictureByPublicId(photoPublicId);
+        toAdd.setPhoto(picture);
+
+        this.allItemsRepository.save(toAdd.setCreationDateTime(LocalDateTime.now()));
     }
 
     public ComputerViewGeneralModel findOneComputerById(Long itemId) {
@@ -116,7 +120,8 @@ public class ComputerService implements InitializableProductService {
                 .setVideoCard(addUpdateComputerBindingDTO.getVideoCard())
                 .setRam(addUpdateComputerBindingDTO.getRam())
                 .setDisk(addUpdateComputerBindingDTO.getDisk())
-                .setSsd(addUpdateComputerBindingDTO.getSsd());
+                .setSsd(addUpdateComputerBindingDTO.getSsd())
+                .setCreationDateTime(LocalDateTime.now());
 
         ComputerEntity saved = this.allItemsRepository.save(toAdd);
         return saved.getItemId();
@@ -127,8 +132,8 @@ public class ComputerService implements InitializableProductService {
         //Изтриване на снимка от PictureRepositoty при изтриване на самия Item
         ItemEntity itemEntityToDelete = this.allItemsRepository.findById(id).orElseThrow();
 
-        if (itemEntityToDelete.getPhotoUrl() != null) {
-            List<String> collect = Arrays.stream(itemEntityToDelete.getPhotoUrl().split("/")).toList();
+        if (itemEntityToDelete.getPhoto() != null) {
+            List<String> collect = Arrays.stream(itemEntityToDelete.getPhoto().getUrl().split("/")).toList();
             String publicId = collect.get(collect.size() - 1);
             publicId = publicId.substring(0, publicId.length() - 4);
             if (this.cloudinaryAndPictureService.deleteFromCloudinary(publicId)) {

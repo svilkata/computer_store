@@ -16,8 +16,11 @@ public interface FinalOrderRepository extends JpaRepository<FinalOrderEntity, St
     Optional<FinalOrderEntity> findByOrderNumber(String orderNumber);
 
     @Query("SELECT o FROM FinalOrderEntity o JOIN FETCH o.products WHERE o.id= :uuid")
-    Optional<FinalOrderEntity> findByOrderNumberEager(UUID uuid);
+    Optional<FinalOrderEntity> findByOrderNumberByUUIDPrimaryEager(UUID uuid);
 
     @Query("SELECT distinct o FROM FinalOrderEntity o JOIN FETCH o.products")
     List<FinalOrderEntity> findAllOrderAndItemsEager();
+
+    @Query("SELECT distinct o FROM FinalOrderEntity o")
+    List<FinalOrderEntity> findAllOrdersLazy();
 }

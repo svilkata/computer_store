@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,7 +52,8 @@ public class BasketService implements InitializableBasketService {
         BasketOrderEntity basketOrder1 = new BasketOrderEntity()
                 .setUser(admin)
                 .setProducts(basketOrder1Items)
-                .setBasketStatus(BasketStatus.OPEN);
+                .setBasketStatus(BasketStatus.OPEN)
+                .setCreationDateTime(LocalDateTime.now());
         this.basketRepository.save(basketOrder1);
         initItemQuantityInBasket(basketOrder1, 2);
 
@@ -61,7 +63,8 @@ public class BasketService implements InitializableBasketService {
         BasketOrderEntity basketOrder2 = new BasketOrderEntity()
                 .setUser(customer)
                 .setProducts(basketOrder2Items)
-                .setBasketStatus(BasketStatus.OPEN);
+                .setBasketStatus(BasketStatus.OPEN)
+                .setCreationDateTime(LocalDateTime.now());
         this.basketRepository.save(basketOrder2);
 
         //==>>
@@ -88,7 +91,8 @@ public class BasketService implements InitializableBasketService {
         BasketOrderEntity basketOrder3 = new BasketOrderEntity()
                 .setUser(customer)
                 .setProducts(basketOrder3Items)
-                .setBasketStatus(BasketStatus.OPEN);
+                .setBasketStatus(BasketStatus.OPEN)
+                .setCreationDateTime(LocalDateTime.now());
         this.basketRepository.save(basketOrder3);
         initItemQuantityInBasket(basketOrder3, 1);
     }
@@ -171,7 +175,7 @@ public class BasketService implements InitializableBasketService {
                     .setItemId(itemEntity.getItemId())
                     .setModel(itemEntity.getModel())
                     .setType(itemEntity.getType())
-                    .setPhotoUrl(itemEntity.getPhotoUrl());
+                    .setPhotoUrl(itemEntity.getPhoto().getUrl());
 
             ItemQuantityInBasketEntity rec =
                     getItemFromItemQuantityInBasketEntityByBasketItem(basketOrder, itemEntity);

@@ -105,9 +105,9 @@ public class CloudinaryAndPictureService implements InitializablePictureService 
             savedPhoto = this.pictureRepository.save(picture);
         }
 
-        //We update the all Items Repository here with the new url
+        //We update all the Items Repository here with the new url
         ItemEntity byId = allItemsRepository.findById(savedPhoto.getItemId()).orElseThrow();
-        byId.setPhotoUrl(savedPhoto.getUrl()); //we set the new url
+        byId.setPhoto(savedPhoto); //we set the new photo
         this.allItemsRepository.save(byId);
     }
 
@@ -123,5 +123,9 @@ public class CloudinaryAndPictureService implements InitializablePictureService 
 
     public void deleteFromPictureRepository(String publicId) {
         this.pictureRepository.deleteByPublicId(publicId);
+    }
+
+    public PictureEntity getPictureByPublicId(String photoPublicId) {
+        return this.pictureRepository.findPictureEntityByPublicId(photoPublicId).orElseThrow();
     }
 }

@@ -1,5 +1,7 @@
 package bg.softuni.computerStore.constants;
 
+import bg.softuni.computerStore.model.entity.cloudinary.PictureEntity;
+
 public class Constants {
     public final static String IMAGE_PUBLIC_ID_COMPUTER_1 = "01_qyahda.jpg";
     public final static String IMAGE_URL_COMPUTER_1 = "https://res.cloudinary.com/dtfd8gw16/image/upload/v1658595336/computerStore/computers/01_qyahda.jpg";

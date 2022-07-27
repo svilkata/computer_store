@@ -48,7 +48,7 @@ public class AddUpdateDeleteComputerController {
         }
 
         Long computerId = this.computerService.saveNewComputer(addUpdateComputerBindingDTO);
-        return "redirect:/items/all/computers/details/" + computerId;
+        return "redirect:/items/all/computer/details/" + computerId;
     }
 
     //IMPORTANT - once a customer puts an item in his/her basket, it is not possible to delete the item
@@ -57,7 +57,7 @@ public class AddUpdateDeleteComputerController {
     public String deleteComputer(@PathVariable Long id) {
         this.computerService.deleteComputerAndQuantity(id);
 
-        return "redirect:/items/all/computers";
+        return "redirect:/items/all/computer";
     }
 
     @GetMapping("/computers/{id}/edit")
@@ -88,6 +88,6 @@ public class AddUpdateDeleteComputerController {
 
         this.computerService.updateExistingComputer(addUpdateComputerBindingDTO);
 
-        return "redirect:/items/all/computers/details/" + id;
+        return "redirect:/items/all/computer/details/" + id;
     }
 }

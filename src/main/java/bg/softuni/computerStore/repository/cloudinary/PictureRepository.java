@@ -16,4 +16,6 @@ public interface PictureRepository extends JpaRepository<PictureEntity, Long> {
     String findPhotoUrlByItemId(@Param(value = "itemId") Long itemId);
 
     Optional<PictureEntity> findPictureEntitiesByItemId(Long itemId);
+
+    Optional<PictureEntity> findPictureEntityByPublicId(String photoPublicId);
 }

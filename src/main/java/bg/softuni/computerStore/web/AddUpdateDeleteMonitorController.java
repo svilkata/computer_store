@@ -49,7 +49,7 @@ public class AddUpdateDeleteMonitorController {
         }
 
         Long monitorId = this.monitorService.saveNewMonitor(addUpdateMonitorBindingDTO);
-        return "redirect:/items/all/monitors/details/" + monitorId;
+        return "redirect:/items/all/monitor/details/" + monitorId;
     }
 
     //IMPORTANT - once a customer puts an item in his/her basket, it is not possible to delete the item
@@ -58,7 +58,7 @@ public class AddUpdateDeleteMonitorController {
     public String deleteMonitor(@PathVariable Long id) {
         this.monitorService.deleteMonitorAndQuantity(id);
 
-        return "redirect:/items/all/monitors";
+        return "redirect:/items/all/monitor";
     }
 
     @GetMapping("/monitors/{id}/edit")
@@ -89,6 +89,6 @@ public class AddUpdateDeleteMonitorController {
 
         this.monitorService.updateExistingMonitor(addUpdateMonitorBindingDTO);
 
-        return "redirect:/items/all/monitors/details/" + id;
+        return "redirect:/items/all/monitor/details/" + id;
     }
 }

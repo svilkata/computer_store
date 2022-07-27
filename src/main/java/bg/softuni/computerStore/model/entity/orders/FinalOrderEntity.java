@@ -1,13 +1,13 @@
 package bg.softuni.computerStore.model.entity.orders;
 
 import bg.softuni.computerStore.model.entity.products.ItemEntity;
-import bg.softuni.computerStore.model.entity.users.ClientExtraInfoEntity;
 import bg.softuni.computerStore.model.entity.users.UserEntity;
 import bg.softuni.computerStore.model.enums.OrderStatusEnum;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
@@ -32,6 +32,9 @@ public class FinalOrderEntity {
     @Column(nullable = false)
     private OrderStatusEnum status;
 
+    @Column(name = "creation_date_time", nullable = false)
+    private LocalDateTime creationDateTime;
+
     @ManyToMany
     private List<ItemEntity> products;
 
@@ -39,7 +42,7 @@ public class FinalOrderEntity {
     private UserEntity user;
 
     @OneToOne
-    private ClientExtraInfoEntity extraInfoForCurrentOrder;
+    private ClientOrderExtraInfoEntity extraInfoForCurrentOrder;
 
     public FinalOrderEntity() {
     }
@@ -62,11 +65,11 @@ public class FinalOrderEntity {
         return this;
     }
 
-    public ClientExtraInfoEntity getExtraInfoForCurrentOrder() {
+    public ClientOrderExtraInfoEntity getExtraInfoForCurrentOrder() {
         return extraInfoForCurrentOrder;
     }
 
-    public FinalOrderEntity setExtraInfoForCurrentOrder(ClientExtraInfoEntity extraInfoForCurrentOrder) {
+    public FinalOrderEntity setExtraInfoForCurrentOrder(ClientOrderExtraInfoEntity extraInfoForCurrentOrder) {
         this.extraInfoForCurrentOrder = extraInfoForCurrentOrder;
         return this;
     }
@@ -95,6 +98,15 @@ public class FinalOrderEntity {
 
     public FinalOrderEntity setProducts(List<ItemEntity> products) {
         this.products = products;
+        return this;
+    }
+
+    public LocalDateTime getCreationDateTime() {
+        return creationDateTime;
+    }
+
+    public FinalOrderEntity setCreationDateTime(LocalDateTime dateTime) {
+        this.creationDateTime = dateTime;
         return this;
     }
 }

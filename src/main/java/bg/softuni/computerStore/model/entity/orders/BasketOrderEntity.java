@@ -6,6 +6,7 @@ import bg.softuni.computerStore.model.entity.users.UserEntity;
 import bg.softuni.computerStore.model.enums.BasketStatus;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -17,6 +18,9 @@ public class BasketOrderEntity extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @Column(name = "basket_status", nullable = false)
     private BasketStatus basketStatus;
+
+    @Column(name = "creation_date_time", nullable = false)
+    private LocalDateTime creationDateTime;
 
     //(fetch = FetchType.EAGER)
     @ManyToMany
@@ -55,6 +59,15 @@ public class BasketOrderEntity extends BaseEntity {
 
     public BasketOrderEntity setBasketStatus(BasketStatus basketStatus) {
         this.basketStatus = basketStatus;
+        return this;
+    }
+
+    public LocalDateTime getCreationDateTime() {
+        return creationDateTime;
+    }
+
+    public BasketOrderEntity setCreationDateTime(LocalDateTime creationDateTime) {
+        this.creationDateTime = creationDateTime;
         return this;
     }
 }

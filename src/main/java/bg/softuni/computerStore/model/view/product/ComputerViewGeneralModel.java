@@ -19,9 +19,6 @@ public class ComputerViewGeneralModel {
     private String disk;
     private String ssd;
 
-
-
-
     public ComputerViewGeneralModel() {
     }
 
