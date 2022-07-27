@@ -2,9 +2,9 @@ package bg.softuni.computerStore.web;
 
 import bg.softuni.computerStore.model.binding.user.EmployeeRegisterBindingDTO;
 import bg.softuni.computerStore.model.binding.user.UserRolesBindingDTO;
+import bg.softuni.computerStore.model.view.stats.StatsViewModelReportSales;
 import bg.softuni.computerStore.service.StatsService;
 import bg.softuni.computerStore.service.UserService;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -27,12 +27,21 @@ public class AdminController {
         this.statsService = statsService;
     }
 
-    @GetMapping("/statistics")
+    @GetMapping("/statshttprequests")
 //    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
-    public ModelAndView statistics() {
+    public ModelAndView statisticsHttpRequests() {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject("stats", statsService.getStats());
-        modelAndView.setViewName("/user/stats");
+        modelAndView.addObject("stats", statsService.getStatsHttpRequests());
+        modelAndView.setViewName("/stats/stats-httprequests");
+        return modelAndView;
+    }
+
+    @GetMapping("/statssales")
+//    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    public ModelAndView statisticsSales() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("stats", statsService.getStatsSales());
+        modelAndView.setViewName("/stats/stats-sales");
         return modelAndView;
     }
 

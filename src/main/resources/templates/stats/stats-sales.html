@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec='http://www.thymeleaf.org/extras/spring-security'>
+
+<head th:replace="fragments/commons::head"></head>
+
+<body>
+
+<header th:replace="fragments/commons::header"></header>
+
+<main>
+    <div class="container-fluid">
+        <h1 class="text-center text-warning mt-5"> Welcome to Stats Sales!</h1>
+        <h3 class="text-center text-warning mt-5">Total number of orders:
+            <th:block th:text="${stats.getTotalOrders()}"></th:block>
+        </h3>
+        <h3 class="text-center text-warning mt-5">Total number of items:
+            <th:block th:text="${stats.getTotalItems()}"></th:block>
+        </h3>
+        <h3 class="text-center text-warning mt-5">Total revenue in LEVA:
+            <th:block th:text="${stats.getTotalRevenue()}"></th:block>
+        </h3>
+        <h3 class="text-center text-warning mt-5">Total net profit in LEVA:
+            <th:block th:text="${stats.getTotalProfit()}"></th:block>
+        </h3>
+    </div>
+</main>
+
+
+<footer th:replace="fragments/commons::footer"></footer>
+
+</body>
+</html>

@@ -7,7 +7,9 @@ import bg.softuni.computerStore.model.enums.BasketStatus;
 
 import javax.persistence.*;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 @Entity
 @Table(name = "baskets")
@@ -19,6 +21,9 @@ public class BasketOrderEntity extends BaseEntity {
     //(fetch = FetchType.EAGER)
     @ManyToMany
     private List<ItemEntity> products;
+
+    //Keeping quantities of each bought product
+//    private Map<String, Integer> productsQuantities = new LinkedHashMap<>();
 
     @ManyToOne
     private UserEntity user;

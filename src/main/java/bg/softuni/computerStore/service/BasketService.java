@@ -50,12 +50,16 @@ public class BasketService implements InitializableBasketService {
                 .setBasketStatus(BasketStatus.OPEN);
         this.basketRepository.save(basketOrder2);
 
+        BasketOrderEntity basketOrder3 = new BasketOrderEntity()
+                .setUser(customer)
+                .setProducts(allItemsInTheCurrentBasket.subList(6, 8))
+                .setBasketStatus(BasketStatus.OPEN);
+        this.basketRepository.save(basketOrder3);
+
     }
 
     public BasketOrderEntity readOneBasket(Long basketId) {
-        BasketOrderEntity basketOrder1 = this.basketRepository.findBasketById(basketId).orElseThrow();
-        return basketOrder1;
-//        BasketOrderEntity basketOrder2 = this.basketRepository.findById(2L).orElseThrow();
+        return this.basketRepository.findBasketById(basketId).orElseThrow();
     }
 
     public void deleteOneBasket(Long basketId) {

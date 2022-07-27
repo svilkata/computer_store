@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -16,4 +17,7 @@ public interface FinalOrderRepository extends JpaRepository<FinalOrderEntity, St
 
     @Query("SELECT o FROM FinalOrderEntity o JOIN FETCH o.products WHERE o.id= :uuid")
     Optional<FinalOrderEntity> findByOrderNumberEager(UUID uuid);
+
+    @Query("SELECT distinct o FROM FinalOrderEntity o JOIN FETCH o.products")
+    List<FinalOrderEntity> findAllOrderAndItemsEager();
 }

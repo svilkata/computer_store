@@ -1,10 +1,10 @@
 package bg.softuni.computerStore.model.view.stats;
 
-public class StatsViewModel {
+public class StatsViewModelHttpRequests {
     private final int authRequests;
     private final int anonymousRequests;
 
-    public StatsViewModel(int authRequests, int anonymousRequests) {
+    public StatsViewModelHttpRequests(int authRequests, int anonymousRequests) {
         this.authRequests = authRequests;
         this.anonymousRequests = anonymousRequests;
     }
