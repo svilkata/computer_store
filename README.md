@@ -90,3 +90,9 @@ Pageable and sorted – to implement it. – лесно става в Java, но
 * Чрез ModelMapper
 * Чрез MapStruct - и един деклариран default mapping method
 * Ръчно - чрез setters
+
+
+### Три custom валидации
+* За това дали username или e-mail вече съществуват в базата данни
+* За това дали паролите се еднакви
+* За това дали покупна и продажна цена са валидни

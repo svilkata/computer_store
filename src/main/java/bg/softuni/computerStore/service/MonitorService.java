@@ -100,7 +100,7 @@ public class MonitorService implements InitializableProductService {
     public Long saveNewMonitor(AddUpdateMonitorBindingDTO addUpdateMonitorBindingDTO) {
         //From ItemEntity
         MonitorEntity toAdd = new MonitorEntity(addUpdateMonitorBindingDTO.getBrand(), addUpdateMonitorBindingDTO.getModel(),
-                addUpdateMonitorBindingDTO.getBuyingPrice(), addUpdateMonitorBindingDTO.getSellingPrice(),
+                new BigDecimal(addUpdateMonitorBindingDTO.getBuyingPrice()), new BigDecimal(addUpdateMonitorBindingDTO.getSellingPrice()),
                 addUpdateMonitorBindingDTO.getNewQuantityToAdd(), addUpdateMonitorBindingDTO.getMoreInfo());
 
         //From MonitorEntity
@@ -145,8 +145,8 @@ public class MonitorService implements InitializableProductService {
                 .setBrand(oneMonitorById.getBrand())
                 .setModel(oneMonitorById.getModel())
                 .setCurrentQuantity(oneMonitorById.getCurrentQuantity())
-                .setBuyingPrice(oneMonitorById.getBuyingPrice())
-                .setSellingPrice(oneMonitorById.getSellingPrice())
+                .setBuyingPrice(oneMonitorById.getBuyingPrice().toString())
+                .setSellingPrice(oneMonitorById.getSellingPrice().toString())
                 .setMoreInfo(oneMonitorById.getMoreInfo());
 
         //From AddUpdateMonitorBindingDTO
@@ -172,8 +172,8 @@ public class MonitorService implements InitializableProductService {
         toUpdate
                 .setBrand(addUpdateMonitorBindingDTO.getBrand())
                 .setModel(addUpdateMonitorBindingDTO.getModel())
-                .setBuyingPrice(addUpdateMonitorBindingDTO.getBuyingPrice())
-                .setSellingPrice(addUpdateMonitorBindingDTO.getSellingPrice())
+                .setBuyingPrice(new BigDecimal(addUpdateMonitorBindingDTO.getBuyingPrice()))
+                .setSellingPrice(new BigDecimal(addUpdateMonitorBindingDTO.getSellingPrice()))
                 .setCurrentQuantity(addUpdateMonitorBindingDTO.getNewQuantityToAdd() + toUpdate.getCurrentQuantity())
                 .setMoreInfo(addUpdateMonitorBindingDTO.getMoreInfo());
 

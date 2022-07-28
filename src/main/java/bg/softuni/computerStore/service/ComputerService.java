@@ -111,7 +111,7 @@ public class ComputerService implements InitializableProductService {
     public Long saveNewComputer(AddUpdateComputerBindingDTO addUpdateComputerBindingDTO) {
         //From ItemEntity
         ComputerEntity toAdd = new ComputerEntity(addUpdateComputerBindingDTO.getBrand(), addUpdateComputerBindingDTO.getModel(),
-                addUpdateComputerBindingDTO.getBuyingPrice(), addUpdateComputerBindingDTO.getSellingPrice(),
+                new BigDecimal(addUpdateComputerBindingDTO.getBuyingPrice()), new BigDecimal(addUpdateComputerBindingDTO.getSellingPrice()),
                 addUpdateComputerBindingDTO.getNewQuantityToAdd(), addUpdateComputerBindingDTO.getMoreInfo());
 
         //From ComputerEntity
@@ -155,8 +155,8 @@ public class ComputerService implements InitializableProductService {
                 .setBrand(oneComputerById.getBrand())
                 .setModel(oneComputerById.getModel())
                 .setCurrentQuantity(oneComputerById.getCurrentQuantity())
-                .setBuyingPrice(oneComputerById.getBuyingPrice())
-                .setSellingPrice(oneComputerById.getSellingPrice())
+                .setBuyingPrice(oneComputerById.getBuyingPrice().toString())
+                .setSellingPrice(oneComputerById.getSellingPrice().toString())
                 .setMoreInfo(oneComputerById.getMoreInfo());
 
         //From AddUpdateComputerBindingDTO
@@ -181,8 +181,8 @@ public class ComputerService implements InitializableProductService {
         toUpdate
                 .setBrand(addUpdateComputerBindingDTO.getBrand())
                 .setModel(addUpdateComputerBindingDTO.getModel())
-                .setBuyingPrice(addUpdateComputerBindingDTO.getBuyingPrice())
-                .setSellingPrice(addUpdateComputerBindingDTO.getSellingPrice())
+                .setBuyingPrice(new BigDecimal(addUpdateComputerBindingDTO.getBuyingPrice()))
+                .setSellingPrice(new BigDecimal(addUpdateComputerBindingDTO.getSellingPrice()))
                 .setCurrentQuantity(addUpdateComputerBindingDTO.getNewQuantityToAdd() + toUpdate.getCurrentQuantity())
                 .setMoreInfo(addUpdateComputerBindingDTO.getMoreInfo());
 

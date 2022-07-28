@@ -1,10 +1,10 @@
 package bg.softuni.computerStore.model.binding.product;
 
+import bg.softuni.computerStore.model.validation.price.ValidPrice;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
-import java.math.BigDecimal;
 
 public class AddUpdateMonitorBindingDTO {
     //From ItemEntity
@@ -14,12 +14,10 @@ public class AddUpdateMonitorBindingDTO {
     private String brand;
     @NotBlank(message = "Computer model cannot be empty")
     private String model;
-    @NotNull(message = "Computer buying price can not be null")
-    @Positive(message = "Computer buying price should be positive")
-    private BigDecimal buyingPrice;
-    @NotNull(message = "Computer selling price can not be null")
-    @Positive(message = "Computer selling price should be positive")
-    private BigDecimal sellingPrice;
+    @ValidPrice
+    private String buyingPrice;
+    @ValidPrice
+    private String sellingPrice;
     //No need for validation for current quantity
     private int currentQuantity;
     @NotNull(message = "Computer new bought quantity can not be null")
@@ -74,20 +72,20 @@ public class AddUpdateMonitorBindingDTO {
         return this;
     }
 
-    public BigDecimal getBuyingPrice() {
+    public String getBuyingPrice() {
         return buyingPrice;
     }
 
-    public AddUpdateMonitorBindingDTO setBuyingPrice(BigDecimal buyingPrice) {
+    public AddUpdateMonitorBindingDTO setBuyingPrice(String buyingPrice) {
         this.buyingPrice = buyingPrice;
         return this;
     }
 
-    public BigDecimal getSellingPrice() {
+    public String getSellingPrice() {
         return sellingPrice;
     }
 
-    public AddUpdateMonitorBindingDTO setSellingPrice(BigDecimal sellingPrice) {
+    public AddUpdateMonitorBindingDTO setSellingPrice(String sellingPrice) {
         this.sellingPrice = sellingPrice;
         return this;
     }
