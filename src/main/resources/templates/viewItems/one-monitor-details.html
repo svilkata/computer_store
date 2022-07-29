@@ -12,7 +12,7 @@
 
 <main>
     <div class="container-fluid">
-        <h2 class="text-center text-white mt-5 greybg">..........Details...........</h2>
+        <h2 class="text-center text-white mt-5 greybg" th:text="#{view_item_details}">..........Details...........</h2>
         <div class="offers row mx-auto d-flex flex-row justify-content-center .row-cols-auto">
             <div class="row">
                 <div class="offer card col-sm-2 col-md-3  col-lg-3 m-2 p-0"
@@ -24,18 +24,25 @@
                     <ul class="offer-details list-group list-group-flush">
                         <li class="list-group-item">
                             <div class="card-text"><span th:text="'*Size: ' + *{size}">Size in inches</span></div>
-                            <div class="card-text"><span th:text="'*Resolution: ' + *{resolution}">Resolution</span></div>
-                            <div class="card-text"><span th:text="'*Matrix type: ' + *{matrixType}">Matrix type</span></div>
-                            <div class="card-text"><span th:text="'*View angle: ' + *{viewAngle}">View angle</span></div>
-                            <div class="card-text"><span th:text="'*Refresh rate: ' + *{refreshRate}">Refresh rate</span></div>
-                            <div th:if="*{!brightness.isBlank()}" class="card-text"><span th:text="'*Brightness: ' + *{brightness}">Brightness</span></div>
-                            <div th:if="*{!moreInfo.isBlank()}" class="card-text"><span th:text="'*More info: ' + *{moreInfo}">More info</span>
+                            <div class="card-text"><span th:text="'*Resolution: ' + *{resolution}">Resolution</span>
+                            </div>
+                            <div class="card-text"><span th:text="'*Matrix type: ' + *{matrixType}">Matrix type</span>
+                            </div>
+                            <div class="card-text"><span th:text="'*View angle: ' + *{viewAngle}">View angle</span>
+                            </div>
+                            <div class="card-text"><span
+                                    th:text="'*Refresh rate: ' + *{refreshRate}">Refresh rate</span></div>
+                            <div th:if="*{!brightness.isBlank()}" class="card-text"><span
+                                    th:text="'*Brightness: ' + *{brightness}">Brightness</span></div>
+                            <div th:if="*{!moreInfo.isBlank()}" class="card-text"><span
+                                    th:text="'*More info: ' + *{moreInfo}">More info</span>
                             </div>
                             <div sec:authorize="hasRole('ADMIN') || hasRole('EMPLOYEE_PURCHASES') || hasRole('EMPLOYEE_SALES')"
                                  class="card-text"><span class="alert-danger"
                                                          th:text="'* Current quantity: ' + *{currentQuantity}">Current quantity</span>
                             </div>
-                            <div class="card-text"><span th:text="'We sell at: ' + *{sellingPrice} + ' лв'" style="font-weight: bold">Selling price</span></div>
+                            <div class="card-text"><span th:text="'We sell at: ' + *{sellingPrice} + ' лв'"
+                                                         style="font-weight: bold">Selling price</span></div>
                         </li>
                     </ul>
 
@@ -49,7 +56,6 @@
                                    th:href="@{/pages/purchases/monitors/{id}/edit (id=*{itemId})}">Update</a>
 
                                 <form th:action="@{/pages/purchases/monitors/delete/{id} (id=*{itemId})}"
-                                      th:type="hidden"
                                       th:method="delete">
                                     <input type="submit" class="btn btn-link alert-danger" value="Delete"></input>
                                 </form>

@@ -35,9 +35,9 @@ public class FieldMatchValidator implements ConstraintValidator<FieldMatch, Obje
             valid = firstValue.equals(secondValue);  //еднакви ли са password и confirmPassword от html формуляра
         }
 
-        if (!valid) {  //ако не са еднакви паролите, върни error message
+        if (!valid) {  //ако не са еднакви паролите, върни errorHandling message
             context
-                    .buildConstraintViolationWithTemplate(message)  //error message-а от клас Анотацията @FieldMatch на UserRegisterDto
+                    .buildConstraintViolationWithTemplate(message)  //errorHandling message-а от клас Анотацията @FieldMatch на UserRegisterDto
                     .addPropertyNode(this.second) //задай грешката на второто поле от класа UserRegisterDto
                     .addConstraintViolation()
                     .disableDefaultConstraintViolation();  //без dafault message при грешка

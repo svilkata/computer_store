@@ -1,6 +1,8 @@
 package bg.softuni.computerStore.service;
 
 import bg.softuni.computerStore.config.mapper.StructMapper;
+import bg.softuni.computerStore.exception.ItemNotFoundException;
+import bg.softuni.computerStore.exception.ItemsWithTypeNotFoundException;
 import bg.softuni.computerStore.initSeed.InitializableProductService;
 import bg.softuni.computerStore.model.binding.product.AddUpdateMonitorBindingDTO;
 import bg.softuni.computerStore.model.entity.cloudinary.PictureEntity;
@@ -77,7 +79,8 @@ public class MonitorService implements InitializableProductService {
     }
 
     public MonitorViewGeneralModel findOneMonitorById(Long itemId) {
-        ItemEntity oneMonitorById = this.allItemsRepository.findById(itemId).orElseThrow();
+        ItemEntity oneMonitorById = this.allItemsRepository.findItemEntityByTypeAndItemId("monitor", itemId)
+                .orElseThrow(() -> new ItemNotFoundException(String.format("No monitor item with id %d to be viewed!", itemId), itemId));
 
         MonitorViewGeneralModel monitorViewGeneralModel =
                 this.structMapper.monitorEntityToMonitorViewGeneralModel((MonitorEntity) oneMonitorById);
@@ -87,6 +90,9 @@ public class MonitorService implements InitializableProductService {
 
     public List<MonitorViewGeneralModel> findAllMonitors() {
         List<ItemEntity> allMonitors = this.allItemsRepository.findAllItemsByType("monitor");
+        if (allMonitors.isEmpty()) {
+            throw new ItemsWithTypeNotFoundException("No monitors available in the database");
+        }
         List<MonitorViewGeneralModel> allMonitorsView = new ArrayList<>();
 
         for (ItemEntity item : allMonitors) {
@@ -120,7 +126,8 @@ public class MonitorService implements InitializableProductService {
     @Transactional
     public void deleteMonitorAndQuantity(Long id) {
         //Изтриване на снимка от PictureRepositoty при изтриване на самия Item
-        ItemEntity itemEntityToDelete = this.allItemsRepository.findById(id).orElseThrow();
+        ItemEntity itemEntityToDelete = this.allItemsRepository.findItemEntityByTypeAndItemId("monitor", id)
+                .orElseThrow(() -> new ItemNotFoundException(String.format("No monitor item with this %d to be deleted!", id), id));
 
         if (itemEntityToDelete.getPhoto() != null) {
             List<String> collect = Arrays.stream(itemEntityToDelete.getPhoto().getUrl().split("/")).toList();

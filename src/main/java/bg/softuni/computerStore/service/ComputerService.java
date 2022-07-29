@@ -1,6 +1,8 @@
 package bg.softuni.computerStore.service;
 
 import bg.softuni.computerStore.config.mapper.StructMapper;
+import bg.softuni.computerStore.exception.ItemNotFoundException;
+import bg.softuni.computerStore.exception.ItemsWithTypeNotFoundException;
 import bg.softuni.computerStore.initSeed.InitializableProductService;
 import bg.softuni.computerStore.model.binding.product.AddUpdateComputerBindingDTO;
 import bg.softuni.computerStore.model.entity.cloudinary.PictureEntity;
@@ -88,7 +90,8 @@ public class ComputerService implements InitializableProductService {
     }
 
     public ComputerViewGeneralModel findOneComputerById(Long itemId) {
-        ItemEntity oneComputerById = this.allItemsRepository.findById(itemId).orElseThrow();
+        ItemEntity oneComputerById = this.allItemsRepository.findItemEntityByTypeAndItemId("computer", itemId)
+                .orElseThrow(() -> new ItemNotFoundException(String.format("No computer item with id %d to be viewed!", itemId), itemId));
 
         ComputerViewGeneralModel computerViewGeneralModel =
                 this.structMapper.computerEntityToComputerSalesViewGeneralModel((ComputerEntity) oneComputerById);
@@ -98,6 +101,9 @@ public class ComputerService implements InitializableProductService {
 
     public List<ComputerViewGeneralModel> findAllComputers() {
         List<ItemEntity> allComputers = this.allItemsRepository.findAllItemsByType("computer");
+        if (allComputers.isEmpty()) {
+            throw new ItemsWithTypeNotFoundException("No computers available in the database");
+        }
         List<ComputerViewGeneralModel> allComputersView = new ArrayList<>();
 
         for (ItemEntity item : allComputers) {
@@ -130,7 +136,8 @@ public class ComputerService implements InitializableProductService {
     @Transactional
     public void deleteComputerAndQuantity(Long id) {
         //Изтриване на снимка от PictureRepositoty при изтриване на самия Item
-        ItemEntity itemEntityToDelete = this.allItemsRepository.findById(id).orElseThrow();
+        ItemEntity itemEntityToDelete = this.allItemsRepository.findItemEntityByTypeAndItemId("computer", id)
+                .orElseThrow(() -> new ItemNotFoundException(String.format("No computer with this %d to be deleted!", id), id));
 
         if (itemEntityToDelete.getPhoto() != null) {
             List<String> collect = Arrays.stream(itemEntityToDelete.getPhoto().getUrl().split("/")).toList();

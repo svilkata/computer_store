@@ -1,7 +1,7 @@
 # Computer Store - diploma web project on JAVA and SPRING
 # Online магазин за продажба на компютри и компютърни компоненти
 
-## Functionality
+## Functionality of the system
 ### Инициализация на първоначални данни
 * Инициализация на първоначални данни - чрез InitialazbleService интерфейси съгласно Open-Close принципа - в init/AppInit.java class в @PostConstruct анотирания метод.
 * Накрая на представянето на проекта, може да добавим за демо, да се инициализират и 2 монитора от data.sql файла.
@@ -58,8 +58,68 @@ sql:
 
 
 ### Search in category by  ...
+* //TODO - глобална търсачка в commons.html за всички типове продукти - по тип на продукта + име на модел/цена по-голяма от... 
+
 
 Добавянето на Item-s в кошницата може да става с @RestController :)
+
+
+
+## Requirements done
+### Използвани структури от данни
+* Sets - за ролите
+* Lists - като връщаме и Unmodifiable когато е неoбходимо
+
+### Преубразуване на данни
+* Чрез ModelMapper
+* Чрез MapStruct - и един деклариран default mapping method
+* Ръчно - чрез constructor и setters
+
+### Validating input data
+* client-side via HTML
+* server-side via @Valid annotation
+
+### Три custom annotation валидации
+* За това дали username или e-mail вече съществуват в базата данни
+* За това дали паролите се еднакви
+* За това дали покупна и продажна цена са валидни
+
+### Spring data, Hibernate and database
+* using MySQL
+* implemented Single Table inheritance for all the products
+* all tables interconnected one another relationally
+
+### Cloudinary
+* За качване/смяна на снимка за всеки продукт
+
+### Interceptors
+* report for http request from anonymous and authenticated user
+* I18N – change language - just a demo for the header part and some title/paragraphs of pages - from English to Bulgarian and vice versa
+* //ТODO - ...........как да направя отчета за продажбите да бъде interceptor....
+
+### Generating HTML
+* with Thymeleaf engine secured
+* //TODO - with rest fetch API
+
+### Responsive Web Page Design 
+* using Bootstrap
+
+### Spring security
+* only via the security chain! - not using @PreAuthorize on method level
+* secured user role management
+* secured password change
+* secured admin user change
+* secured adding new employee of Computer store
+
+### Error Handling 
+* using global application exception handling with @ControllerAdvice on all GET operations
+* POST, PATCH, DELETE operations are secured by the Spring security
+* //TODO - moreeeee
+
+//TODO
+### Loading data with FETCH api in the Thymeleaf html
+
+
 
 
 **Other**
@@ -72,27 +132,12 @@ sql:
 Подобие на чат (ако остане време)
 Pageable and sorted – to implement it. – лесно става в Java, но за да се display-не на html-a, то:
 -	При client-side rendering трябва чрез JS да ги вземаме нещата.
--	При server-side rendering с обикновен контролер -  трябва в Thymeleaf модела да ги сложим 
-Чрез Page . content вземаме лист от елементите от текущия Page, previous enabled, next enabled, previousPage, next
+-	При server-side rendering с обикновен контролер -  трябва в Thymeleaf модела да ги сложим
+     Чрез Page . content вземаме лист от елементите от текущия Page, previous enabled, next enabled, previousPage, next
 
 /Възможност за нелогнат потребител да си добавя продукти в кошница. За да ги поръча обаче трябва да се логне – след регистрация и логване, кошницата дали ще може да се запази.
 * Възможност за статистика:
   * за брой клиенти и средна стойност в лева за една поръчка;
 
 
-* При 20 000 артикула, то допълнителната информация може да я слагаме в вложени JSON-и
-
-### Използвани структури от данни
-* Sets - за ролите
-* Lists - като връщаме и Unmodifiable когато е непбходимо
-
-### Преубразуване на данни
-* Чрез ModelMapper
-* Чрез MapStruct - и един деклариран default mapping method
-* Ръчно - чрез setters
-
-
-### Три custom валидации
-* За това дали username или e-mail вече съществуват в базата данни
-* За това дали паролите се еднакви
-* За това дали покупна и продажна цена са валидни
+* При 20 000 артикула, то допълнителната информация може да я слагаме във вложени JSON-и

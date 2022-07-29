@@ -7,7 +7,7 @@ import javax.validation.constraints.Size;
 
 @FieldMatch(firstField = "newPassword",
         secondField = "confirmNewPassword",
-        message = "New passwords do not match" //we override here the default error message
+        message = "New passwords do not match" //we override here the default errorHandling message
 )
 public class ChangeUserPasswordDTO {
     //we take/display the username automatically

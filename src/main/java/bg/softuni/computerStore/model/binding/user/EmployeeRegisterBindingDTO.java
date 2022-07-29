@@ -10,14 +10,14 @@ import java.util.List;
 import java.util.Set;
 
 public class EmployeeRegisterBindingDTO {
-    @NotEmpty(message = "E-mail should be provided") //we override here the default error message
-    @Email(message = "E-mail should be valid") //we override here the default error message
-    @UniqueUserEmail(message = "Email already exists in the db. Please, think of another e-mail")  //we override here the default error message
+    @NotEmpty(message = "E-mail should be provided") //we override here the default errorHandling message
+    @Email(message = "E-mail should be valid") //we override here the default errorHandling message
+    @UniqueUserEmail(message = "Email already exists in the db. Please, think of another e-mail")  //we override here the default errorHandling message
     private String email;
 
     @NotBlank(message = "Username cannot be empty")
     @Size(min = 3, max = 20, message = "Username must be between 3 and 20 characters inclusive")
-    @UniqueUserEmail(message = "Username already exists in the db. Please, think of another e-mail")  //we override here the default error message
+    @UniqueUserEmail(message = "Username already exists in the db. Please, think of another e-mail")  //we override here the default errorHandling message
     private String username;
 
     @NotBlank(message = "First name cannot be empty")

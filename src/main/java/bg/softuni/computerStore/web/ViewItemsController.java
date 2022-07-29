@@ -1,8 +1,10 @@
 package bg.softuni.computerStore.web;
 
 import bg.softuni.computerStore.model.view.product.ComputerViewGeneralModel;
+import bg.softuni.computerStore.model.view.product.LaptopViewGeneralModel;
 import bg.softuni.computerStore.model.view.product.MonitorViewGeneralModel;
 import bg.softuni.computerStore.service.ComputerService;
+import bg.softuni.computerStore.service.LaptopService;
 import bg.softuni.computerStore.service.MonitorService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,10 +19,12 @@ import java.util.List;
 public class ViewItemsController {
     private final ComputerService computerService;
     private final MonitorService monitorService;
+    private final LaptopService laptopService;
 
-    public ViewItemsController(ComputerService computerService, MonitorService monitorService) {
+    public ViewItemsController(ComputerService computerService, MonitorService monitorService, LaptopService laptopService) {
         this.computerService = computerService;
         this.monitorService = monitorService;
+        this.laptopService = laptopService;
     }
 
     @GetMapping("/computer/details/{id}")
@@ -62,6 +66,26 @@ public class ViewItemsController {
         }
 
         return "/viewItems/all-monitors";
+    }
+
+    @GetMapping("/laptop/details/{id}")
+    public String viewOneLaptop(Model model, @PathVariable Long id) {
+        if (!model.containsAttribute("oneLaptop")) {
+            LaptopViewGeneralModel oneLaptop = this.laptopService.findOneLaptopById(id);
+            model.addAttribute("oneLaptop", oneLaptop);
+        }
+
+        return "/viewItems/one-laptop-details";
+    }
+
+    @GetMapping("/laptop")
+    public String viewAllLaptops(Model model) {
+        if (!model.containsAttribute("laptops")) {
+            List<LaptopViewGeneralModel> laptops = this.laptopService.findAllLaptops();
+            model.addAttribute("laptops", laptops);
+        }
+
+        return "/viewItems/all-laptops";
     }
 
 

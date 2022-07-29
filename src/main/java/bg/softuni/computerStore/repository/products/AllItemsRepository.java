@@ -20,5 +20,5 @@ public interface AllItemsRepository extends JpaRepository<ItemEntity, Long> {
 
     Optional<ItemEntity> findByModel(String model);
 
-
+    Optional<ItemEntity> findItemEntityByTypeAndItemId(String type, Long itemId);
 }

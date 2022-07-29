@@ -6,7 +6,9 @@ import bg.softuni.computerStore.service.AppUserDetailsService;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
@@ -16,6 +18,8 @@ import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 
 @Configuration
+//@EnableGlobalMethodSecurity(prePostEnabled = true) - we will not use @PreAuthorize on method level
+//@EnableWebSecurity - we will not use @PreAuthorize on method level
 public class SecurityConfig {
     //Here we have to expose 3 things:
     // 1. PasswordEncoder
@@ -62,7 +66,7 @@ public class SecurityConfig {
                 // where to go in case that the login is successful
                         defaultSuccessUrl("/").
                 // where to go in case that the login failed
-                        failureForwardUrl("/users/login-error").
+                        failureForwardUrl("/users/login-errorHandling").
                 and().
                 // configure logout
                         logout().
