@@ -91,24 +91,14 @@ public class ComputerService implements InitializableProductService {
     }
 
     public ComputerViewGeneralModel findOneComputerById(String itemId) {
-        final Long itemLongId = isItemIdANumber(itemId);
-        ItemEntity oneComputerById = this.allItemsRepository.findItemEntityByTypeAndItemId("computer", itemLongId)
-                .orElseThrow(() -> new ItemNotFoundException(String.format("No computer item with id %d to be viewed!", itemLongId), itemLongId));
+        final Long id = isItemIdANumber(itemId);
+        ItemEntity oneComputerById = this.allItemsRepository.findItemEntityByTypeAndItemId("computer", id)
+                .orElseThrow(() -> new ItemNotFoundException(String.format("No computer item with id %d to be viewed!", id), id));
 
         ComputerViewGeneralModel computerViewGeneralModel =
                 this.structMapper.computerEntityToComputerSalesViewGeneralModel((ComputerEntity) oneComputerById);
 
         return computerViewGeneralModel;
-    }
-
-    private Long isItemIdANumber(String itemId) {
-        final Long itemLongId;
-        try {
-            itemLongId = Long.parseLong(itemId);
-        } catch (Exception e){
-            throw new ItemIdNotANumberException(String.format("%s is not a valid computer item number!", itemId));
-        }
-        return itemLongId;
     }
 
     public List<ComputerViewGeneralModel> findAllComputers() {
@@ -146,10 +136,12 @@ public class ComputerService implements InitializableProductService {
     }
 
     @Transactional
-    public void deleteComputerAndQuantity(Long id) {
+    public void deleteComputerAndQuantity(String itemId) {
+        final Long id = isItemIdANumber(itemId);
+
         //Изтриване на снимка от PictureRepositoty при изтриване на самия Item
         ItemEntity itemEntityToDelete = this.allItemsRepository.findItemEntityByTypeAndItemId("computer", id)
-                .orElseThrow(() -> new ItemNotFoundException(String.format("No computer with this %d to be deleted!", id), id));
+                .orElseThrow(() -> new ItemNotFoundException(String.format("No computer with id %d to be deleted!", id), id));
 
         if (itemEntityToDelete.getPhoto() != null) {
             List<String> collect = Arrays.stream(itemEntityToDelete.getPhoto().getUrl().split("/")).toList();
@@ -163,8 +155,11 @@ public class ComputerService implements InitializableProductService {
         this.allItemsRepository.deleteById(id);
     }
 
-    public AddUpdateComputerBindingDTO findComputerByIdUpdatingItem(Long id) {
-        ItemEntity oneComputerById = this.allItemsRepository.findById(id).orElseThrow();
+    public AddUpdateComputerBindingDTO findComputerByIdUpdatingItem(String itemId) {
+        final Long id = isItemIdANumber(itemId);
+
+        ItemEntity oneComputerById = this.allItemsRepository.findById(id)
+                .orElseThrow(() -> new ItemNotFoundException(String.format("No computer with id %d to be updated!", id), id));
         ComputerEntity ce = (ComputerEntity) oneComputerById;
 
         AddUpdateComputerBindingDTO addUpdateComputerBindingDTO = new AddUpdateComputerBindingDTO();
@@ -193,7 +188,10 @@ public class ComputerService implements InitializableProductService {
     }
 
     public Long updateExistingComputer(AddUpdateComputerBindingDTO addUpdateComputerBindingDTO) {
-        ItemEntity ce = this.allItemsRepository.findById(addUpdateComputerBindingDTO.getItemId()).orElseThrow();
+        Long id = addUpdateComputerBindingDTO.getItemId();
+
+        ItemEntity ce = this.allItemsRepository.findById(id)
+                .orElseThrow(() -> new ItemNotFoundException(String.format("No computer with id %d to be updated!", id), id));
         ComputerEntity toUpdate = (ComputerEntity) ce;
 
         //From ItemEntity
@@ -216,5 +214,15 @@ public class ComputerService implements InitializableProductService {
         ComputerEntity saved = this.allItemsRepository.save(toUpdate);
 
         return saved.getItemId();
+    }
+
+    private Long isItemIdANumber(String itemId) {
+        final Long itemLongId;
+        try {
+            itemLongId = Long.parseLong(itemId);
+        } catch (Exception e){
+            throw new ItemIdNotANumberException(String.format("%s is not a valid computer item number!", itemId));
+        }
+        return itemLongId;
     }
 }

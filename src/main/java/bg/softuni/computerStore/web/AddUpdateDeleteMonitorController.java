@@ -55,14 +55,14 @@ public class AddUpdateDeleteMonitorController {
     //IMPORTANT - once a customer puts an item in his/her basket, it is not possible to delete the item
     //We better delete in the beginning before ordering - in case we have done a mistake
     @DeleteMapping("/monitors/delete/{id}")
-    public String deleteMonitor(@PathVariable Long id) {
+    public String deleteMonitor(@PathVariable String id) {
         this.monitorService.deleteMonitorAndQuantity(id);
 
         return "redirect:/items/all/monitor";
     }
 
     @GetMapping("/monitors/{id}/edit")
-    public String updateMonitor(@PathVariable Long id, Model model) {
+    public String updateMonitor(@PathVariable String id, Model model) {
         AddUpdateMonitorBindingDTO editMonitor = this.monitorService.findMonitorByIdUpdatingItem(id);
 
         if (!model.containsAttribute("editMonitorBindingDTO")) {

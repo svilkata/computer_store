@@ -52,16 +52,17 @@ public class AddUpdateDeleteComputerController {
     }
 
     //IMPORTANT - once a customer puts an item in his/her basket, it is not possible to delete the item
-    //We better delete in the beginnig before ordering - in case we have done a mistake
+    //We better delete in the beginning before ordering - in case we have done a mistake
+    //Otherwise, we may update the item
     @DeleteMapping("/computers/delete/{id}")
-    public String deleteComputer(@PathVariable Long id) {
+    public String deleteComputer(@PathVariable String id) {
         this.computerService.deleteComputerAndQuantity(id);
 
         return "redirect:/items/all/computer";
     }
 
     @GetMapping("/computers/{id}/edit")
-    public String updateComputer(@PathVariable Long id, Model model) {
+    public String updateComputer(@PathVariable String id, Model model) {
         AddUpdateComputerBindingDTO editComputer = this.computerService.findComputerByIdUpdatingItem(id);
 
         if (!model.containsAttribute("editComputerBindingDTO")) {

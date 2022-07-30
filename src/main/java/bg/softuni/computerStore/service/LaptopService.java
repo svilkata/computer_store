@@ -33,24 +33,14 @@ public class LaptopService implements InitializableProductService {
     }
 
     public LaptopViewGeneralModel findOneLaptopById(String itemId) {
-        final Long itemLongId = isItemIdANumber(itemId);
-        ItemEntity oneLaptopById = this.allItemsRepository.findItemEntityByTypeAndItemId("laptop", itemLongId)
-                .orElseThrow(() -> new ItemNotFoundException(String.format("No laptop item with id %d to be viewed!", itemLongId), itemLongId));
+        final Long id = isItemIdANumber(itemId);
+        ItemEntity oneLaptopById = this.allItemsRepository.findItemEntityByTypeAndItemId("laptop", id)
+                .orElseThrow(() -> new ItemNotFoundException(String.format("No laptop item with id %d to be viewed!", id), id));
 
         LaptopViewGeneralModel laptopViewGeneralModel =
                 this.structMapper.laptopEntityToLaptopViewGeneralModel((LaptopEntity) oneLaptopById);
 
         return laptopViewGeneralModel;
-    }
-
-    private Long isItemIdANumber(String itemId) {
-        final Long itemLongId;
-        try {
-            itemLongId = Long.parseLong(itemId);
-        } catch (Exception e){
-            throw new ItemIdNotANumberException(String.format("%s is not a valid laptop item number!", itemId));
-        }
-        return itemLongId;
     }
 
     public List<LaptopViewGeneralModel> findAllLaptops() {
@@ -66,5 +56,15 @@ public class LaptopService implements InitializableProductService {
         }
 
         return allMonitorsView;
+    }
+
+    private Long isItemIdANumber(String itemId) {
+        final Long itemLongId;
+        try {
+            itemLongId = Long.parseLong(itemId);
+        } catch (Exception e){
+            throw new ItemIdNotANumberException(String.format("%s is not a valid laptop item number!", itemId));
+        }
+        return itemLongId;
     }
 }

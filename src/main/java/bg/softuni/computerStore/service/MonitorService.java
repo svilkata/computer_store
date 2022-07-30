@@ -80,25 +80,15 @@ public class MonitorService implements InitializableProductService {
     }
 
     public MonitorViewGeneralModel findOneMonitorById(String itemId) {
-        final Long itemLongId = isItemIdANumber(itemId);
+        final Long id = isItemIdANumber(itemId);
 
-        ItemEntity oneMonitorById = this.allItemsRepository.findItemEntityByTypeAndItemId("monitor", itemLongId)
-                .orElseThrow(() -> new ItemNotFoundException(String.format("No monitor item with id %d to be viewed!", itemLongId), itemLongId));
+        ItemEntity oneMonitorById = this.allItemsRepository.findItemEntityByTypeAndItemId("monitor", id)
+                .orElseThrow(() -> new ItemNotFoundException(String.format("No monitor item with id %d to be viewed!", id), id));
 
         MonitorViewGeneralModel monitorViewGeneralModel =
                 this.structMapper.monitorEntityToMonitorViewGeneralModel((MonitorEntity) oneMonitorById);
 
         return monitorViewGeneralModel;
-    }
-
-    private Long isItemIdANumber(String itemId) {
-        final Long itemLongId;
-        try {
-            itemLongId = Long.parseLong(itemId);
-        } catch (Exception e){
-            throw new ItemIdNotANumberException(String.format("%s is not a valid monitor item number!", itemId));
-        }
-        return itemLongId;
     }
 
     public List<MonitorViewGeneralModel> findAllMonitors() {
@@ -137,8 +127,10 @@ public class MonitorService implements InitializableProductService {
     }
 
     @Transactional
-    public void deleteMonitorAndQuantity(Long id) {
-        //Изтриване на снимка от PictureRepositoty при изтриване на самия Item
+    public void deleteMonitorAndQuantity(String itemId) {
+        final Long id = isItemIdANumber(itemId);
+
+         //Изтриване на снимка от PictureRepositoty при изтриване на самия Item
         ItemEntity itemEntityToDelete = this.allItemsRepository.findItemEntityByTypeAndItemId("monitor", id)
                 .orElseThrow(() -> new ItemNotFoundException(String.format("No monitor item with this %d to be deleted!", id), id));
 
@@ -154,8 +146,11 @@ public class MonitorService implements InitializableProductService {
         this.allItemsRepository.deleteById(id);
     }
 
-    public AddUpdateMonitorBindingDTO findMonitorByIdUpdatingItem(Long id) {
-        ItemEntity oneMonitorById = this.allItemsRepository.findById(id).orElseThrow();
+    public AddUpdateMonitorBindingDTO findMonitorByIdUpdatingItem(String itemId) {
+        final Long id = isItemIdANumber(itemId);
+
+        ItemEntity oneMonitorById = this.allItemsRepository.findById(id)
+                .orElseThrow(() -> new ItemNotFoundException(String.format("No monitor with id %d to be updated!", id), id));
         MonitorEntity me = (MonitorEntity) oneMonitorById;
 
         AddUpdateMonitorBindingDTO addUpdateMonitorBindingDTO = new AddUpdateMonitorBindingDTO();
@@ -185,7 +180,10 @@ public class MonitorService implements InitializableProductService {
     }
 
     public Long updateExistingMonitor(AddUpdateMonitorBindingDTO addUpdateMonitorBindingDTO) {
-        ItemEntity me = this.allItemsRepository.findById(addUpdateMonitorBindingDTO.getItemId()).orElseThrow();
+        Long id = addUpdateMonitorBindingDTO.getItemId();
+
+        ItemEntity me = this.allItemsRepository.findById(id)
+                .orElseThrow(() -> new ItemNotFoundException(String.format("No monitor with id %d to be updated!", id), id));
         MonitorEntity toUpdate = (MonitorEntity) me;
 
         //From ItemEntity
@@ -209,5 +207,15 @@ public class MonitorService implements InitializableProductService {
         MonitorEntity saved = this.allItemsRepository.save(toUpdate);
 
         return saved.getItemId();
+    }
+
+    private Long isItemIdANumber(String itemId) {
+        final Long itemLongId;
+        try {
+            itemLongId = Long.parseLong(itemId);
+        } catch (Exception e){
+            throw new ItemIdNotANumberException(String.format("%s is not a valid monitor item number!", itemId));
+        }
+        return itemLongId;
     }
 }

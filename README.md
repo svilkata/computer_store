@@ -61,7 +61,7 @@ sql:
 * //TODO - глобална търсачка в commons.html за всички типове продукти - по тип на продукта + име на модел/цена по-голяма от... 
 
 
-Добавянето на Item-s в кошницата може да става с @RestController :)
+
 
 
 
@@ -95,11 +95,10 @@ sql:
 ### Interceptors
 * report for http request from anonymous and authenticated user
 * I18N – change language - just a demo for the header part and some title/paragraphs of pages - from English to Bulgarian and vice versa
-* //ТODO - ...........брой логвания на даден потребител
+* //ТODO - YESS - колко потребителя има активни в момента - ще го дисплейваме на commons (NOOO!!! - how many people visited the website or the sales report)
 
 ### Generating HTML
-* with Thymeleaf engine secured
-* //TODO - with rest fetch API
+* with Thymeleaf engine secured and rest fetch API in inside html for some pages
 
 ### Responsive Web Page Design 
 * using Bootstrap
@@ -120,11 +119,13 @@ sql:
 * picture for the error pages 404, 403 and 500
 3. More customs error handling experience with @ControllerAdvice
 * using global application exception handling with @ControllerAdvice on all GET operations
-* Exceptions for @ControllerAdvice for POST, PATCH, DELETE operations are secured by the Spring security and CSFR (I can add more customs exceptions here, but there is no sense)
+* Exceptions for @ControllerAdvice for POST, PATCH, DELETE operations not needed as they are secured by the Spring security and CSFR (but I included them also for extra security)
 
 
 //TODO
 ### Loading data with FETCH api in the Thymeleaf html
+* Добавянето на Item-s в кошницата може да става с @RestController :)
+
 
 
 
