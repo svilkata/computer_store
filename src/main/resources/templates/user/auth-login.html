@@ -12,7 +12,7 @@
 <main>
     <div class="container">
         <!--        Login customer or employee-->
-        <h2 class="text-center text-white greybg">..... ...Login...   ......</h2>
+        <h2 class="text-center text-white greybg" th:text="#{login}">..... ...Login...   ......</h2>
         <form
                 th:action="@{/users/login}"
                 th:method="post"

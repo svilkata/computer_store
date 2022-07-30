@@ -55,7 +55,7 @@ sql:
 
 ### Особеност при basket и order
 * Имаме един кръг от четири таблици свързани релационно и можем да подходим от две посоки за каквото и да е
-
+![img_8.png](img_8.png)
 
 ### Search in category by  ...
 * //TODO - глобална търсачка в commons.html за всички типове продукти - по тип на продукта + име на модел/цена по-голяма от... 
@@ -95,7 +95,7 @@ sql:
 ### Interceptors
 * report for http request from anonymous and authenticated user
 * I18N – change language - just a demo for the header part and some title/paragraphs of pages - from English to Bulgarian and vice versa
-* //ТODO - ...........как да направя отчета за продажбите да бъде interceptor....
+* //ТODO - ...........брой логвания на даден потребител
 
 ### Generating HTML
 * with Thymeleaf engine secured
@@ -112,9 +112,16 @@ sql:
 * secured adding new employee of Computer store
 
 ### Error Handling 
+1. Spring security default re-direct to login page for not allowed operations/wrong urls - for anonymous users
+2. Adding a custom ComputerStoreErrorHandler
+* disabling the default Spring whitelable error.html page
+* adding a custom ComputerStoreErrorHandler implementing the markup interface ErrorController - custom error pages for 404 Not Found, 403 Forbidden and 500 Internal Server Error.
+* when wrong url error-404.html displayed; when correct url but not authorized error-403.html displayed
+* picture for the error pages 404, 403 and 500
+3. More customs error handling experience with @ControllerAdvice
 * using global application exception handling with @ControllerAdvice on all GET operations
-* POST, PATCH, DELETE operations are secured by the Spring security
-* //TODO - moreeeee
+* Exceptions for @ControllerAdvice for POST, PATCH, DELETE operations are secured by the Spring security and CSFR (I can add more customs exceptions here, but there is no sense)
+
 
 //TODO
 ### Loading data with FETCH api in the Thymeleaf html

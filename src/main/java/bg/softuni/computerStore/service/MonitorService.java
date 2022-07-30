@@ -1,6 +1,7 @@
 package bg.softuni.computerStore.service;
 
 import bg.softuni.computerStore.config.mapper.StructMapper;
+import bg.softuni.computerStore.exception.ItemIdNotANumberException;
 import bg.softuni.computerStore.exception.ItemNotFoundException;
 import bg.softuni.computerStore.exception.ItemsWithTypeNotFoundException;
 import bg.softuni.computerStore.initSeed.InitializableProductService;
@@ -78,14 +79,26 @@ public class MonitorService implements InitializableProductService {
         this.allItemsRepository.save(toAdd.setCreationDateTime(LocalDateTime.now()));
     }
 
-    public MonitorViewGeneralModel findOneMonitorById(Long itemId) {
-        ItemEntity oneMonitorById = this.allItemsRepository.findItemEntityByTypeAndItemId("monitor", itemId)
-                .orElseThrow(() -> new ItemNotFoundException(String.format("No monitor item with id %d to be viewed!", itemId), itemId));
+    public MonitorViewGeneralModel findOneMonitorById(String itemId) {
+        final Long itemLongId = isItemIdANumber(itemId);
+
+        ItemEntity oneMonitorById = this.allItemsRepository.findItemEntityByTypeAndItemId("monitor", itemLongId)
+                .orElseThrow(() -> new ItemNotFoundException(String.format("No monitor item with id %d to be viewed!", itemLongId), itemLongId));
 
         MonitorViewGeneralModel monitorViewGeneralModel =
                 this.structMapper.monitorEntityToMonitorViewGeneralModel((MonitorEntity) oneMonitorById);
 
         return monitorViewGeneralModel;
+    }
+
+    private Long isItemIdANumber(String itemId) {
+        final Long itemLongId;
+        try {
+            itemLongId = Long.parseLong(itemId);
+        } catch (Exception e){
+            throw new ItemIdNotANumberException(String.format("%s is not a valid monitor item number!", itemId));
+        }
+        return itemLongId;
     }
 
     public List<MonitorViewGeneralModel> findAllMonitors() {

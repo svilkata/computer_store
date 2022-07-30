@@ -1,5 +1,7 @@
 package bg.softuni.computerStore.web;
 
+import bg.softuni.computerStore.exception.ItemIdNotANumberException;
+import bg.softuni.computerStore.exception.ItemNotFoundException;
 import bg.softuni.computerStore.model.view.product.ComputerViewGeneralModel;
 import bg.softuni.computerStore.model.view.product.LaptopViewGeneralModel;
 import bg.softuni.computerStore.model.view.product.MonitorViewGeneralModel;
@@ -28,7 +30,7 @@ public class ViewItemsController {
     }
 
     @GetMapping("/computer/details/{id}")
-    public String viewOneComputer(Model model, @PathVariable Long id) {
+    public String viewOneComputer(Model model, @PathVariable String id) {
         if (!model.containsAttribute("oneComputer")) {
             ComputerViewGeneralModel oneComputer = this.computerService.findOneComputerById(id);
             model.addAttribute("oneComputer", oneComputer);
@@ -49,7 +51,7 @@ public class ViewItemsController {
 
 
     @GetMapping("/monitor/details/{id}")
-    public String viewOneMonitor(Model model, @PathVariable Long id) {
+    public String viewOneMonitor(Model model, @PathVariable String id) {
         if (!model.containsAttribute("oneMonitor")) {
             MonitorViewGeneralModel oneMonitor = this.monitorService.findOneMonitorById(id);
             model.addAttribute("oneMonitor", oneMonitor);
@@ -69,7 +71,7 @@ public class ViewItemsController {
     }
 
     @GetMapping("/laptop/details/{id}")
-    public String viewOneLaptop(Model model, @PathVariable Long id) {
+    public String viewOneLaptop(Model model, @PathVariable String id) {
         if (!model.containsAttribute("oneLaptop")) {
             LaptopViewGeneralModel oneLaptop = this.laptopService.findOneLaptopById(id);
             model.addAttribute("oneLaptop", oneLaptop);

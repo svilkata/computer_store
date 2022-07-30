@@ -1,6 +1,7 @@
 package bg.softuni.computerStore.service;
 
 import bg.softuni.computerStore.config.mapper.StructMapper;
+import bg.softuni.computerStore.exception.ItemIdNotANumberException;
 import bg.softuni.computerStore.exception.ItemNotFoundException;
 import bg.softuni.computerStore.exception.ItemsWithTypeNotFoundException;
 import bg.softuni.computerStore.initSeed.InitializableProductService;
@@ -89,14 +90,25 @@ public class ComputerService implements InitializableProductService {
         this.allItemsRepository.save(toAdd.setCreationDateTime(LocalDateTime.now()));
     }
 
-    public ComputerViewGeneralModel findOneComputerById(Long itemId) {
-        ItemEntity oneComputerById = this.allItemsRepository.findItemEntityByTypeAndItemId("computer", itemId)
-                .orElseThrow(() -> new ItemNotFoundException(String.format("No computer item with id %d to be viewed!", itemId), itemId));
+    public ComputerViewGeneralModel findOneComputerById(String itemId) {
+        final Long itemLongId = isItemIdANumber(itemId);
+        ItemEntity oneComputerById = this.allItemsRepository.findItemEntityByTypeAndItemId("computer", itemLongId)
+                .orElseThrow(() -> new ItemNotFoundException(String.format("No computer item with id %d to be viewed!", itemLongId), itemLongId));
 
         ComputerViewGeneralModel computerViewGeneralModel =
                 this.structMapper.computerEntityToComputerSalesViewGeneralModel((ComputerEntity) oneComputerById);
 
         return computerViewGeneralModel;
+    }
+
+    private Long isItemIdANumber(String itemId) {
+        final Long itemLongId;
+        try {
+            itemLongId = Long.parseLong(itemId);
+        } catch (Exception e){
+            throw new ItemIdNotANumberException(String.format("%s is not a valid computer item number!", itemId));
+        }
+        return itemLongId;
     }
 
     public List<ComputerViewGeneralModel> findAllComputers() {

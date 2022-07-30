@@ -23,4 +23,6 @@ public class AllItemsService {
     public ItemEntity getItemById(Long id){
         return this.allItemsRepository.findById(id).orElseThrow();
     }
+
+
 }

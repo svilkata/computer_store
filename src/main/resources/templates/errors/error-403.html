@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/commons::head"></head>
+
+<body>
+
+<header th:replace="fragments/commons::header"></header>
+
+<main>
+    <div class="container-fluid">
+        <a class="btn btn-link text-center text-white mt-5 greybg" href="/">Back to Home</a>
+        <h5 class="text-center text-white mt-5 greybg">Resource forbidden</h5>
+        <h5 class="text-center text-white mt-5 greybg">You are trying to access a valid url, but you do not have authorization</h5>
+        <img src="/images/error-403.png" class="center">
+    </div>
+
+
+</main>
+
+
+<div th:replace="fragments/commons::footer"></div>
+
+</body>
+</html>

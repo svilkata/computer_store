@@ -1,6 +1,7 @@
 package bg.softuni.computerStore.service;
 
 import bg.softuni.computerStore.config.mapper.StructMapper;
+import bg.softuni.computerStore.exception.ItemIdNotANumberException;
 import bg.softuni.computerStore.exception.ItemNotFoundException;
 import bg.softuni.computerStore.exception.ItemsWithTypeNotFoundException;
 import bg.softuni.computerStore.initSeed.InitializableProductService;
@@ -31,14 +32,25 @@ public class LaptopService implements InitializableProductService {
         //do nothing for the moment
     }
 
-    public LaptopViewGeneralModel findOneLaptopById(Long itemId) {
-        ItemEntity oneLaptopById = this.allItemsRepository.findItemEntityByTypeAndItemId("laptop", itemId)
-                .orElseThrow(() -> new ItemNotFoundException(String.format("No laptop item with id %d to be viewed!", itemId), itemId));
+    public LaptopViewGeneralModel findOneLaptopById(String itemId) {
+        final Long itemLongId = isItemIdANumber(itemId);
+        ItemEntity oneLaptopById = this.allItemsRepository.findItemEntityByTypeAndItemId("laptop", itemLongId)
+                .orElseThrow(() -> new ItemNotFoundException(String.format("No laptop item with id %d to be viewed!", itemLongId), itemLongId));
 
         LaptopViewGeneralModel laptopViewGeneralModel =
                 this.structMapper.laptopEntityToLaptopViewGeneralModel((LaptopEntity) oneLaptopById);
 
         return laptopViewGeneralModel;
+    }
+
+    private Long isItemIdANumber(String itemId) {
+        final Long itemLongId;
+        try {
+            itemLongId = Long.parseLong(itemId);
+        } catch (Exception e){
+            throw new ItemIdNotANumberException(String.format("%s is not a valid laptop item number!", itemId));
+        }
+        return itemLongId;
     }
 
     public List<LaptopViewGeneralModel> findAllLaptops() {
