@@ -19,7 +19,7 @@ public class BasketOrderEntity extends BaseEntity {
     @Column(name = "basket_status", nullable = false)
     private BasketStatus basketStatus;
 
-    @Column(name = "creation_date_time", nullable = false)
+    @Column(name = "creation_date_time")
     private LocalDateTime creationDateTime;
 
     //(fetch = FetchType.EAGER)

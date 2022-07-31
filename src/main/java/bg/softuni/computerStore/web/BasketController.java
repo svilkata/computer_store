@@ -9,12 +9,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.Objects;
 
 @Controller
-@RequestMapping("/users/basket")
 public class BasketController {
     private final BasketService basketService;
 
@@ -22,7 +22,8 @@ public class BasketController {
         this.basketService = basketService;
     }
 
-    @GetMapping("/{id}")
+    //userId
+    @GetMapping("/users/basket/{id}")
     public String viewBasketWithItems(Model model,
                                       @PathVariable String id,
                                       @AuthenticationPrincipal AppUser user) {
@@ -40,11 +41,30 @@ public class BasketController {
         return "/customer/OneBasket-items";
     }
 
+    @PostMapping("/users/basket/{id}")
+    public String basketWithItemsConfirmOrder(Model model,
+                                         @PathVariable String id,
+                                         @AuthenticationPrincipal AppUser user) {
+//        final Long userId = isItemIdANumber(id);
+//        Long basketId = this.basketService.getBaskeIdByUserId(userId);
+//
+//        if (basketId != null && !Objects.equals(user.getId(), userId)) {
+//            throw new BasketIdForbiddenException(String.format("You do not have authorization for the basket of user with id %d", userId));
+//        }
+//
+//        if (!model.containsAttribute("basketId")) {
+//            model.addAttribute("basketId", basketId);
+//        }
+//
+//        return "/customer/OneBasket-items";
+        return null;
+    }
+
     private Long isItemIdANumber(String userId) {
         final Long userLongId;
         try {
             userLongId = Long.parseLong(userId);
-        } catch (Exception e){
+        } catch (Exception e) {
             throw new ObjectIdNotANumberException(String.format("%s is not a valid userId!", userId));
         }
         return userLongId;

@@ -1,14 +1,9 @@
-// const test = $("#test");
-// test.text("muhaha");
-// let test = document.getElementById('test');
-// test.textContent = 'Muhaha';
-
 const allItems = $("#items");
 const basketId = $("#basketId").attr('value');
 const basketTotalValue = $("#basketTotalValue");
 
 
-fetch('http://localhost:8080/basketitems/' + basketId)
+fetch('http://localhost:8080/users/basket/viewitems/' + basketId)
     .then((response) => response.json())
     .then((result) => {
         basketTotalValue.text('Total value: ' + result.totalValue + ' LEVA');
