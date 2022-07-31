@@ -1,7 +1,7 @@
 package bg.softuni.computerStore.service;
 
 import bg.softuni.computerStore.config.mapper.StructMapper;
-import bg.softuni.computerStore.exception.ItemIdNotANumberException;
+import bg.softuni.computerStore.exception.ObjectIdNotANumberException;
 import bg.softuni.computerStore.exception.ItemNotFoundException;
 import bg.softuni.computerStore.exception.ItemsWithTypeNotFoundException;
 import bg.softuni.computerStore.initSeed.InitializableProductService;
@@ -63,7 +63,7 @@ public class LaptopService implements InitializableProductService {
         try {
             itemLongId = Long.parseLong(itemId);
         } catch (Exception e){
-            throw new ItemIdNotANumberException(String.format("%s is not a valid laptop item number!", itemId));
+            throw new ObjectIdNotANumberException(String.format("%s is not a valid laptop item number!", itemId));
         }
         return itemLongId;
     }

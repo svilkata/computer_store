@@ -1,7 +1,5 @@
 package bg.softuni.computerStore.web;
 
-import bg.softuni.computerStore.exception.ItemIdNotANumberException;
-import bg.softuni.computerStore.exception.ItemNotFoundException;
 import bg.softuni.computerStore.model.view.product.ComputerViewGeneralModel;
 import bg.softuni.computerStore.model.view.product.LaptopViewGeneralModel;
 import bg.softuni.computerStore.model.view.product.MonitorViewGeneralModel;

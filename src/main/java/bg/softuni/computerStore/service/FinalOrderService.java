@@ -88,7 +88,7 @@ public class FinalOrderService implements InitializableFinalOrderService {
         }
 
         //Finally, we delete all info in all 3 basket tables
-        this.basketService.deleteOneBasket(basketId);
+        this.basketService.resetOneBasket(basketId);
     }
 
     public void confirmOrderByStore(String orderNumber) {

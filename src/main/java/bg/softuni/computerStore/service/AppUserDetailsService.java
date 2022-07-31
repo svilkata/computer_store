@@ -39,7 +39,7 @@ public class AppUserDetailsService implements UserDetailsService {
 //                                toList()).
 //                        build();
         return new AppUser(
-                userEntity.getUsername(),
+                userEntity.getId(), userEntity.getUsername(),
                 userEntity.getPassword(),
                 userEntity.getFirstName(),
                 userEntity.getLastName(),

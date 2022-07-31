@@ -1,9 +1,9 @@
 package bg.softuni.computerStore.exception;
 
-public class ItemIdNotANumberException extends RuntimeException  {
+public class ObjectIdNotANumberException extends RuntimeException  {
     private ItemErrorInfo item;
 
-    public ItemIdNotANumberException(String message) {
+    public ObjectIdNotANumberException(String message) {
         super(message);
         this.item = new ItemErrorInfo(message);
     }

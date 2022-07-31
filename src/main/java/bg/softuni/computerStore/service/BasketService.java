@@ -20,6 +20,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class BasketService implements InitializableBasketService {
@@ -45,9 +46,10 @@ public class BasketService implements InitializableBasketService {
     }
 
     private void basketsInit() {
-        UserEntity admin = userRepository.findByUsername("admin").orElseThrow();
         List<ItemEntity> allItemsInTheCurrentBasket = this.allItemsRepository.findAll();
 
+        //Basket 1
+        UserEntity admin = userRepository.findByUsername("admin").orElseThrow();
         List<ItemEntity> basketOrder1Items = allItemsInTheCurrentBasket.subList(0, 3);
         BasketOrderEntity basketOrder1 = new BasketOrderEntity()
                 .setUser(admin)
@@ -58,43 +60,59 @@ public class BasketService implements InitializableBasketService {
         initItemQuantityInBasket(basketOrder1, 2);
 
 
-        UserEntity customer = userRepository.findByUsername("customer").orElseThrow();
-        List<ItemEntity> basketOrder2Items = allItemsInTheCurrentBasket.subList(5, 7);
+        //Basket 2
+        UserEntity purchase = userRepository.findByUsername("purchase").orElseThrow();
+        List<ItemEntity> basketOrder2Items = allItemsInTheCurrentBasket.subList(6, 8);
         BasketOrderEntity basketOrder2 = new BasketOrderEntity()
-                .setUser(customer)
+                .setUser(purchase)
                 .setProducts(basketOrder2Items)
                 .setBasketStatus(BasketStatus.OPEN)
                 .setCreationDateTime(LocalDateTime.now());
         this.basketRepository.save(basketOrder2);
+        initItemQuantityInBasket(basketOrder2, 1);
+
+        //Basket 3
+        UserEntity sales = userRepository.findByUsername("sales").orElseThrow();
+        List<ItemEntity> basketOrder3Items = allItemsInTheCurrentBasket.subList(3, 6);
+        BasketOrderEntity basketOrder3 = new BasketOrderEntity()
+                .setUser(sales)
+                .setProducts(basketOrder3Items)
+                .setBasketStatus(BasketStatus.OPEN)
+                .setCreationDateTime(LocalDateTime.now());
+        this.basketRepository.save(basketOrder3);
+        initItemQuantityInBasket(basketOrder3, 2);
+
+
+        //Basket 4
+        UserEntity customer = userRepository.findByUsername("customer").orElseThrow();
+        List<ItemEntity> basketOrder4Items = allItemsInTheCurrentBasket.subList(5, 7);
+        BasketOrderEntity basketOrder4 = new BasketOrderEntity()
+                .setUser(customer)
+                .setProducts(basketOrder4Items)
+                .setBasketStatus(BasketStatus.OPEN)
+                .setCreationDateTime(LocalDateTime.now());
+        this.basketRepository.save(basketOrder4);
+
 
         //==>>
         //TODO still testing here
-        for (ItemEntity basketOrder2OneItem : basketOrder2Items) {
+        for (ItemEntity basketOrder4OneItem : basketOrder4Items) {
             ItemQuantityInBasketEntity rec = new ItemQuantityInBasketEntity();
             int boughtQuantity = 2;
-            int orderedQuantity = checkBeginningAvailableQuantityOfItem(basketOrder2OneItem, boughtQuantity);
+            int orderedQuantity = checkBeginningAvailableQuantityOfItem(basketOrder4OneItem, boughtQuantity);
             rec
-                    .setBasket(basketOrder2)
-                    .setItem(basketOrder2OneItem)
+                    .setBasket(basketOrder4)
+                    .setItem(basketOrder4OneItem)
                     .setQuantityBought(orderedQuantity);
 
             this.quantitiesItemsInBasketRepository.save(rec);
         }
 
         //Changing item quantity in the Basket with new quantity in basket from that item
-        deductItemQuantityInBasket(basketOrder2, basketOrder2Items.get(0), 1);
+        deductItemQuantityInBasket(basketOrder4, basketOrder4Items.get(0), 1);
 
         //TODO Increasing Item quantity in a basket
         // <<==
-
-        List<ItemEntity> basketOrder3Items = allItemsInTheCurrentBasket.subList(6, 8);
-        BasketOrderEntity basketOrder3 = new BasketOrderEntity()
-                .setUser(customer)
-                .setProducts(basketOrder3Items)
-                .setBasketStatus(BasketStatus.OPEN)
-                .setCreationDateTime(LocalDateTime.now());
-        this.basketRepository.save(basketOrder3);
-        initItemQuantityInBasket(basketOrder3, 1);
     }
 
     private void initItemQuantityInBasket(BasketOrderEntity basketOrder, int eachItemQtity) {
@@ -156,11 +174,18 @@ public class BasketService implements InitializableBasketService {
         return this.basketRepository.findBasketById(basketId).orElseThrow();
     }
 
+    public Long getBaskeIdByUserId(Long userId) {
+        return this.basketRepository.findBasketIdByUserId(userId);
+    }
+
 
     @Transactional
-    public void deleteOneBasket(Long basketId) {
+    public void resetOneBasket(Long basketId) {
         this.quantitiesItemsInBasketRepository.deleteAllByBasket_Id(basketId);
-        this.basketRepository.deleteById(basketId);
+        BasketOrderEntity basketToReset = this.basketRepository.findBasketById(basketId).orElseThrow();
+        basketToReset.setProducts(new ArrayList<>());
+        basketToReset.setBasketStatus(BasketStatus.CLOSED);
+        this.basketRepository.save(basketToReset);
     }
 
     public OneBasketViewModel viewAllItemsFromOneBasket(Long basketId) {

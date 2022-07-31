@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 
 public class AppUser implements UserDetails {
+    private final Long id;
     private final String username;
     private final String password;
     private final String firstName;
@@ -13,11 +14,12 @@ public class AppUser implements UserDetails {
     private final Collection<? extends GrantedAuthority> authorities;
 
     public AppUser(
-            String username,
+            Long id, String username,
             String password,
             String firstName,
             String lastName,
             Collection<? extends GrantedAuthority> authorities) {
+        this.id = id;
         this.username = username;
         this.password = password;
         this.firstName = firstName;
@@ -38,6 +40,10 @@ public class AppUser implements UserDetails {
         }
 
         return fullName.toString();
+    }
+
+    public Long getId() {
+        return this.id;
     }
 
 
