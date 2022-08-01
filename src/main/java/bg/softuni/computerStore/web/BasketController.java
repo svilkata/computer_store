@@ -2,6 +2,9 @@ package bg.softuni.computerStore.web;
 
 import bg.softuni.computerStore.exception.BasketIdForbiddenException;
 import bg.softuni.computerStore.exception.ObjectIdNotANumberException;
+import bg.softuni.computerStore.model.binding.order.ClientOrderExtraInfoGetViewModel;
+import bg.softuni.computerStore.model.entity.orders.BasketOrderEntity;
+import bg.softuni.computerStore.model.view.order.OneBasketViewModel;
 import bg.softuni.computerStore.service.BasketService;
 import bg.softuni.computerStore.user.AppUser;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -27,7 +30,7 @@ public class BasketController {
     public String viewBasketWithItems(Model model,
                                       @PathVariable String id,
                                       @AuthenticationPrincipal AppUser user) {
-        final Long userId = isItemIdANumber(id);
+        final Long userId = isItemIdANumber(id, "userId");
         Long basketId = this.basketService.getBaskeIdByUserId(userId);
 
         if (basketId != null && !Objects.equals(user.getId(), userId)) {
@@ -41,32 +44,46 @@ public class BasketController {
         return "/customer/OneBasket-items";
     }
 
+    //userId
+    @GetMapping("/users/order/{bId}")
+    public String viewOrderWithItemsAndAddAddress(Model model,
+                                      @PathVariable String bId,
+                                      @AuthenticationPrincipal AppUser user) {
+        final Long basketId = isItemIdANumber(bId, "basketId");
+        Long userId = this.basketService.getUserIdByBasketId(basketId);
 
-//    @PostMapping("/users/basket/{id}")
-//    public String basketWithItemsConfirmOrder(Model model,
-//                                         @PathVariable String id,
-//                                         @AuthenticationPrincipal AppUser user) {
-//        final Long userId = isItemIdANumber(id);
-//        Long basketId = this.basketService.getBaskeIdByUserId(userId);
+        if (userId != null && !Objects.equals(user.getId(), userId)) {
+            throw new BasketIdForbiddenException(String.format("You do not have authorization for the basket of user with id %d", userId));
+        }
+
+        OneBasketViewModel basket = this.basketService.viewAllItemsFromOneBasket(basketId);
+
+        if (!model.containsAttribute("basket")) {
+            model.addAttribute("basket", basket);
+        }
+
+        if (!model.containsAttribute("clientOrderExtraInfo")) {
+            model.addAttribute("clientOrderExtraInfo", new ClientOrderExtraInfoGetViewModel());
+        }
+
+
+        return "/customer/OneOrder-confirm";
+    }
+
+//    @PostMapping("/users/order/{bId}")
+//    public String viewOrderWithItemsAndAddAddress(Model model){
 //
-//        if (basketId != null && !Objects.equals(user.getId(), userId)) {
-//            throw new BasketIdForbiddenException(String.format("You do not have authorization for the basket of user with id %d", userId));
-//        }
-//
-//        if (!model.containsAttribute("basketId")) {
-//            model.addAttribute("basketId", basketId);
-//        }
-//
-//        return "/customer/OneBasket-items";
-//        return null;
+//        return "redirect:/";
 //    }
 
-    private Long isItemIdANumber(String userId) {
+
+
+    private Long isItemIdANumber(String objectId, String comment) {
         final Long userLongId;
         try {
-            userLongId = Long.parseLong(userId);
+            userLongId = Long.parseLong(objectId);
         } catch (Exception e) {
-            throw new ObjectIdNotANumberException(String.format("%s is not a valid userId!", userId));
+            throw new ObjectIdNotANumberException(String.format("%s is not a valid %s!", objectId, comment));
         }
         return userLongId;
     }

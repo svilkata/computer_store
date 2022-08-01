@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec='http://www.thymeleaf.org/extras/spring-security'>
+
+<head th:replace="fragments/commons::head"></head>
+
+<body>
+
+<header th:replace="fragments/commons::header"></header>
+
+<main>
+    <div class="container-fluid">
+        <h2 class="text-center text-white mt-5 greybg">........Confirm Order.........</h2>
+        <h2 class="text-center text-white mt-5 greybg" th:value="${basket}"></h2>
+
+        <div
+                th:each="p : ${basket.items}" th:object="${p}"
+                class="main-form mx-auto col-md-8 d-flex flex-column justify-content-center">
+
+
+            <div class="row form-group col-md-7 mb-2">
+                <div class="col text-dark bg-white">
+                    <div class="card-text"><span th:text="'*Type: ' + *{type}">Type</span></div>
+                    <div class="card-text"><span th:text="'*Model: ' + *{model}">Model</span></div>
+                    <div class="card-text"><span th:text="'*Quantity: ' + *{quantity}">Quantity</span></div>
+                    <div class="card-text"><span style="font-weight: bold"
+                                                 th:text="'*All price: ' + *{sellingPriceForAllQuantity} + ' BGN'">Model</span>
+                    </div>
+                </div>
+                <img style="max-width: 30%" class="card-img col" th:src="*{photoUrl}"></img>
+            </div>
+
+
+        </div>
+
+        <h4 class="text-center text-white mt-5 greybg" th:text="'Total Total: ' + ${basket.totalValue} + ' BGN'"></h4>
+
+
+        <form
+                th:action="@{/users/orderconfirm}"
+                th:method="post"
+                th:object="${clientOrderExtraInfo}"
+                class="main-form mx-auto col-md-8 d-flex flex-column justify-content-center"
+                id="addExtraInfo">
+            <label class="text-white font-weight-bold" style="position: center; font-size: 20px">Enter extra info for
+                order</label>
+            <div class="offers row mx-auto d-flex flex-row justify-content-center .row-cols-auto">
+                <div class="row">
+                    <div class="form-group col-md-5 mb-3">
+                        <label for="deliveryAddress" class="text-white font-weight-bold">Delivery address</label>
+                        <input id="deliveryAddress"
+                               th:field="*{deliveryAddress}"
+                               th:errorclass="is-invalid"
+                               type="text"
+                               size="120"
+                               class="form-control"
+                               placeholder="deliveryAddress"
+                               required/>
+                        <div class="invalid-feedback errors alert alert-danger">
+                            <div th:each="err : ${#fields.errors('deliveryAddress')}" th:text="${err}"/>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-5 mb-3">
+                        <label for="phoneNumber" class="text-white font-weight-bold">Phone number</label>
+                        <input id="phoneNumber"
+                               th:field="*{phoneNumber}"
+                               th:errorclass="is-invalid"
+                               type="text"
+                               size="25"
+                               class="form-control"
+                               placeholder="phoneNumber"
+                               required/>
+                        <div class="invalid-feedback errors alert alert-danger">
+                            <div th:each="err : ${#fields.errors('phoneNumber')}" th:text="${err}"/>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group col-md-6 mb-3">
+                        <label for="moreInfo" class="text-white font-weight-bold">More info</label>
+                        <textarea th:field="*{extraNotes}"
+                                  id="moreInfo"
+                                  form="addExtraInfo"
+                                  rows="4" cols="80"
+                                  placeholder="Enter extra notes here..."></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group col-md-6 mb-3">
+                    <a href="http://localhost:8080/users/basket/{userId}" class="btn btn-link"
+                       text="Back to Basket"></a>
+                </div>
+
+                <div class="form-group col-md-6 mb-3">
+                    <input type="submit" class="btn btn-info btn-lg" value="Confirm the Order"/>
+                </div>
+
+            </div>
+
+        </form>
+    </div>
+</main>
+
+
+<footer th:replace="fragments/commons::footer"></footer>
+
+
+</body>
+</html>

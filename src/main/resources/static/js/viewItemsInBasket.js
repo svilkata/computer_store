@@ -28,11 +28,8 @@ function displayBasket(result) {
     // <form method="post" th:action="@{/pages/admins/change-admin-user}"
     //       className="main-form mx-auto col-md-8 d-flex flex-column justify-content-center">
 
-    const form = $('<form>').attr({
-        'th:method': 'POST',
-        'th:action': '@{/users/order/'
-    }).addClass('main-form mx-auto col-md-8 d-flex flex-column justify-content-center');
-    container.append(form);
+    const divUpper = $('<div>').addClass('main-form mx-auto col-md-8 d-flex flex-column justify-content-center');
+    container.append(divUpper);
 
     const allItems = $('<div>').addClass('offers row mx-auto d-flex flex-row justify-content-center .row-cols-auto');
     result.items.forEach(item => {
@@ -43,6 +40,7 @@ function displayBasket(result) {
         const photo = $('<img>').addClass('card-img-top').attr({'alt': 'image', 'src': item.photoUrl});
         cardTop.append(photo);
         product.append(cardTop);
+
 
         const cardBody = $('<div>').addClass('card-body pb-1');
         const title = $('<h5>').addClass('card-title').text('Model: ' + item.model);
@@ -92,12 +90,13 @@ function displayBasket(result) {
         allItems.append(product);
     });
 
-    form.append(allItems);
+    divUpper.append(allItems);
+
     const div = $('<div>').addClass('button-holder d-flex');
-    const submitButton = $('<input/>').attr({'type': 'submit', 'id': 'submit'}).val('Continue to Order');
-    submitButton.on('click', onSubmit);
+    const submitButton = $('<a>').addClass('btn btn-link').text('Continue to Order')
+        .attr('href', 'http://localhost:8080/users/order/' + basketId);
     div.append(submitButton);
-    form.append(div);
+    divUpper.append(div);
 }
 
 function onChangeQuantity(itemId, newQuantity) {
@@ -127,11 +126,4 @@ function onRemoveItemFromBasket(itemId) {
             alert('Item removed from basket successfully');
             displayBasket(result);
         });
-}
-
-function onSubmit(event) {
-    event.preventDefault();
-    const data = new FormData(event.target);
-    console.log(data);
-    // FETCH here
 }
