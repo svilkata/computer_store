@@ -14,7 +14,7 @@ function displayBasket(result) {
     const headBasketId = $('<h2>').addClass('text-center text-white mt-5 greybg').attr({'id': 'basketId'}).val(basketId);
     container.append(headBasketId);
 
-    if (result.items.length == 0) {
+    if (result.items.length === 0) {
         container.append(
             $('<h5>').addClass('text-center text-white mt-5 greybg').text('No items in this basket yet!')
         );
@@ -25,10 +25,16 @@ function displayBasket(result) {
         .text('Total value: ' + result.totalValue + ' LEVA');
     container.append(totalValue);
 
-    const form = $('<form>');
-    container.append(form);
-    const allItems = $('<div>').addClass('offers row mx-auto d-flex flex-row justify-content-center .row-cols-auto');
+    // <form method="post" th:action="@{/pages/admins/change-admin-user}"
+    //       className="main-form mx-auto col-md-8 d-flex flex-column justify-content-center">
 
+    const form = $('<form>').attr({
+        'th:method': 'POST',
+        'th:action': '@{/users/order/'
+    }).addClass('main-form mx-auto col-md-8 d-flex flex-column justify-content-center');
+    container.append(form);
+
+    const allItems = $('<div>').addClass('offers row mx-auto d-flex flex-row justify-content-center .row-cols-auto');
     result.items.forEach(item => {
         const product = $('<div>').addClass('offer card col-sm-2 col-md-3  col-lg-3 m-2 p-0')
             .attr({'id': 'each', 'value': item.itemId, 'name': 'itemId'});
@@ -49,11 +55,22 @@ function displayBasket(result) {
         const quantity = $('<div>').addClass('card-text')
             .append($('<label>')).text('Quantity buying: ');
 
-        const quantityInput = $('<input>').val(item.quantity).attr('name', 'quantity');
+        const quantityInput = $('<input>').val(item.quantity).attr({'name': 'quantity', 'type': 'number'});
         quantity.append(quantityInput);
-        //TODO - if quantity has not changed, we should not call the onChangeQuantity function
-        //TODO - if new quantity is less than zero
-        quantityInput.on('change', () => onChangeQuantity(item.itemId, quantityInput.val()));
+
+        //If quantity has not changed, we do not call the onChangeQuantity function
+        quantityInput.on('change', () =>
+            onChangeQuantity(item.itemId, miniFunction()));
+
+
+        function miniFunction() {
+            if (quantityInput.val() < 0) {
+                alert('Quantity can not be negative');
+                quantityInput.val(0);
+            }
+
+            return quantityInput.val();
+        }
 
         const totalPrice = $('<div>').addClass('card-text')
             .append($('<span>').css('font-weight', 'bold')
@@ -66,6 +83,11 @@ function displayBasket(result) {
             .text('Details')
             .attr('href', '/items/all/' + item.type + '/details/' + item.itemId);
         product.append(btnDetails);
+
+        const btnRemoveFromBasket = $('<button>').addClass('btn btn-link')
+            .text('Remove from basket');
+        btnRemoveFromBasket.on('click', () => onRemoveItemFromBasket(item.itemId));
+        product.append(btnRemoveFromBasket);
 
         allItems.append(product);
     });
@@ -81,23 +103,30 @@ function displayBasket(result) {
 function onChangeQuantity(itemId, newQuantity) {
     fetch('http://localhost:8080/users/basket/changeOneItemQuantityInBasket/' + basketId + '?itemId=' + itemId + '&newQuantity=' + newQuantity)
         .then((response) => {
-            if (response.status == 200){
+            if (response.status == 200) {
                 alert('Quantity changed successfully');
             }
 
-            if (response.status == 202){
+            if (response.status == 202) {
                 alert('Last quantities of the changed item left!');
             }
 
             return response.json();
         })
+        .then((result) => displayBasket(result));
+    // console.log('Changed quantity for item with id: ' + itemId + '. New quantity is: ' + newQuantity);
+}
+
+function onRemoveItemFromBasket(itemId) {
+    fetch('http://localhost:8080/users/basket/removeOneItemFromBasket/' + basketId + '?itemId=' + itemId)
+        .then((response) => {
+            return response.json();
+
+        })
         .then((result) => {
-                console.log(result)
-                displayBasket(result);
-            }
-        );
-    console.log('Changed quantity for item with id: ' + itemId + '. New quantity is: ' + newQuantity);
-    // FETCH here
+            alert('Item removed from basket successfully');
+            displayBasket(result);
+        });
 }
 
 function onSubmit(event) {
@@ -106,24 +135,3 @@ function onSubmit(event) {
     console.log(data);
     // FETCH here
 }
-
-
-// <div className="form-group col-md-6 mb-3">
-//     <label htmlFor="quantity" className="text-white font-weight-bold">Quantity buying:</label>
-//     <div className="card-text">
-//         <input id="quantity"
-//                th:field="*{quantity}"
-//                type="number"
-//                className="form-control"
-//                placeholder="quantity"
-//                required/>
-//     </div>
-// </div>
-
-// <div className="row">
-//     <div className="col col-md-4">
-//         <div className="button-holder d-flex">
-//             <input type="submit" className="btn btn-info btn-lg" value="Login"/>
-//         </div>
-//     </div>
-// </div>

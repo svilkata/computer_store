@@ -43,7 +43,7 @@ public class SecurityConfig {
                         antMatchers("/", "/items/all/**").permitAll().
                         antMatchers("/users/login", "/users/register").anonymous().
                         antMatchers("/users/changepassword").authenticated().
-                        antMatchers("/users/basket/**").hasRole(UserRoleEnum.CUSTOMER.toString()).
+                        antMatchers("/users/basket/**", "/users/order/**").hasRole(UserRoleEnum.CUSTOMER.toString()).
                 // pages available only for purchase department
                         antMatchers("/pages/purchases/**").hasAnyRole(UserRoleEnum.EMPLOYEE_PURCHASES.name(), UserRoleEnum.ADMIN.name()).
                 // pages available only for purchase department

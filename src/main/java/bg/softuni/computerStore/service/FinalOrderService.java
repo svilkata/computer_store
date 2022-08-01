@@ -14,6 +14,7 @@ import bg.softuni.computerStore.repository.users.ClientExtraInfoRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -52,9 +53,15 @@ public class FinalOrderService implements InitializableFinalOrderService {
 
         clientOrderExtraInfoEntity = this.clientExtraInfoRepository.save(clientOrderExtraInfoEntity);
 
+        List<ItemEntity> products = basketOrder.getProducts();
+//        List<ItemEntity> productsInOrder = new ArrayList<>();
+//        for (ItemEntity product : products) {
+//            productsInOrder.add(product);
+//        }
+
         FinalOrderEntity finalOrderEntity = new FinalOrderEntity();
         finalOrderEntity
-                .setProducts(basketOrder.getProducts())
+                .setProducts(products)
                 .setUser(basketOrder.getUser());
 
         //TODO we wait the client to enter his extra info details for the current order
@@ -65,11 +72,13 @@ public class FinalOrderService implements InitializableFinalOrderService {
         //Giving random number for orderNumber
         finalOrderEntity.setOrderNumber(UUID.randomUUID().toString());
 
+        finalOrderEntity.setCreationDateTime(LocalDateTime.now());
+
         //We do not set in advance the @Id of UUID for the current order,
         // because after a save, the id UUID is generated automatically
 
         //Saving the final confirmed order
-        FinalOrderEntity savedFinalOrder = this.finalOrderRepository.save(finalOrderEntity.setCreationDateTime(LocalDateTime.now()));
+        FinalOrderEntity savedFinalOrder = this.finalOrderRepository.save(finalOrderEntity);
 
         //Then from basket tables saving quantities to table orders_item_quantity
         List<ItemEntity> order1Items = savedFinalOrder.getProducts();

@@ -5,6 +5,7 @@ import bg.softuni.computerStore.exception.ObjectIdNotANumberException;
 import bg.softuni.computerStore.model.view.order.OneBasketViewModel;
 import bg.softuni.computerStore.service.BasketService;
 import bg.softuni.computerStore.user.AppUser;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,7 +26,7 @@ public class RestBasketController {
     //id is basketId
     @GetMapping("/users/basket/viewitems/{id}")
     public ResponseEntity<OneBasketViewModel> getBasketWithAllItems(@PathVariable String id,
-                                                    @AuthenticationPrincipal AppUser user) {
+                                                                    @AuthenticationPrincipal AppUser user) {
         final Long basketId = isItemIdANumber(id, "basketId");
         Long userId = this.basketService.getUserIdByBasketId(basketId);
 
@@ -40,9 +41,9 @@ public class RestBasketController {
     //id is basketId
     @GetMapping("/users/basket/changeOneItemQuantityInBasket/{bId}")
     public ResponseEntity<OneBasketViewModel> changeOneItemQuantityInBasket(@PathVariable String bId,
-                                                                @RequestParam("itemId") String iId,
-                                                                @RequestParam("newQuantity") String newQ,
-                                                                @AuthenticationPrincipal AppUser user) {
+                                                                            @RequestParam("itemId") String iId,
+                                                                            @RequestParam("newQuantity") String newQ,
+                                                                            @AuthenticationPrincipal AppUser user) {
 
         final Long basketId = isItemIdANumber(bId, "basketId");
         Long userId = this.basketService.getUserIdByBasketId(basketId);
@@ -54,13 +55,38 @@ public class RestBasketController {
         final Long itemId = isItemIdANumber(iId, "itemId");
         final Long newQuantity = isItemIdANumber(newQ, "newQuantity");
 
-        boolean changeQuantityResult = this.basketService.changeOrderedQuantity(basketId, itemId, newQuantity);
+        int changeQuantityResult = this.basketService.changeOrderedQuantity(basketId, itemId, newQuantity);
         OneBasketViewModel basket = this.basketService.viewAllItemsFromOneBasket(basketId);
 
         //if condition - return response will be specific, and then I will be able to call alert message dialog box
-        return changeQuantityResult
-                ? ResponseEntity.ok(basket)  //Successfull 200
-                : ResponseEntity.accepted().body(basket);  //Accepted 202
+        return switch (changeQuantityResult) {
+            case 1 -> ResponseEntity.ok(basket);  //Successfull 200
+            case -1 -> ResponseEntity.accepted().body(basket);  //Accepted 202
+            case -2 -> ResponseEntity.status(HttpStatus.CREATED).body(basket);  //Created 201
+            default -> throw new IllegalStateException("Unexpected value: " + changeQuantityResult);
+        };
+    }
+
+    //id is basketId
+    @GetMapping("/users/basket/removeOneItemFromBasket/{bId}")
+    public ResponseEntity<OneBasketViewModel> removeOneItemFromBasket(@PathVariable String bId,
+                                                                      @RequestParam("itemId") String iId,
+                                                                      @AuthenticationPrincipal AppUser user) {
+        final Long basketId = isItemIdANumber(bId, "basketId");
+        Long userId = this.basketService.getUserIdByBasketId(basketId);
+
+        if (userId != null && !Objects.equals(user.getId(), userId)) {
+            throw new BasketIdForbiddenException(String.format("You do not have authorization to the basket items of user with id %d", userId));
+        }
+
+        final Long itemId = isItemIdANumber(iId, "itemId");
+
+        this.basketService.removeOneItemFromBasket(basketId, itemId);
+        OneBasketViewModel basket = this.basketService.viewAllItemsFromOneBasket(basketId);
+
+        //if condition - return response will be specific, and then I will be able to call alert message dialog box
+
+        return ResponseEntity.ok(basket);  //Successfull 200
     }
 
     @GetMapping("/users/basket/additemtobasket/{itemId}")
