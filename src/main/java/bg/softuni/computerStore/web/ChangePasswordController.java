@@ -71,7 +71,7 @@ public class ChangePasswordController {
         }
 
         userService.changeCurrentUserPassword(changeUserPasswordDTO);
-        return "redirect:/";
+        return "redirect:/users/logout";
     }
 
 

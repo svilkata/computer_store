@@ -8,12 +8,11 @@ import javax.servlet.http.HttpSession;
 
 @Controller
 public class LogoutController {
-    //for automatic logout after changed admin user
+    //for automatic logout after changed admin user or changed password
     @GetMapping("/users/logout")
     public String logginOut(HttpSession httpSession) throws Exception {
         httpSession.invalidate();
 
         return "redirect:/";
     }
-
 }

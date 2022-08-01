@@ -124,7 +124,8 @@ sql:
 
 //TODO
 ### Loading data with FETCH api in the Thymeleaf html
-* Добавянето на Item-s в кошницата може да става с @RestController :)
+* Добавянето на Item-s в кошницата чрез Rest и FETCH Api
+* Дисплейване на всяка кошница - чрез Rest и Fetch Api
 
 
 

@@ -41,10 +41,11 @@ public class BasketController {
         return "/customer/OneBasket-items";
     }
 
-    @PostMapping("/users/basket/{id}")
-    public String basketWithItemsConfirmOrder(Model model,
-                                         @PathVariable String id,
-                                         @AuthenticationPrincipal AppUser user) {
+
+//    @PostMapping("/users/basket/{id}")
+//    public String basketWithItemsConfirmOrder(Model model,
+//                                         @PathVariable String id,
+//                                         @AuthenticationPrincipal AppUser user) {
 //        final Long userId = isItemIdANumber(id);
 //        Long basketId = this.basketService.getBaskeIdByUserId(userId);
 //
@@ -57,8 +58,8 @@ public class BasketController {
 //        }
 //
 //        return "/customer/OneBasket-items";
-        return null;
-    }
+//        return null;
+//    }
 
     private Long isItemIdANumber(String userId) {
         final Long userLongId;
