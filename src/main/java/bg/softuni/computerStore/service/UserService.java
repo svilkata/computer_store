@@ -214,7 +214,12 @@ public class UserService implements InitializableUserService {
                         setLastName(employeeRegistrationModel.getLastName()).
                         setPassword(passwordEncoder.encode(employeeRegistrationModel.getPassword()));
 
-        userRepository.save(newEmployee);
+        UserEntity savedEmployee = userRepository.save(newEmployee);
+
+        //If the employee has a role for CUSTOMER, then we create a basket
+        if (employeeRoles.contains("CUSTOMER")) {
+            this.basketService.addBasketForRegisteredUser(savedEmployee);
+        }
     }
 
     public void changeCurrentUserPassword(ChangeUserPasswordDTO changeUserPasswordDTO) {
