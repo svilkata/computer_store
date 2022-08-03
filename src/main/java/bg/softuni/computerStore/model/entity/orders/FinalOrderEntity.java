@@ -7,6 +7,8 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
+import javax.validation.constraints.Positive;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
@@ -34,6 +36,10 @@ public class FinalOrderEntity {
 
     @Column(name = "creation_date_time", nullable = false)
     private LocalDateTime creationDateTime;
+
+    @Column(nullable = false)
+    @Positive
+    private BigDecimal totalTotal;
 
     @ManyToMany
     private List<ItemEntity> products;
@@ -107,6 +113,15 @@ public class FinalOrderEntity {
 
     public FinalOrderEntity setCreationDateTime(LocalDateTime dateTime) {
         this.creationDateTime = dateTime;
+        return this;
+    }
+
+    public BigDecimal getTotalTotal() {
+        return totalTotal;
+    }
+
+    public FinalOrderEntity setTotalTotal(BigDecimal totalTotal) {
+        this.totalTotal = totalTotal;
         return this;
     }
 }

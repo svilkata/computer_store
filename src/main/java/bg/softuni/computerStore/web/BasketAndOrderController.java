@@ -3,7 +3,12 @@ package bg.softuni.computerStore.web;
 import bg.softuni.computerStore.exception.BasketIdForbiddenException;
 import bg.softuni.computerStore.exception.ObjectIdNotANumberException;
 import bg.softuni.computerStore.model.binding.order.ClientOrderExtraInfoGetViewModel;
+import bg.softuni.computerStore.model.entity.orders.FinalOrderEntity;
+import bg.softuni.computerStore.model.entity.orders.ItemQuantityInOrderEntity;
 import bg.softuni.computerStore.model.view.order.OneBasketViewModel;
+import bg.softuni.computerStore.model.view.order.OneItemInOrderViewModel;
+import bg.softuni.computerStore.model.view.order.OneOrderDetailsViewModel;
+import bg.softuni.computerStore.repository.orders.QuantitiesItemsInOrderRepository;
 import bg.softuni.computerStore.service.BasketService;
 import bg.softuni.computerStore.service.FinalOrderService;
 import bg.softuni.computerStore.user.AppUser;
@@ -17,12 +22,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Controller
 public class BasketAndOrderController {
     private final BasketService basketService;
     private final FinalOrderService finalOrderService;
+
 
     public BasketAndOrderController(BasketService basketService, FinalOrderService finalOrderService) {
         this.basketService = basketService;
@@ -95,12 +104,12 @@ public class BasketAndOrderController {
             throw new BasketIdForbiddenException(String.format("You do not have authorization for the basket/order of user with id %d", userId));
         }
 
+        OneBasketViewModel basket = this.basketService.viewAllItemsFromOneBasket(basketId);
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("clientExtraOrderInfo", clientExtraOrderInfo);
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.clientExtraOrderInfo",
                     bindingResult);
 
-            OneBasketViewModel basket = this.basketService.viewAllItemsFromOneBasket(basketId);
             redirectAttributes.addFlashAttribute("basket", basket);
 
             redirectAttributes.addFlashAttribute("userId", user.getId());
@@ -110,9 +119,50 @@ public class BasketAndOrderController {
         }
 
         //Creation order is successfull, we start creating the order
-        this.finalOrderService.processOrder(basketId, clientExtraOrderInfo);
+        String orderNumber = this.finalOrderService.processOrder(basketId, clientExtraOrderInfo, basket.getTotalValue());
 
-        return "redirect:/";
+        return "redirect:/users/vieworders/" + orderNumber + "/details";
+    }
+
+    //    Display One Order
+    @GetMapping("/users/vieworders/{orderNumber}/details")
+    public String viewOrderDetails(Model model, @PathVariable String orderNumber) {
+        OneOrderDetailsViewModel orderDetailsViewModel = new OneOrderDetailsViewModel();
+
+        FinalOrderEntity finalOrderEntity = this.finalOrderService.getOrderByOrderNumber(orderNumber);
+        orderDetailsViewModel
+                .setOrderNumber(finalOrderEntity.getOrderNumber())
+                .setDeliveryAddress(finalOrderEntity.getExtraInfoForCurrentOrder().getDeliveryAddress())
+                .setPhoneNumber(finalOrderEntity.getExtraInfoForCurrentOrder().getPhoneNumber())
+                .setExtraInfo(finalOrderEntity.getExtraInfoForCurrentOrder().getExtraNotes())
+                .setTotalTotal(finalOrderEntity.getTotalTotal());
+
+
+        List<ItemQuantityInOrderEntity> productQuantities = this.finalOrderService.getProductQuantitiesFromOrderByOrderNumber(orderNumber);
+        List<OneItemInOrderViewModel> itemsInOrder = new ArrayList<>();
+        for (ItemQuantityInOrderEntity productQuantity : productQuantities) {
+            OneItemInOrderViewModel oneItem = new OneItemInOrderViewModel();
+            int boughtQuantity = productQuantity.getBoughtQuantity();
+            BigDecimal sellingPricePerUnit = productQuantity.getItem().getSellingPrice();
+
+            oneItem
+                    .setType(productQuantity.getItem().getType())
+                    .setModel(productQuantity.getItem().getModel())
+                    .setQuantity(boughtQuantity)
+                    .setPricePerUnit(sellingPricePerUnit)
+                    .setSellingPriceForAllQuantity(sellingPricePerUnit.multiply(BigDecimal.valueOf(boughtQuantity)))
+                    .setPhotoUrl(productQuantity.getItem().getPhoto().getUrl());
+
+            itemsInOrder.add(oneItem);
+        }
+
+        orderDetailsViewModel.setItems(itemsInOrder);
+
+        if (!model.containsAttribute("order")) {
+            model.addAttribute("order", orderDetailsViewModel);
+        }
+
+        return "/customer/OneOrder-details";
     }
 
 //    //Една страница където ще се зареждат поръчките на даден user или всички поръчки за SALES и ADMIN роли

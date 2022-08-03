@@ -48,7 +48,7 @@ public class StatsService {
         int[] totalItems = new int[1];  //total number of items
 
         allOrdersLazy.forEach(ord -> {
-            List<ItemQuantityInOrderEntity> iqos = this.finalOrderService.findIQO(ord.getId());
+            List<ItemQuantityInOrderEntity> iqos = this.finalOrderService.findIQOUUIDPrimary(ord.getId());
             for (ItemQuantityInOrderEntity iqo : iqos) {
                 ItemEntity item = iqo.getItem();
                 totals[0] = totals[0].add(item.getSellingPrice());

@@ -14,8 +14,8 @@ import bg.softuni.computerStore.repository.orders.QuantitiesItemsInOrderReposito
 import bg.softuni.computerStore.repository.users.ClientExtraInfoRepository;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -41,15 +41,16 @@ public class FinalOrderService implements InitializableFinalOrderService {
                     .setDeliveryAddress("Ivan Rilski 5, Sofia")
                     .setPhoneNumber("0898822977")
                     .setExtraNotes("bla bla bla bla bla");
-            processOrder(2L, clientOrderExtraInfoGetViewModel);
-            processOrder(3L, clientOrderExtraInfoGetViewModel);
+            processOrder(2L, clientOrderExtraInfoGetViewModel, BigDecimal.ONE);
+            processOrder(3L, clientOrderExtraInfoGetViewModel, BigDecimal.TEN);
         } else {
 //            confirmOrderByStore(UUID_ORDER_NUMBER_TESTING);
 //            markOrderAsDelivered(UUID_ORDER_NUMBER_TESTING);
         }
     }
 
-    public void processOrder(Long basketId, ClientOrderExtraInfoGetViewModel clientOrderExtraInfoGetViewModel) {
+    public String processOrder(Long basketId, ClientOrderExtraInfoGetViewModel clientOrderExtraInfoGetViewModel,
+                             BigDecimal totalTotal) {
         BasketOrderEntity basketOrder = this.basketService.readOneBasket(basketId);
         ClientOrderExtraInfoEntity clientOrderExtraInfoEntity = new ClientOrderExtraInfoEntity()
                 .setDeliveryAddress(clientOrderExtraInfoGetViewModel.getDeliveryAddress())
@@ -60,14 +61,11 @@ public class FinalOrderService implements InitializableFinalOrderService {
         clientOrderExtraInfoEntity = this.clientExtraInfoRepository.save(clientOrderExtraInfoEntity);
 
         List<ItemEntity> products = basketOrder.getProducts();
-//        List<ItemEntity> productsInOrder = new ArrayList<>();
-//        for (ItemEntity product : products) {
-//            productsInOrder.add(product);
-//        }
 
         FinalOrderEntity finalOrderEntity = new FinalOrderEntity();
         finalOrderEntity
                 .setProducts(products)
+                .setTotalTotal(totalTotal)
                 .setUser(basketOrder.getUser());
 
         //TODO we wait the client to enter his extra info details for the current order
@@ -87,7 +85,6 @@ public class FinalOrderService implements InitializableFinalOrderService {
         FinalOrderEntity savedFinalOrder = this.finalOrderRepository.save(finalOrderEntity);
 
         //Then from basket tables saving quantities to table orders_item_quantity
-        List<ItemEntity> order1Items = savedFinalOrder.getProducts();
         for (ItemEntity basketOneItem : basketOrder.getProducts()) {
             ItemQuantityInOrderEntity rec = new ItemQuantityInOrderEntity();
 
@@ -102,8 +99,10 @@ public class FinalOrderService implements InitializableFinalOrderService {
             this.quantitiesItemsInOrderRepository.save(rec);
         }
 
-        //Finally, we delete all info in all 3 basket tables
+        //Finally, we delete/reset the info in all 3 basket tables
         this.basketService.resetOneBasket(basketId);
+
+        return savedFinalOrder.getOrderNumber();
     }
 
     public void confirmOrderByStore(String orderNumber) {
@@ -137,11 +136,18 @@ public class FinalOrderService implements InitializableFinalOrderService {
         return this.finalOrderRepository.findAllOrdersLazy();
     }
 
-    //iqo from ItemQuantityInOrderEntity
-    public List<ItemQuantityInOrderEntity> findIQO(UUID uuid) {
+    //iqo name comes from ItemQuantityInOrderEntity
+    public List<ItemQuantityInOrderEntity> findIQOUUIDPrimary(UUID uuid) {
         List<ItemQuantityInOrderEntity> allByUUIDPrimary = this.quantitiesItemsInOrderRepository.findAllByUUIDPrimary(uuid);
         return allByUUIDPrimary;
     }
 
 
+    public FinalOrderEntity getOrderByOrderNumber(String orderNumber) {
+        return this.finalOrderRepository.findByOrderNumber(orderNumber).orElseThrow();
+    }
+
+    public List<ItemQuantityInOrderEntity> getProductQuantitiesFromOrderByOrderNumber(String orderNumber) {
+        return this.quantitiesItemsInOrderRepository.findAllByOrder_OrderNumber(orderNumber);
+    }
 }

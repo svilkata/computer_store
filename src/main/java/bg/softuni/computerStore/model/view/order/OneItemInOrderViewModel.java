@@ -8,6 +8,7 @@ public class OneItemInOrderViewModel {
     private String type;
     private String model;
     private BigDecimal sellingPriceForAllQuantity;
+    private BigDecimal pricePerUnit;
     private String photoUrl;
 
     //For the current item of the basket
@@ -67,6 +68,15 @@ public class OneItemInOrderViewModel {
 
     public OneItemInOrderViewModel setType(String type) {
         this.type = type;
+        return this;
+    }
+
+    public BigDecimal getPricePerUnit() {
+        return pricePerUnit;
+    }
+
+    public OneItemInOrderViewModel setPricePerUnit(BigDecimal pricePerUnit) {
+        this.pricePerUnit = pricePerUnit;
         return this;
     }
 }

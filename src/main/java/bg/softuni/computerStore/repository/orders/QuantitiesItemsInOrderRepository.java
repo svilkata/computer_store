@@ -15,4 +15,6 @@ public interface QuantitiesItemsInOrderRepository extends JpaRepository<ItemQuan
     //iqo from ItemQuantityInOrderEntity
     @Query("SELECT iqo FROM ItemQuantityInOrderEntity iqo WHERE iqo.order.id= :uuid")
     List<ItemQuantityInOrderEntity> findAllByUUIDPrimary(UUID uuid);
+
+    List<ItemQuantityInOrderEntity> findAllByOrder_OrderNumber(String orderNumber);
 }
