@@ -50,7 +50,7 @@ public class FinalOrderService implements InitializableFinalOrderService {
     }
 
     public String processOrder(Long basketId, ClientOrderExtraInfoGetViewModel clientOrderExtraInfoGetViewModel,
-                             BigDecimal totalTotal) {
+                               BigDecimal totalTotal) {
         BasketOrderEntity basketOrder = this.basketService.readOneBasket(basketId);
         ClientOrderExtraInfoEntity clientOrderExtraInfoEntity = new ClientOrderExtraInfoEntity()
                 .setDeliveryAddress(clientOrderExtraInfoGetViewModel.getDeliveryAddress())
@@ -84,6 +84,9 @@ public class FinalOrderService implements InitializableFinalOrderService {
         //Saving the final confirmed order
         FinalOrderEntity savedFinalOrder = this.finalOrderRepository.save(finalOrderEntity);
 
+
+        int countOfProducts = 0;
+
         //Then from basket tables saving quantities to table orders_item_quantity
         for (ItemEntity basketOneItem : basketOrder.getProducts()) {
             ItemQuantityInOrderEntity rec = new ItemQuantityInOrderEntity();
@@ -91,13 +94,21 @@ public class FinalOrderService implements InitializableFinalOrderService {
             ItemQuantityInBasketEntity itemFromItemQuantityInBasketEntityByBasketItem = this.basketService.getItemFromItemQuantityInBasketEntityByBasketItem(
                     basketOrder, basketOneItem);
 
+            int quantityBought = itemFromItemQuantityInBasketEntityByBasketItem.getQuantityBought();
+
             rec
                     .setOrder(savedFinalOrder)
                     .setItem(basketOneItem)
-                    .setBoughtQuantity(itemFromItemQuantityInBasketEntityByBasketItem.getQuantityBought());
+                    .setBoughtQuantity(quantityBought);
+
+            countOfProducts += quantityBought;
 
             this.quantitiesItemsInOrderRepository.save(rec);
         }
+
+        //We save/update the order with the count of products
+        savedFinalOrder.setCountTotalProducts(countOfProducts);
+        this.finalOrderRepository.save(savedFinalOrder);
 
         //Finally, we delete/reset the info in all 3 basket tables
         this.basketService.resetOneBasket(basketId);
@@ -149,5 +160,10 @@ public class FinalOrderService implements InitializableFinalOrderService {
 
     public List<ItemQuantityInOrderEntity> getProductQuantitiesFromOrderByOrderNumber(String orderNumber) {
         return this.quantitiesItemsInOrderRepository.findAllByOrder_OrderNumber(orderNumber);
+    }
+
+    public List<FinalOrderEntity> getAllOrdersByUserId(Long userId) {
+        return this.finalOrderRepository.findAllByUserId(userId);
+
     }
 }

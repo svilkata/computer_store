@@ -41,6 +41,9 @@ public class FinalOrderEntity {
     @Positive
     private BigDecimal totalTotal;
 
+    @Column(name = "count_total_products")
+    private int countTotalProducts;
+
     @ManyToMany
     private List<ItemEntity> products;
 
@@ -122,6 +125,15 @@ public class FinalOrderEntity {
 
     public FinalOrderEntity setTotalTotal(BigDecimal totalTotal) {
         this.totalTotal = totalTotal;
+        return this;
+    }
+
+    public int getCountTotalProducts() {
+        return countTotalProducts;
+    }
+
+    public FinalOrderEntity setCountTotalProducts(int countTotalProducts) {
+        this.countTotalProducts = countTotalProducts;
         return this;
     }
 }

@@ -23,4 +23,6 @@ public interface FinalOrderRepository extends JpaRepository<FinalOrderEntity, St
 
     @Query("SELECT distinct o FROM FinalOrderEntity o")
     List<FinalOrderEntity> findAllOrdersLazy();
+
+    List<FinalOrderEntity> findAllByUserId(Long userId);
 }

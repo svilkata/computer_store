@@ -76,7 +76,7 @@ sql:
 
 ### Преубразуване на данни
 * Чрез ModelMapper
-* Чрез MapStruct - и един деклариран default mapping method
+* Чрез MapStruct - плюс един деклариран default mapping method (about the photo)
 * Ръчно - чрез constructor и setters
 
 ### Validating input data

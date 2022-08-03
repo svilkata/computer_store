@@ -20,7 +20,8 @@
 
 <header>
     <nav class="navbar navbar-expand-lg bg-dark navbar-dark fixed-top">
-        <a class="navbar-brand" href="/"><img alt="computer picture" src="/images/pc_photo2.png" class="logo" style="border-radius: 20px"></a>
+        <a class="navbar-brand" href="/"><img alt="computer picture" src="/images/pc_photo2.png" class="logo"
+                                              style="border-radius: 20px"></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -36,15 +37,19 @@
                     </a>
 
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownAdmin">
-                        <a class="dropdown-item" th:text="#{navbar_all_computers}"  th:href="@{/items/all/computer}">All computers</a>
-                        <a class="dropdown-item" th:text="#{navbar_all_monitors}" th:href="@{/items/all/monitor}">All monitors</a>
-                        <a class="dropdown-item" th:text="#{navbar_all_laptops}" th:href="@{/items/all/laptop}">All laptops</a>
+                        <a class="dropdown-item" th:text="#{navbar_all_computers}" th:href="@{/items/all/computer}">All
+                            computers</a>
+                        <a class="dropdown-item" th:text="#{navbar_all_monitors}" th:href="@{/items/all/monitor}">All
+                            monitors</a>
+                        <a class="dropdown-item" th:text="#{navbar_all_laptops}" th:href="@{/items/all/laptop}">All
+                            laptops</a>
                     </div>
                 </li>
 
 
                 <li class="nav-item" sec:authorize="hasAnyRole('ADMIN') || hasRole('EMPLOYEE_PURCHASES')">
-                    <a class="nav-link" th:href="@{/pages/purchases/items/add}" th:text="#{navbar_add_newitem}">Add New Item</a>
+                    <a class="nav-link" th:href="@{/pages/purchases/items/add}" th:text="#{navbar_add_newitem}">Add New
+                        Item</a>
                 </li>
 
                 <li class="nav-item" sec:authorize="hasRole('CUSTOMER')">
@@ -54,9 +59,18 @@
                 </li>
 
                 <li class="nav-item" sec:authorize="hasRole('CUSTOMER') || hasRole('EMPLOYEE_SALES')">
-                    <a class="nav-link"
-                       th:href="@{/users/order/{userId} (userId = ${#authentication.getPrincipal().getId()})}"
-                       th:text="#{navbar_orders}">Orders</a>
+                    <th:block sec:authorize="hasRole('ADMIN') || hasRole('EMPLOYEE_SALES')">
+                        <a class="nav-link"
+                           th:href="@{/users/vieworders}"
+                           th:text="#{navbar_orders}">Orders</a>
+                    </th:block>
+
+                    <th:block sec:authorize="!hasRole('ADMIN') && !hasRole('EMPLOYEE_SALES')">
+                        <a class="nav-link"
+                           th:href="@{/users/vieworders}"
+                           th:text="#{navbar_myorders}">My Orders</a>
+                    </th:block>
+
                 </li>
 
                 <li class="nav-item dropdown" sec:authorize="isAuthenticated() && !hasRole('ADMIN')">
@@ -66,7 +80,8 @@
                         Settings
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownUserSettings">
-                        <a class="dropdown-item" th:href="@{/users/changepassword}" th:text="#{navbar_changepassword}">Change Password</a>
+                        <a class="dropdown-item" th:href="@{/users/changepassword}" th:text="#{navbar_changepassword}">Change
+                            Password</a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="/" th:text="#{navbar_else}">Something else here</a>
                     </div>
@@ -80,13 +95,19 @@
                     </a>
 
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownAdmin">
-                        <a class="dropdown-item" th:text="#{navbar_create_new_employee}" th:href="@{/pages/admins/register-new-employee}">Create New Employee</a>
-                        <a class="dropdown-item" th:text="#{navbar_set_employee_roles}" th:href="@{/pages/admins/set-user-role}">Set Employee Roles</a>
-                        <a class="dropdown-item" th:text="#{navbar_change_admin}" th:href="@{/pages/admins/change-admin-user}">Change Admin User</a>
-                        <a class="dropdown-item" th:text="#{navbar_change_password}" th:href="@{/users/changepassword}">Change Password</a>
+                        <a class="dropdown-item" th:text="#{navbar_create_new_employee}"
+                           th:href="@{/pages/admins/register-new-employee}">Create New Employee</a>
+                        <a class="dropdown-item" th:text="#{navbar_set_employee_roles}"
+                           th:href="@{/pages/admins/set-user-role}">Set Employee Roles</a>
+                        <a class="dropdown-item" th:text="#{navbar_change_admin}"
+                           th:href="@{/pages/admins/change-admin-user}">Change Admin User</a>
+                        <a class="dropdown-item" th:text="#{navbar_change_password}" th:href="@{/users/changepassword}">Change
+                            Password</a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" th:text="#{navbar_statshttprequests}" th:href="@{/pages/admins/statshttprequests}">Statistics http requests</a>
-                        <a class="dropdown-item" th:text="#{navbar_statssales}" th:href="@{/pages/admins/statssales}">Statistics Sales</a>
+                        <a class="dropdown-item" th:text="#{navbar_statshttprequests}"
+                           th:href="@{/pages/admins/statshttprequests}">Statistics http requests</a>
+                        <a class="dropdown-item" th:text="#{navbar_statssales}" th:href="@{/pages/admins/statssales}">Statistics
+                            Sales</a>
                     </div>
                 </li>
 
@@ -95,7 +116,7 @@
                     <div class="form-inline my-2 my-lg-0 border px-3">
                         <div class="text-white"><span th:text="#{navbar_welcome}">Welcome,</span>
                             <th:block th:text="${#authentication.principal.getFullName()}">X</th:block>
-<!--                            <th:block sec:authentication='name'></th:block>-->
+                            <!--                            <th:block sec:authentication='name'></th:block>-->
                         </div>
                         <form th:action="@{/users/logout}" th:method="post">
                             <input class="btn btn-link nav-link" type="submit" th:value="#{navbar_logout}">

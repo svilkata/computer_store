@@ -8,7 +8,7 @@ import bg.softuni.computerStore.model.entity.orders.ItemQuantityInOrderEntity;
 import bg.softuni.computerStore.model.view.order.OneBasketViewModel;
 import bg.softuni.computerStore.model.view.order.OneItemInOrderViewModel;
 import bg.softuni.computerStore.model.view.order.OneOrderDetailsViewModel;
-import bg.softuni.computerStore.repository.orders.QuantitiesItemsInOrderRepository;
+import bg.softuni.computerStore.model.view.order.OneOrderInManyOrdersViewModel;
 import bg.softuni.computerStore.service.BasketService;
 import bg.softuni.computerStore.service.FinalOrderService;
 import bg.softuni.computerStore.user.AppUser;
@@ -23,6 +23,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.math.BigDecimal;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -137,7 +138,6 @@ public class BasketAndOrderController {
                 .setExtraInfo(finalOrderEntity.getExtraInfoForCurrentOrder().getExtraNotes())
                 .setTotalTotal(finalOrderEntity.getTotalTotal());
 
-
         List<ItemQuantityInOrderEntity> productQuantities = this.finalOrderService.getProductQuantitiesFromOrderByOrderNumber(orderNumber);
         List<OneItemInOrderViewModel> itemsInOrder = new ArrayList<>();
         for (ItemQuantityInOrderEntity productQuantity : productQuantities) {
@@ -165,8 +165,53 @@ public class BasketAndOrderController {
         return "/customer/OneOrder-details";
     }
 
-//    //Една страница където ще се зареждат поръчките на даден user или всички поръчки за SALES и ADMIN роли
-//    @GetMapping("/users/vieworders/")
+    //One page where the orders of a client will be loaded or all orders if SALES or ADMIN user
+    @GetMapping("/users/vieworders")
+    public String viewOrders(Model model, @AuthenticationPrincipal AppUser user) {
+        Long userId = user.getId();
+
+        List<String> roles = user.getAuthorities().stream()
+                .map(Object::toString).toList();
+
+        List<OneOrderInManyOrdersViewModel> ordersViewModels = new ArrayList<>();
+
+        //Get list of all orders if ADMIN or SALES employee
+        if (roles.contains("ROLE_ADMIN") || roles.contains("ROLE_EMPLOYEE_SALES")) {
+            List<FinalOrderEntity> allOrdersLazy = this.finalOrderService.getAllOrdersLazy();
+            setAllOrdersView(ordersViewModels, allOrdersLazy);
+        } else if (roles.contains("ROLE_CUSTOMER")){
+            //Get orders for the current client user only
+            List<FinalOrderEntity> allCurrentUserOrders = this.finalOrderService.getAllOrdersByUserId(userId);
+            setAllOrdersView(ordersViewModels, allCurrentUserOrders);
+        }
+
+        if (ordersViewModels.isEmpty()) {
+
+        }
+
+        if (!model.containsAttribute("orders")) {
+            model.addAttribute("orders", ordersViewModels);
+        }
+
+        return "/customer/view-orders";
+    }
+
+    //to do it with modelMapper!!!
+    private void setAllOrdersView(List<OneOrderInManyOrdersViewModel> ordersViewModels, List<FinalOrderEntity> allOrdersLazy) {
+        for (FinalOrderEntity finalOrder : allOrdersLazy) {
+            OneOrderInManyOrdersViewModel oneOrderInManyOrdersViewModel = new OneOrderInManyOrdersViewModel();
+            oneOrderInManyOrdersViewModel
+                    .setUsername(finalOrder.getUser().getUsername())
+                    .setOrderNumber(finalOrder.getOrderNumber())
+                    .setCreatedAt(finalOrder.getCreationDateTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
+                    .setTotalItemsInOrder(finalOrder.getCountTotalProducts())
+                    .setTotalValue(finalOrder.getTotalTotal())
+                    .setOrderStatus(finalOrder.getStatus().toString());
+
+
+            ordersViewModels.add(oneOrderInManyOrdersViewModel);
+        }
+    }
 
 
     private Long isItemIdANumber(String objectId, String comment) {
