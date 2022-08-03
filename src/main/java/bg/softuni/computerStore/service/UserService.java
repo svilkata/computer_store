@@ -34,18 +34,20 @@ public class UserService implements InitializableUserService {
     private final UserDetailsService appUserDetailsService;
     private final String adminPass;
     private final ModelMapper modelMapper;
+    private final BasketService basketService;
 
     public UserService(
             UserRepository userRepository, UserRoleRepository userRoleRepository,
             PasswordEncoder passwordEncoder,
             UserDetailsService appUserDetailsService,
-            @Value("${app.default.admin.password}") String adminPass, ModelMapper modelMapper) {
+            @Value("${app.default.admin.password}") String adminPass, ModelMapper modelMapper, BasketService basketService) {
         this.userRepository = userRepository;
         this.userRoleRepository = userRoleRepository;
         this.passwordEncoder = passwordEncoder;
         this.appUserDetailsService = appUserDetailsService;
         this.adminPass = adminPass;
         this.modelMapper = modelMapper;
+        this.basketService = basketService;
     }
 
     @Override
@@ -133,7 +135,10 @@ public class UserService implements InitializableUserService {
                         setLastName(userRegisterBindingDTO.getLastName()).
                         setPassword(passwordEncoder.encode(userRegisterBindingDTO.getPassword()));
 
-        userRepository.save(newCustomer);
+        UserEntity savedUser = userRepository.save(newCustomer);
+
+        //Creating here the relevant basket
+        this.basketService.addBasketForRegisteredUser(savedUser);
 
         //this is the Spring representation of a User - after register, we AUTO log-in the users directly
         UserDetails userDetails =

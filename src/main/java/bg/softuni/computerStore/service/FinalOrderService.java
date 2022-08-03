@@ -1,6 +1,7 @@
 package bg.softuni.computerStore.service;
 
 import bg.softuni.computerStore.initSeed.InitializableFinalOrderService;
+import bg.softuni.computerStore.model.binding.order.ClientOrderExtraInfoGetViewModel;
 import bg.softuni.computerStore.model.entity.orders.BasketOrderEntity;
 import bg.softuni.computerStore.model.entity.orders.FinalOrderEntity;
 import bg.softuni.computerStore.model.entity.orders.ItemQuantityInBasketEntity;
@@ -35,20 +36,25 @@ public class FinalOrderService implements InitializableFinalOrderService {
     @Override
     public void init() {
         if (finalOrderRepository.count() == 0) {
-            processOrder(2L);
-            processOrder(3L);
+            ClientOrderExtraInfoGetViewModel clientOrderExtraInfoGetViewModel = new ClientOrderExtraInfoGetViewModel();
+            clientOrderExtraInfoGetViewModel
+                    .setDeliveryAddress("Ivan Rilski 5, Sofia")
+                    .setPhoneNumber("0898822977")
+                    .setExtraNotes("bla bla bla bla bla");
+            processOrder(2L, clientOrderExtraInfoGetViewModel);
+            processOrder(3L, clientOrderExtraInfoGetViewModel);
         } else {
 //            confirmOrderByStore(UUID_ORDER_NUMBER_TESTING);
 //            markOrderAsDelivered(UUID_ORDER_NUMBER_TESTING);
         }
     }
 
-    public void processOrder(Long basketId) {
+    public void processOrder(Long basketId, ClientOrderExtraInfoGetViewModel clientOrderExtraInfoGetViewModel) {
         BasketOrderEntity basketOrder = this.basketService.readOneBasket(basketId);
         ClientOrderExtraInfoEntity clientOrderExtraInfoEntity = new ClientOrderExtraInfoEntity()
-                .setDeliveryAddress("Ivan Rilski 5, Sofia")
-                .setPhoneNumber("0898822977")
-                .setExtraNotes("bla bla bla bla bla")
+                .setDeliveryAddress(clientOrderExtraInfoGetViewModel.getDeliveryAddress())
+                .setPhoneNumber(clientOrderExtraInfoGetViewModel.getPhoneNumber())
+                .setExtraNotes(clientOrderExtraInfoGetViewModel.getExtraNotes())
                 .setUser(basketOrder.getUser());
 
         clientOrderExtraInfoEntity = this.clientExtraInfoRepository.save(clientOrderExtraInfoEntity);
@@ -132,7 +138,7 @@ public class FinalOrderService implements InitializableFinalOrderService {
     }
 
     //iqo from ItemQuantityInOrderEntity
-    public List<ItemQuantityInOrderEntity> findIQO(UUID uuid){
+    public List<ItemQuantityInOrderEntity> findIQO(UUID uuid) {
         List<ItemQuantityInOrderEntity> allByUUIDPrimary = this.quantitiesItemsInOrderRepository.findAllByUUIDPrimary(uuid);
         return allByUUIDPrimary;
     }

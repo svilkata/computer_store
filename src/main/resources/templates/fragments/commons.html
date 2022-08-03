@@ -53,6 +53,12 @@
                        th:text="#{navbar_basket}">Basket</a>
                 </li>
 
+                <li class="nav-item" sec:authorize="hasRole('CUSTOMER') || hasRole('EMPLOYEE_SALES')">
+                    <a class="nav-link"
+                       th:href="@{/users/basket/{userId} (userId = ${#authentication.getPrincipal().getId()})}"
+                       th:text="#{navbar_basket}">Orders</a>
+                </li>
+
                 <li class="nav-item dropdown" sec:authorize="isAuthenticated() && !hasRole('ADMIN')">
                     <a class="nav-link dropdown-toggle" href="/" id="navbarDropdownUserSettings" role="button"
                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"

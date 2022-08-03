@@ -39,7 +39,7 @@
 
 
         <form
-                th:action="@{/users/orderconfirm}"
+                th:action="@{/users/order/{basketId}(basketId=${basketId})}"
                 th:method="post"
                 th:object="${clientOrderExtraInfo}"
                 class="main-form mx-auto col-md-8 d-flex flex-column justify-content-center"
@@ -59,7 +59,7 @@
                                placeholder="deliveryAddress"
                                required/>
                         <div class="invalid-feedback errors alert alert-danger">
-                            <div th:each="err : ${#fields.errors('deliveryAddress')}" th:text="${err}"/>
+                            <div th:each="err : ${#fields.errors('deliveryAddress')}" th:text="${err}"></div>
                         </div>
                     </div>
                     <div class="form-group col-md-5 mb-3">
@@ -73,7 +73,7 @@
                                placeholder="phoneNumber"
                                required/>
                         <div class="invalid-feedback errors alert alert-danger">
-                            <div th:each="err : ${#fields.errors('phoneNumber')}" th:text="${err}"/>
+                            <div th:each="err : ${#fields.errors('phoneNumber')}" th:text="${err}"></div>
                         </div>
                     </div>
                 </div>
@@ -91,12 +91,11 @@
             </div>
 
             <div class="row">
-                <div class="form-group col-md-6 mb-3">
-                    <a href="http://localhost:8080/users/basket/{userId}" class="btn btn-link"
-                       text="Back to Basket"></a>
+                <div class="button-holder d-flex col">
+                    <a th:href="@{http://localhost:8080/users/basket/{userId} (userId = ${userId})}" class="btn btn-info btn-lg">Back to Basket</a>
                 </div>
 
-                <div class="form-group col-md-6 mb-3">
+                <div class="button-holder d-flex col">
                     <input type="submit" class="btn btn-info btn-lg" value="Confirm the Order"/>
                 </div>
 
@@ -109,6 +108,7 @@
 
 <footer th:replace="fragments/commons::footer"></footer>
 
+<script src="/js/successfullCreatedOrder.js" type="text/javascript"></script>
 
 </body>
 </html>

@@ -3,9 +3,9 @@ package bg.softuni.computerStore.model.binding.order;
 import javax.validation.constraints.NotBlank;
 
 public class ClientOrderExtraInfoGetViewModel {
-    @NotBlank
+    @NotBlank(message = "Delivery address can not be empty!")
     private String deliveryAddress;
-    @NotBlank
+    @NotBlank(message = "Phone number can not be empty!")
     private String phoneNumber;
     private String extraNotes;
 

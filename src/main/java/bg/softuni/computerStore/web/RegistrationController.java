@@ -32,7 +32,7 @@ public class RegistrationController {
     }
 
     @PostMapping("/users/register")
-    public String register(@Valid UserRegisterBindingDTO userRegisterBindingDto,
+    public String registerConfirm(@Valid UserRegisterBindingDTO userRegisterBindingDto,
                            BindingResult bindingResult,
                            RedirectAttributes redirectAttributes) {
 

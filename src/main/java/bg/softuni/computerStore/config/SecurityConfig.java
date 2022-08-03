@@ -41,20 +41,19 @@ public class SecurityConfig {
                         requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll().
                 // everyone can login and register
                         antMatchers("/", "/items/all/**").permitAll().
-                        antMatchers("/users/login", "/users/register").anonymous().
-                        antMatchers("/users/changepassword").authenticated().
-                        antMatchers("/users/basket/**", "/users/order/**").hasRole(UserRoleEnum.CUSTOMER.toString()).
+                antMatchers("/users/login", "/users/register").anonymous().
+                antMatchers("/users/changepassword").authenticated().
+                antMatchers("/users/basket/**", "/users/order/**").hasRole(UserRoleEnum.CUSTOMER.toString()).
+                antMatchers("/users/vieworders/**").authenticated().
                 // pages available only for purchase department
                         antMatchers("/pages/purchases/**").hasAnyRole(UserRoleEnum.EMPLOYEE_PURCHASES.name(), UserRoleEnum.ADMIN.name()).
                 // pages available only for purchase department
                         antMatchers("/pages/sales/**").hasAnyRole(UserRoleEnum.EMPLOYEE_SALES.name(), UserRoleEnum.ADMIN.name()).
                 // pages available only for admins
                         antMatchers("/pages/admins/**").hasRole(UserRoleEnum.ADMIN.name()).
-                //we permit the page below only only for admin users
-//                        antMatchers("/pages/admins/statistics").hasRole(UserRoleEnum.ADMIN.toString()).
-                // all other pages are available for logger in users
+                // all other pages are available for logged-in users
 //                        antMatchers("/**").authenticated().
-                anyRequest().authenticated().
+        anyRequest().authenticated().
                 and().
                 // configuration of form login
                         formLogin().
@@ -67,8 +66,8 @@ public class SecurityConfig {
                 // where to go in case that the login is successful
                         defaultSuccessUrl("/").
                 // where to go in case that the login failed
-                        failureForwardUrl("/users/login-errorHandling").
-                and().
+                        failureForwardUrl("/users/login-error").
+        and().
                 // configure logout
                         logout().
                 // which is the logout url

@@ -53,7 +53,7 @@ function displayBasket(result) {
         const quantity = $('<div>').addClass('card-text')
             .append($('<label>')).text('Quantity buying: ');
 
-        const quantityInput = $('<input>').val(item.quantity).attr({'name': 'quantity', 'type': 'number'});
+        const quantityInput = $('<input>').val(item.quantity).attr({'name': 'quantity', 'type': 'number', 'min': 1});
         quantity.append(quantityInput);
 
         //If quantity has not changed, we do not call the onChangeQuantity function
@@ -62,9 +62,9 @@ function displayBasket(result) {
 
 
         function miniFunction() {
-            if (quantityInput.val() < 0) {
-                alert('Quantity can not be negative');
-                quantityInput.val(0);
+            if (quantityInput.val() < 1) {
+                alert('Quantity can not be negative or zero');
+                quantityInput.val(1);
             }
 
             return quantityInput.val();
@@ -93,7 +93,7 @@ function displayBasket(result) {
     divUpper.append(allItems);
 
     const div = $('<div>').addClass('button-holder d-flex');
-    const submitButton = $('<a>').addClass('btn btn-link').text('Continue to Order')
+    const submitButton = $('<a>').addClass('btn btn-info btn-lg').text('Continue to Order')
         .attr('href', 'http://localhost:8080/users/order/' + basketId);
     div.append(submitButton);
     divUpper.append(div);
@@ -123,7 +123,7 @@ function onRemoveItemFromBasket(itemId) {
 
         })
         .then((result) => {
-            alert('Item removed from basket successfully');
             displayBasket(result);
+            alert('Item removed from basket successfully');
         });
 }
