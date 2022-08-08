@@ -27,6 +27,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Controller
 public class BasketAndOrderController {
@@ -125,9 +126,10 @@ public class BasketAndOrderController {
         return "redirect:/users/vieworders/" + orderNumber + "/details";
     }
 
-    //    Display One Order
+    //    Display One Order details
     @GetMapping("/users/vieworders/{orderNumber}/details")
     public String viewOrderDetails(Model model, @PathVariable String orderNumber) {
+        //TODO: add security here
         OneOrderDetailsViewModel orderDetailsViewModel = new OneOrderDetailsViewModel();
 
         FinalOrderEntity finalOrderEntity = this.finalOrderService.getOrderByOrderNumber(orderNumber);
@@ -166,53 +168,12 @@ public class BasketAndOrderController {
     }
 
     //One page where the orders of a client will be loaded or all orders if SALES or ADMIN user
-    @GetMapping("/users/vieworders")
-    public String viewOrders(Model model, @AuthenticationPrincipal AppUser user) {
-        Long userId = user.getId();
-
-        List<String> roles = user.getAuthorities().stream()
-                .map(Object::toString).toList();
-
-        List<OneOrderInManyOrdersViewModel> ordersViewModels = new ArrayList<>();
-
-        //Get list of all orders if ADMIN or SALES employee
-        if (roles.contains("ROLE_ADMIN") || roles.contains("ROLE_EMPLOYEE_SALES")) {
-            List<FinalOrderEntity> allOrdersLazy = this.finalOrderService.getAllOrdersLazy();
-            setAllOrdersView(ordersViewModels, allOrdersLazy);
-        } else if (roles.contains("ROLE_CUSTOMER")){
-            //Get orders for the current client user only
-            List<FinalOrderEntity> allCurrentUserOrders = this.finalOrderService.getAllOrdersByUserId(userId);
-            setAllOrdersView(ordersViewModels, allCurrentUserOrders);
-        }
-
-        if (ordersViewModels.isEmpty()) {
-
-        }
-
-        if (!model.containsAttribute("orders")) {
-            model.addAttribute("orders", ordersViewModels);
-        }
+    @GetMapping("/users/order/vieworders")
+    public String viewOrders(@AuthenticationPrincipal AppUser user) {
+        //TODO: add security here
 
         return "/customer/view-orders";
     }
-
-    //to do it with modelMapper!!!
-    private void setAllOrdersView(List<OneOrderInManyOrdersViewModel> ordersViewModels, List<FinalOrderEntity> allOrdersLazy) {
-        for (FinalOrderEntity finalOrder : allOrdersLazy) {
-            OneOrderInManyOrdersViewModel oneOrderInManyOrdersViewModel = new OneOrderInManyOrdersViewModel();
-            oneOrderInManyOrdersViewModel
-                    .setUsername(finalOrder.getUser().getUsername())
-                    .setOrderNumber(finalOrder.getOrderNumber())
-                    .setCreatedAt(finalOrder.getCreationDateTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
-                    .setTotalItemsInOrder(finalOrder.getCountTotalProducts())
-                    .setTotalValue(finalOrder.getTotalTotal())
-                    .setOrderStatus(finalOrder.getStatus().toString());
-
-
-            ordersViewModels.add(oneOrderInManyOrdersViewModel);
-        }
-    }
-
 
     private Long isItemIdANumber(String objectId, String comment) {
         final Long userLongId;
@@ -223,5 +184,4 @@ public class BasketAndOrderController {
         }
         return userLongId;
     }
-
 }

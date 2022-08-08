@@ -61,16 +61,15 @@
                 <li class="nav-item" sec:authorize="hasRole('CUSTOMER') || hasRole('EMPLOYEE_SALES')">
                     <th:block sec:authorize="hasRole('ADMIN') || hasRole('EMPLOYEE_SALES')">
                         <a class="nav-link"
-                           th:href="@{/users/vieworders}"
-                           th:text="#{navbar_orders}">Orders</a>
+                           th:href="@{/users/order/vieworders}"
+                           th:text="#{navbar_orders}">All Orders</a>
                     </th:block>
 
                     <th:block sec:authorize="!hasRole('ADMIN') && !hasRole('EMPLOYEE_SALES')">
                         <a class="nav-link"
-                           th:href="@{/users/vieworders}"
+                           th:href="@{/users/order/vieworders}"
                            th:text="#{navbar_myorders}">My Orders</a>
                     </th:block>
-
                 </li>
 
                 <li class="nav-item dropdown" sec:authorize="isAuthenticated() && !hasRole('ADMIN')">

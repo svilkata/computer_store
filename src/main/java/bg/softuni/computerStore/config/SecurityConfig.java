@@ -43,12 +43,13 @@ public class SecurityConfig {
                         antMatchers("/", "/items/all/**").permitAll().
                 antMatchers("/users/login", "/users/register").anonymous().
                 antMatchers("/users/changepassword").authenticated().
-                antMatchers("/users/basket/**", "/users/order/**").hasRole(UserRoleEnum.CUSTOMER.toString()).
-                antMatchers("/users/vieworders/**").authenticated().
+                antMatchers("/users/basket/**").hasRole(UserRoleEnum.CUSTOMER.toString()).
+                antMatchers("/users/order/**").authenticated().
+                antMatchers("/users/changeorderstatus/**").hasAnyRole(UserRoleEnum.EMPLOYEE_SALES.name(), UserRoleEnum.ADMIN.name()).
                 // pages available only for purchase department
-                        antMatchers("/pages/purchases/**").hasAnyRole(UserRoleEnum.EMPLOYEE_PURCHASES.name(), UserRoleEnum.ADMIN.name()).
+                        antMatchers("/pages/purchases/**").hasAnyRole(UserRoleEnum.EMPLOYEE_PURCHASES.toString(), UserRoleEnum.ADMIN.name()).
                 // pages available only for purchase department
-                        antMatchers("/pages/sales/**").hasAnyRole(UserRoleEnum.EMPLOYEE_SALES.name(), UserRoleEnum.ADMIN.name()).
+                        antMatchers("/pages/sales/**").hasAnyRole(UserRoleEnum.EMPLOYEE_SALES.name(), UserRoleEnum.ADMIN.toString()).
                 // pages available only for admins
                         antMatchers("/pages/admins/**").hasRole(UserRoleEnum.ADMIN.name()).
                 // all other pages are available for logged-in users

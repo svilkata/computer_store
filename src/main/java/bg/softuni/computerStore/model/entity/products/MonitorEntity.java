@@ -12,7 +12,7 @@ import java.util.Locale;
 public class MonitorEntity extends ItemEntity {
     private static final String ITEM_TYPE = TypesOfProducts.MONITOR.name().toLowerCase(Locale.ROOT);
 
-    //TODO - Issue with SINGLE Table Inheritance strategy
+    //TODO
     // how to adjust nullable = false and if null given somehow, some default value to be set for empty data
     @Column(nullable = true)
     private String size;
