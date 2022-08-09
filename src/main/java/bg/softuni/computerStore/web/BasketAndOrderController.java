@@ -169,8 +169,18 @@ public class BasketAndOrderController {
 
     //One page where the orders of a client will be loaded or all orders if SALES or ADMIN user
     @GetMapping("/users/order/vieworders")
-    public String viewOrders(@AuthenticationPrincipal AppUser user) {
+    public String viewOrders(Model model, @AuthenticationPrincipal AppUser user) {
         //TODO: add security here
+        Long userId = user.getId();
+
+        List<String> roles = user.getAuthorities().stream()
+                .map(Object::toString).toList();
+
+        boolean adminOrSalesUser = roles.contains("ROLE_ADMIN") || roles.contains("ROLE_EMPLOYEE_SALES");
+
+        if (!model.containsAttribute("adminOrSalesUser")) {
+            model.addAttribute("adminOrSalesUser", adminOrSalesUser);
+        }
 
         return "/customer/view-orders";
     }

@@ -173,4 +173,8 @@ public class FinalOrderService implements InitializableFinalOrderService {
         return this.finalOrderRepository.findAllByUserId(userId);
 
     }
+
+    public List<FinalOrderEntity> getAllOrdersLazyByOrderNumber(String searchByOrderNumber) {
+        return this.finalOrderRepository.findAllOrdersLazyByOrderNumber(searchByOrderNumber);
+    }
 }

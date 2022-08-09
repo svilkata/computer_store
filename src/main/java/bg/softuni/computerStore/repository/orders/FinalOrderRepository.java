@@ -25,4 +25,7 @@ public interface FinalOrderRepository extends JpaRepository<FinalOrderEntity, St
     List<FinalOrderEntity> findAllOrdersLazy();
 
     List<FinalOrderEntity> findAllByUserId(Long userId);
+
+    @Query("SELECT o FROM FinalOrderEntity o WHERE o.orderNumber LIKE CONCAT('%', :searchByOrderNumber, '%')")
+    List<FinalOrderEntity> findAllOrdersLazyByOrderNumber(String searchByOrderNumber);
 }

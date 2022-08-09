@@ -1,49 +1,57 @@
 const maincontainer = $('#displayOrders');
+const roleValueCustomerOnly = maincontainer.attr('value');
+
+//With query selector it only works!!! -  ***цензура*** jQuery не ми работи с preventDefault() !!!
+const searchOrdersForm = document.querySelector("#searchOrdersForm");
+searchOrdersForm.addEventListener("submit", onSearch);
+
+const titleOrders = $('#titleOrders');
+
+
+function onSearch(event) {
+    event.preventDefault();
+    const searchField = new FormData(event.target).get('search')
+
+    fetch('http://localhost:8080/users/order/searchorders?search=' + searchField)
+        .then((response) => response.json())
+        .then((result) => {
+            displayOrders(result);
+        });
+}
 
 //initial load of page
 fetch('http://localhost:8080/users/order/viewordersrest')
     .then((response) => response.json())
-    .then((result) => displayOrdersInitial(result));
+    .then((result) => displayOrders(result));
 
-function displayOrdersInitial(result) {
 
-    // const title = $('<h2>').addClass('text-center text-white mt-5 greybg');
-    // // const span1 = $('<span>').attr('sec:authorize', "!hasRole(\'ADMIN\') && !hasRole(\'EMPLOYEE_SALES\')").text('.......My Orders.......');
-    // // const span2 = $('<span>').attr('sec:authorize', "hasRole('ADMIN') || hasRole('EMPLOYEE_SALES')").text('......All orders.......');
-    // const span = $('<span>');
+function displayOrders(result) {
+    maincontainer.empty();
+    maincontainer.append(searchOrdersForm);
+    maincontainer.append(titleOrders);
 
-    // let boolResult = [[${#authorization.expression('hasRole("EMPLOYEE_SALES")')}]];
+    // console.log(maincontainer.html());
     // debugger;
-    // console.log(boolResult);
 
-    // let result = [[${#authorization.expression('hasRole("EMPLOYEE_SALES")')}]];
-    //
-    // console.log(result);
-
-    // if(boolResult){
-    //     span.text("MUHAHA")
-    //     // span.text('.......My Orders.......');
-    // } else {
-    //     span.text("BEEEE")
-    //     // span.text('......All orders.......');
-    // }
-    // title.append(span);
-    // maincontainer.append(title);
-
-    if (result.length == 0) {
+    if (result.length === 0) {
         const noOrders = $('<h4>').addClass('text-center text-white mt-5 greybg').text('.....No orders available.....');
         maincontainer.append(noOrders);
         return;
     }
 
-    const body = $('<div>');
+    const bodyOrders = $('<div>');
+    maincontainer.append(bodyOrders);
+
     result.forEach(order => {
         const container = $('<div>').addClass('container');
         const divLeft = $('<div>').addClass('float-left');
         container.append(divLeft);
+        container.append($('<br>'));
+        bodyOrders.append(container);
 
         const divBody = $('<div>').addClass('row justify-content-md-center').css('min-height', '38px');
         divLeft.append(divBody);
+        divLeft.append($('<br>'));
 
         const divClientName = $('<div>').addClass('col-md-auto text-dark bg-white').css('min-height', '38px');
         const spanClientName = $('<span>').text('Client username: ' + order.username);
@@ -61,7 +69,7 @@ function displayOrdersInitial(result) {
         divBody.append(divTotalItems);
 
         const divTotalValue = $('<div>').addClass('col-md-auto text-dark bg-white').css('min-height', '38px');
-        const spanTotalValue = $('<span>').text('Total value: ' + order.totalValue);
+        const spanTotalValue = $('<span>').text('Total value: ' + order.totalValue + ' BGN');
         divTotalValue.append(spanTotalValue);
         divBody.append(divTotalValue);
 
@@ -83,35 +91,69 @@ function displayOrdersInitial(result) {
             .text('Details');
         divBody.append(anchorDetails);
 
-        //TODO: the dropdown 3 statuses
-        //TODO: to check in JS if the user role is either SALES or ADMIN
-        // const dropdownChangeOrderStatus =
+        if (roleValueCustomerOnly == "true") {
+            const formChangeStatus = $('<form>').attr('method', 'GET').addClass('col-md-auto btn btn-info');
+            const formLabel = $('<label>').addClass('text-white').text('Change status ');
+            if (order.orderStatus == 'DELIVERED') {
+                formLabel.text('Final status ');
+            }
+            formChangeStatus.append(formLabel);
 
-        body.append(container);
+            const formSelect = $('<select>');
+            // 'onchange' : 'this.form.submit()'
+
+            let option1Form = null;
+            let option2Form = null;
+            let option3Form = null;
+            if (order.orderStatus == 'DELIVERED') {
+                option3Form = $('<option>').val('DELIVERED').text('DELIVERED');
+                option3Form.attr('selected', option3Form.val() == order.orderStatus);
+                formSelect.append(option3Form);
+            } else if (order.orderStatus == 'CONFIRMED_BY_STORE') {
+                option2Form = $('<option>').val('CONFIRMED_BY_STORE').text('CONFIRMED_BY_STORE');
+                option2Form.attr('selected', option2Form.val() == order.orderStatus);
+                formSelect.append(option2Form);
+
+                option3Form = $('<option>').val('DELIVERED').text('DELIVERED');
+                formSelect.append(option3Form);
+            } else if (order.orderStatus == 'CONFIRMED_BY_CUSTOMER') {
+                option1Form = $('<option>').val('CONFIRMED_BY_CUSTOMER').text('CONFIRMED_BY_CUSTOMER');
+                option1Form.attr('selected', option1Form.val() == order.orderStatus);
+                formSelect.append(option1Form);
+
+                option2Form = $('<option>').val('CONFIRMED_BY_STORE').text('CONFIRMED_BY_STORE');
+                formSelect.append(option2Form);
+
+                // option3Form = $('<option>').val('DELIVERED').text('DELIVERED');
+                // formSelect.append(option3Form);
+            }
+
+            formChangeStatus.append(formSelect);
+            divBody.append(formChangeStatus);
+
+            formChangeStatus.on('submit', (event) =>
+                changeOrderStatus(event, order.orderNumber, order.orderStatus));
+            formSelect.on('change', () => {
+                // console.log('We changed the select');
+                var selectVal = $('option:selected', formSelect).val();
+                order.orderStatus = selectVal;
+                formChangeStatus.submit();
+            });
+        }//end of if
     });
 
-    maincontainer.append(body);
 }
 
+function changeOrderStatus(event, orderNumber, orderStatus) {
+    event.preventDefault();
+    debugger;
+    let searchContent = searchOrdersForm.querySelector('input').value;
 
-
-const formSearch = $('#searchOrdersForm');
-let searchField = "";
-
-formSearch.on('submit', (e) => {
-    e.preventDefault(); //можем и без preventDefault като презаписваме стойността на последното търсене след всяко търсене
-    const formData = new FormData(e.target);
-    searchField = formData.get('search');
-    // console.log(searchField);
-
-    //Both two lines below work
-    // $('#searchOrdersForm input[name="search"]').val('my new value');
-    // formSearch.find('input[name="search"]').val('my new value');
-
-    // fetch('http://localhost:8080/users/order/searchorders/search=' + searchField)
-    //     .then((response) => response.json())
-    //     .then((result) => displayBasket(result));
-});
+    //Normal all offers we show - no search is selected
+    fetch('http://localhost:8080/users/order/changestatus/' + orderNumber + '?orderStatus=' + orderStatus + '&search=' + searchContent)
+        .then((response) => response.json())
+        .then((result) => displayOrders(result));
+}
 
 
 // <div>

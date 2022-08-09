@@ -7,6 +7,8 @@ import bg.softuni.computerStore.user.AppUser;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.format.DateTimeFormatter;
@@ -35,7 +37,7 @@ public class RestOrderController {
         if (roles.contains("ROLE_ADMIN") || roles.contains("ROLE_EMPLOYEE_SALES")) {
             List<FinalOrderEntity> allOrdersLazy = this.finalOrderService.getAllOrdersLazy();
             setAllOrdersView(ordersViewModels, allOrdersLazy);
-        } else if (roles.contains("ROLE_CUSTOMER")){
+        } else if (roles.contains("ROLE_CUSTOMER")) {
             //Get orders for the current client user only
             List<FinalOrderEntity> allCurrentUserOrders = this.finalOrderService.getAllOrdersByUserId(userId);
             setAllOrdersView(ordersViewModels, allCurrentUserOrders);
@@ -46,13 +48,78 @@ public class RestOrderController {
     }
 
     @GetMapping("/users/order/changestatus/{orderNumber}")
-    public String changeOrderStatus(){
-        return null;
+    public ResponseEntity<List<OneOrderInManyOrdersViewModel>> changeOrderStatus(
+            @PathVariable String orderNumber, @RequestParam("orderStatus") String orderStatus,
+            @RequestParam("search") String searchByOrderNumber, @AuthenticationPrincipal AppUser user) {
+        Long userId = user.getId();
+
+        List<String> roles = user.getAuthorities().stream()
+                .map(Object::toString).toList();
+
+        List<OneOrderInManyOrdersViewModel> ordersViewModels = new ArrayList<>();
+
+        if (!roles.contains("ROLE_ADMIN") && !roles.contains("ROLE_EMPLOYEE_SALES")) {
+            return ResponseEntity.noContent().build();  //204 No content
+        }
+
+        //updating the status of the order
+        if (orderStatus.equals("CONFIRMED_BY_STORE")) {
+            this.finalOrderService.confirmOrderByStore(orderNumber);
+        }
+
+        if (orderStatus.equals("DELIVERED")) {
+            this.finalOrderService.markOrderAsDelivered(orderNumber);
+        }
+
+        if (searchByOrderNumber.equals("")) {
+            //Get list of all orders if ADMIN or SALES employee
+            if (roles.contains("ROLE_ADMIN") || roles.contains("ROLE_EMPLOYEE_SALES")) {
+                List<FinalOrderEntity> allOrdersLazy = this.finalOrderService.getAllOrdersLazy();
+                setAllOrdersView(ordersViewModels, allOrdersLazy);
+            } else if (roles.contains("ROLE_CUSTOMER")) {
+                //Get orders for the current client user only
+                List<FinalOrderEntity> allCurrentUserOrders = this.finalOrderService.getAllOrdersByUserId(userId);
+                setAllOrdersView(ordersViewModels, allCurrentUserOrders);
+            }
+        } else {
+            //Get list of all orders if ADMIN or SALES employee, but with specific search criteria
+            if (roles.contains("ROLE_ADMIN") || roles.contains("ROLE_EMPLOYEE_SALES")) {
+                List<FinalOrderEntity> allOrdersLazy = this.finalOrderService.getAllOrdersLazyByOrderNumber(searchByOrderNumber);
+                setAllOrdersView(ordersViewModels, allOrdersLazy);
+            } else if (roles.contains("ROLE_CUSTOMER")) {
+                //Get orders for the current client user only
+//            List<FinalOrderEntity> allCurrentUserOrders =
+//                    this.finalOrderService.getAllOrdersByUserIdAndOrderNumber(userId, searchByOrderNumber);
+//            setAllOrdersView(ordersViewModels, allCurrentUserOrders);
+            }
+        }
+
+        return ResponseEntity.ok(ordersViewModels);
     }
 
     @GetMapping("/users/order/searchorders")
-    public String searchOrderBy(){
-        return null;
+    public ResponseEntity<List<OneOrderInManyOrdersViewModel>> searchOrderByOrderNumber(@RequestParam("search") String searchByOrderNumber,
+                                                                                        @AuthenticationPrincipal AppUser user) {
+        Long userId = user.getId();
+
+        List<String> roles = user.getAuthorities().stream()
+                .map(Object::toString).toList();
+
+        List<OneOrderInManyOrdersViewModel> ordersViewModels = new ArrayList<>();
+
+        //Get list of all orders if ADMIN or SALES employee, but with specific search criteria
+        if (roles.contains("ROLE_ADMIN") || roles.contains("ROLE_EMPLOYEE_SALES")) {
+            List<FinalOrderEntity> allOrdersLazy = this.finalOrderService.getAllOrdersLazyByOrderNumber(searchByOrderNumber);
+            setAllOrdersView(ordersViewModels, allOrdersLazy);
+        } else if (roles.contains("ROLE_CUSTOMER")) {
+            //Get orders for the current client user only
+//            List<FinalOrderEntity> allCurrentUserOrders =
+//                    this.finalOrderService.getAllOrdersByUserIdAndOrderNumber(userId, searchByOrderNumber);
+//            setAllOrdersView(ordersViewModels, allCurrentUserOrders);
+        }
+
+
+        return ResponseEntity.ok(ordersViewModels);
     }
 
     private void setAllOrdersView(List<OneOrderInManyOrdersViewModel> ordersViewModels, List<FinalOrderEntity> allOrdersLazy) {
@@ -70,7 +137,7 @@ public class RestOrderController {
             ordersViewModels.add(oneOrderInManyOrdersViewModel);
         }
 
-        //SORTED by the last created order - as each order is saved first, so we just reverse the collection
+        //TODO: SORTED by the last created order - as each order is saved first, so we just reverse the collection
         Collections.reverse(ordersViewModels);
 
 //        if (!ordersViewModels.isEmpty()) {
