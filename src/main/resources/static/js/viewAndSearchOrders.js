@@ -7,16 +7,13 @@ searchOrdersForm.addEventListener("submit", onSearch);
 
 const titleOrders = $('#titleOrders');
 
-
 function onSearch(event) {
     event.preventDefault();
     const searchField = new FormData(event.target).get('search')
 
     fetch('http://localhost:8080/users/order/searchorders?search=' + searchField)
         .then((response) => response.json())
-        .then((result) => {
-            displayOrders(result);
-        });
+        .then((result) => displayOrders(result));
 }
 
 //initial load of page
@@ -87,7 +84,7 @@ function displayOrders(result) {
         divBody.append(divOrderStatus);
 
         const anchorDetails = $('<a>').addClass('col-md-auto btn btn-info')
-            .attr('href', '/users/vieworders/' + order.orderNumber + '/details')
+            .attr('href', '/users/order/' + order.orderNumber + '/details')
             .text('Details');
         divBody.append(anchorDetails);
 
@@ -100,7 +97,6 @@ function displayOrders(result) {
             formChangeStatus.append(formLabel);
 
             const formSelect = $('<select>');
-            // 'onchange' : 'this.form.submit()'
 
             let option1Form = null;
             let option2Form = null;
@@ -123,9 +119,6 @@ function displayOrders(result) {
 
                 option2Form = $('<option>').val('CONFIRMED_BY_STORE').text('CONFIRMED_BY_STORE');
                 formSelect.append(option2Form);
-
-                // option3Form = $('<option>').val('DELIVERED').text('DELIVERED');
-                // formSelect.append(option3Form);
             }
 
             formChangeStatus.append(formSelect);
@@ -135,7 +128,7 @@ function displayOrders(result) {
                 changeOrderStatus(event, order.orderNumber, order.orderStatus));
             formSelect.on('change', () => {
                 // console.log('We changed the select');
-                var selectVal = $('option:selected', formSelect).val();
+                var selectVal = $('option:selected', formSelect).val(); //we get here the selected option from the <select> of the current form
                 order.orderStatus = selectVal;
                 formChangeStatus.submit();
             });
@@ -156,68 +149,45 @@ function changeOrderStatus(event, orderNumber, orderStatus) {
 }
 
 
-// <div>
-{/*<div className="container" th:each="o : ${orders}" th:object="${o}">*/
-}
-{/*    <div className="float-left">*/
-}
-{/*        <div className="row justify-content-md-center" style="min-height: 38px">*/
-}
-{/*            <div className="col-md-auto text-dark bg-white" style="min-height: 38px">*/
-}
-{/*                <span th:text="'Client username: ' + *{username}">Client username:</span></div>*/
-}
+/*
+<th:block th:if="${orders.size() == 0}">
+    <h4 className="text-center text-white mt-5 greybg">.....No orders available.....</h4>
+</th:block>
 
-{/*            <div className="col-md-auto text-dark bg-white" style="min-height: 38px">*/
-}
-{/*                <span th:text="'Order number: ' + *{orderNumber}">Order number:</span>*/
-}
-{/*            </div>*/
-}
-{/*            */
-}
-// <div className="col-md-auto text-dark bg-white" style="min-height: 38px">
-//     <span th:text="'Total items: ' + *{totalItemsInOrder}">Total items:</span>
-// </div>
-// <div className="col-md-auto text-dark bg-white" style="min-height: 38px">
-//     <span th:text="'Total value: '+ *{totalValue} + 'BGN'">Total value:</span>
-// </div>
+<th:block th:if="${orders.size() != 0}">
+    <div>
+        <div className="container" th:each="o : ${orders}" th:object="${o}">
+            <div className="float-left">
+                <div className="row justify-content-md-center" style="min-height: 38px">
+                    <div className="col-md-auto text-dark bg-white" style="min-height: 38px"><span
+                        th:text="'Client username: ' + *{username}">Client username:</span></div>
+                    <div className="col-md-auto text-dark bg-white" style="min-height: 38px"><span
+                        th:text="'Order number: ' + *{orderNumber}">Order number:</span>
+                    </div>
+                    <div className="col-md-auto text-dark bg-white" style="min-height: 38px"><span
+                        th:text="'Total items: ' + *{totalItemsInOrder}">Total items:</span>
+                    </div>
+                    <div className="col-md-auto text-dark bg-white" style="min-height: 38px"><span
+                        th:text="'Total value: '+ *{totalValue} + 'BGN'">Total value:</span>
+                    </div>
+                    <div className="w-100"></div>
+                    <div className="col-md-auto text-dark bg-white" style="min-height: 38px"><span
+                        th:text="'Created at: ' + *{createdAt}">Order created at:</span>
+                    </div>
+                    <div className="col-md-auto text-dark bg-white" style="min-height: 38px"><span
+                        th:text="'Order status: '+ *{orderStatus}">Order status:</span>
+                    </div>
+                    <a className="col-md-auto btn btn-info"
+                       th:href="@{/users/vieworders/{orderNumber}/details (orderNumber=*{orderNumber})}">Details</a>
 
-// <div className="w-100"></div>
-//
-// <div className="col-md-auto text-dark bg-white" style="min-height: 38px">
-//     <span th:text="'Created at: ' + *{createdAt}">Order created at:</span>
-// </div>
-
-// <div className="col-md-auto text-dark bg-white" style="min-height: 38px"><span
-//     th:text="'Order status: '+ *{orderStatus}">Order status:</span>
-// </div>
-
-// <a className="col-md-auto btn btn-info"
-//    th:href="@{/users/vieworders/{orderNumber}/details (orderNumber=*{orderNumber})}">Details</a>
-
-//                 <a sec:authorize="hasRole('EMPLOYEE_SALES')" className="col-md-auto btn btn-info"
-//                    th:href="@{/users/changeorderstatus/{orderNumber} (orderNumber=*{orderNumber})}">Change status</a>
-//             </div>
-//         </div>
-//         <br>
-//     </div>
-//     <br>
-// </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+                    <a sec:authorize="hasRole('EMPLOYEE_SALES')" className="col-md-auto btn btn-info"
+                       th:href="@{/users/changeorderstatus/{orderNumber} (orderNumber=*{orderNumber})}">Change
+                        status</a>
+                </div>
+            </div>
+            <br>
+        </div>
+        <br>
+    </div>
+</th:block>
+*/

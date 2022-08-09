@@ -1,14 +1,14 @@
 package bg.softuni.computerStore.web;
 
-import bg.softuni.computerStore.exception.BasketIdForbiddenException;
+import bg.softuni.computerStore.exception.BasketForbiddenException;
 import bg.softuni.computerStore.exception.ObjectIdNotANumberException;
+import bg.softuni.computerStore.exception.OrderForbiddenException;
 import bg.softuni.computerStore.model.binding.order.ClientOrderExtraInfoGetViewModel;
 import bg.softuni.computerStore.model.entity.orders.FinalOrderEntity;
 import bg.softuni.computerStore.model.entity.orders.ItemQuantityInOrderEntity;
 import bg.softuni.computerStore.model.view.order.OneBasketViewModel;
 import bg.softuni.computerStore.model.view.order.OneItemInOrderViewModel;
 import bg.softuni.computerStore.model.view.order.OneOrderDetailsViewModel;
-import bg.softuni.computerStore.model.view.order.OneOrderInManyOrdersViewModel;
 import bg.softuni.computerStore.service.BasketService;
 import bg.softuni.computerStore.service.FinalOrderService;
 import bg.softuni.computerStore.user.AppUser;
@@ -23,17 +23,14 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.math.BigDecimal;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Controller
 public class BasketAndOrderController {
     private final BasketService basketService;
     private final FinalOrderService finalOrderService;
-
 
     public BasketAndOrderController(BasketService basketService, FinalOrderService finalOrderService) {
         this.basketService = basketService;
@@ -49,7 +46,7 @@ public class BasketAndOrderController {
         Long basketId = this.basketService.getBaskeIdByUserId(userId);
 
         if (basketId != null && !Objects.equals(user.getId(), userId)) {
-            throw new BasketIdForbiddenException(String.format("You do not have authorization for the basket of user with id %d", userId));
+            throw new BasketForbiddenException(String.format("You do not have authorization for the basket of user with id %d", userId));
         }
 
         if (!model.containsAttribute("basketId")) {
@@ -68,7 +65,7 @@ public class BasketAndOrderController {
         Long userId = this.basketService.getUserIdByBasketId(basketId);
 
         if (userId != null && !Objects.equals(user.getId(), userId)) {
-            throw new BasketIdForbiddenException(String.format("You do not have authorization for the basket/order of user with id %d", userId));
+            throw new BasketForbiddenException(String.format("You do not have authorization to the confirmation page of the basket into a final order - for user with id %d ", userId));
         }
 
         OneBasketViewModel basket = this.basketService.viewAllItemsFromOneBasket(basketId);
@@ -103,7 +100,7 @@ public class BasketAndOrderController {
         Long userId = this.basketService.getUserIdByBasketId(basketId);
 
         if (userId != null && !Objects.equals(user.getId(), userId)) {
-            throw new BasketIdForbiddenException(String.format("You do not have authorization for the basket/order of user with id %d", userId));
+            throw new BasketForbiddenException(String.format("You do not have authorization to confirm the basket of user with id %d into a final order", userId));
         }
 
         OneBasketViewModel basket = this.basketService.viewAllItemsFromOneBasket(basketId);
@@ -123,13 +120,22 @@ public class BasketAndOrderController {
         //Creation order is successfull, we start creating the order
         String orderNumber = this.finalOrderService.processOrder(basketId, clientExtraOrderInfo, basket.getTotalValue());
 
-        return "redirect:/users/vieworders/" + orderNumber + "/details";
+        return "redirect:/users/order/" + orderNumber + "/details";
     }
 
     //    Display One Order details
-    @GetMapping("/users/vieworders/{orderNumber}/details")
-    public String viewOrderDetails(Model model, @PathVariable String orderNumber) {
-        //TODO: add security here
+    @GetMapping("/users/order/{orderNumber}/details")
+    public String viewOrderDetails(Model model, @PathVariable String orderNumber, @AuthenticationPrincipal AppUser user) {
+        Long userId = this.finalOrderService.getOrderByOrderNumber(orderNumber).getUser().getId();
+
+        List<String> roles = user.getAuthorities().stream()
+                .map(Object::toString).toList();
+
+        if ((orderNumber!= null && !Objects.equals(user.getId(), userId))
+                && !(roles.contains("ROLE_ADMIN") || roles.contains("ROLE_EMPLOYEE_SALES"))) {
+            throw new OrderForbiddenException(String.format("You do not have an authorization for a final order of user with id %d", userId));
+        }
+
         OneOrderDetailsViewModel orderDetailsViewModel = new OneOrderDetailsViewModel();
 
         FinalOrderEntity finalOrderEntity = this.finalOrderService.getOrderByOrderNumber(orderNumber);

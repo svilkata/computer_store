@@ -1,6 +1,6 @@
 package bg.softuni.computerStore.web;
 
-import bg.softuni.computerStore.exception.BasketIdForbiddenException;
+import bg.softuni.computerStore.exception.BasketForbiddenException;
 import bg.softuni.computerStore.exception.ObjectIdNotANumberException;
 import bg.softuni.computerStore.model.view.order.OneBasketViewModel;
 import bg.softuni.computerStore.service.BasketService;
@@ -31,7 +31,7 @@ public class RestBasketController {
         Long userId = this.basketService.getUserIdByBasketId(basketId);
 
         if (userId != null && !Objects.equals(user.getId(), userId)) {
-            throw new BasketIdForbiddenException(String.format("You do not have authorization to the basket items of user with id %d", userId));
+            throw new BasketForbiddenException(String.format("You do not have authorization to the basket items of user with id %d", userId));
         }
 
         OneBasketViewModel basket = this.basketService.viewAllItemsFromOneBasket(basketId);
@@ -49,7 +49,7 @@ public class RestBasketController {
         Long userId = this.basketService.getUserIdByBasketId(basketId);
 
         if (userId != null && !Objects.equals(user.getId(), userId)) {
-            throw new BasketIdForbiddenException(String.format("You do not have authorization to the basket items of user with id %d", userId));
+            throw new BasketForbiddenException(String.format("You do not have authorization to the basket items of user with id %d", userId));
         }
 
         final Long itemId = isItemIdANumber(iId, "itemId");
@@ -76,7 +76,7 @@ public class RestBasketController {
         Long userId = this.basketService.getUserIdByBasketId(basketId);
 
         if (userId != null && !Objects.equals(user.getId(), userId)) {
-            throw new BasketIdForbiddenException(String.format("You do not have authorization to the basket items of user with id %d", userId));
+            throw new BasketForbiddenException(String.format("You do not have authorization to the basket items of user with id %d", userId));
         }
 
         final Long itemId = isItemIdANumber(iId, "itemId");
@@ -89,9 +89,13 @@ public class RestBasketController {
         return ResponseEntity.ok(basket);  //Successfull 200
     }
 
-    @GetMapping("/users/basket/additemtobasket/{itemId}")
-    public ResponseEntity<String> addItemToBasket(@PathVariable Long itemId,
+    @GetMapping("/users/basket/additemtobasket/{itmId}")
+    public ResponseEntity<String> addItemToBasket(@PathVariable String itmId,
                                                   @AuthenticationPrincipal AppUser user) {
+        final Long itemId = isItemIdANumber(itmId, "ItemId");
+
+        //here no need to check if the user has access - we take the basketId from the userId
+
         Long basketId = this.basketService.getBaskeIdByUserId(user.getId());
         boolean addingResult = this.basketService.addNewItemToBasket(itemId, basketId);
 
@@ -101,12 +105,12 @@ public class RestBasketController {
                 : ResponseEntity.badRequest().build();  //Bad request 400
     }
 
-    private Long isItemIdANumber(String basketId, String comment) {
+    private Long isItemIdANumber(String commentId, String comment) {
         final Long userLongId;
         try {
-            userLongId = Long.parseLong(basketId);
+            userLongId = Long.parseLong(commentId);
         } catch (Exception e) {
-            throw new ObjectIdNotANumberException(String.format("%s is not a valid %s! number", basketId, comment));
+            throw new ObjectIdNotANumberException(String.format("%s is not a valid %s! number", commentId, comment));
         }
         return userLongId;
     }

@@ -48,7 +48,7 @@ public class SecurityConfig {
                 antMatchers("/users/changeorderstatus/**").hasAnyRole(UserRoleEnum.EMPLOYEE_SALES.name(), UserRoleEnum.ADMIN.name()).
                 // pages available only for purchase department
                         antMatchers("/pages/purchases/**").hasAnyRole(UserRoleEnum.EMPLOYEE_PURCHASES.toString(), UserRoleEnum.ADMIN.name()).
-                // pages available only for purchase department
+                // pages available only for sales department - not used still at the moment
                         antMatchers("/pages/sales/**").hasAnyRole(UserRoleEnum.EMPLOYEE_SALES.name(), UserRoleEnum.ADMIN.toString()).
                 // pages available only for admins
                         antMatchers("/pages/admins/**").hasRole(UserRoleEnum.ADMIN.name()).

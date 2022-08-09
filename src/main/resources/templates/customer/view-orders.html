@@ -34,57 +34,10 @@
                     document.getElementById('titleOrders').textContent = '......All orders.......';
                 }
             </script>
-            <!--            <span sec:authorize="!hasRole('ADMIN') && !hasRole('EMPLOYEE_SALES')">.......My Orders.......</span>-->
-            <!--            <span sec:authorize="hasRole('ADMIN') || hasRole('EMPLOYEE_SALES')">......All orders.......</span>-->
         </h2>
 
     </div>
 </main>
-
-
-
-
-
-        <!--        <th:block th:if="${orders.size() == 0}">-->
-        <!--            <h4 class="text-center text-white mt-5 greybg">.....No orders available.....</h4>-->
-        <!--        </th:block>-->
-
-<!--                <th:block th:if="${orders.size() != 0}">-->
-<!--                    <div>-->
-<!--                        <div class="container" th:each="o : ${orders}" th:object="${o}">-->
-<!--                            <div class="float-left">-->
-<!--                                <div class="row justify-content-md-center" style="min-height: 38px">-->
-<!--                                    <div class="col-md-auto text-dark bg-white" style="min-height: 38px"><span-->
-<!--                                            th:text="'Client username: ' + *{username}">Client username:</span></div>-->
-<!--                                    <div class="col-md-auto text-dark bg-white" style="min-height: 38px"><span-->
-<!--                                            th:text="'Order number: ' + *{orderNumber}">Order number:</span>-->
-<!--                                    </div>-->
-<!--                                    <div class="col-md-auto text-dark bg-white" style="min-height: 38px"><span-->
-<!--                                            th:text="'Total items: ' + *{totalItemsInOrder}">Total items:</span>-->
-<!--                                    </div>-->
-<!--                                    <div class="col-md-auto text-dark bg-white" style="min-height: 38px"><span-->
-<!--                                            th:text="'Total value: '+ *{totalValue} + 'BGN'">Total value:</span>-->
-<!--                                    </div>-->
-<!--                                    <div class="w-100"></div>-->
-<!--                                    <div class="col-md-auto text-dark bg-white" style="min-height: 38px"><span-->
-<!--                                            th:text="'Created at: ' + *{createdAt}">Order created at:</span>-->
-<!--                                    </div>-->
-<!--                                    <div class="col-md-auto text-dark bg-white" style="min-height: 38px"><span-->
-<!--                                            th:text="'Order status: '+ *{orderStatus}">Order status:</span>-->
-<!--                                    </div>-->
-<!--                                    <a class="col-md-auto btn btn-info"-->
-<!--                                       th:href="@{/users/vieworders/{orderNumber}/details (orderNumber=*{orderNumber})}">Details</a>-->
-
-<!--                                    <a sec:authorize="hasRole('EMPLOYEE_SALES')" class="col-md-auto btn btn-info" th:href="@{/users/changeorderstatus/{orderNumber} (orderNumber=*{orderNumber})}">Change status</a>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                            <br>-->
-<!--                        </div>-->
-<!--                        <br>-->
-<!--                    </div>-->
-<!--                </th:block>-->
-
-
 
 
 <footer th:replace="fragments/commons::footer"></footer>

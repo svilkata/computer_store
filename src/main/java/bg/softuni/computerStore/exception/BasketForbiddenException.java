@@ -1,9 +1,9 @@
 package bg.softuni.computerStore.exception;
 
-public class BasketIdForbiddenException extends RuntimeException  {
+public class BasketForbiddenException extends RuntimeException  {
     private ItemErrorInfo item;
 
-    public BasketIdForbiddenException(String message) {
+    public BasketForbiddenException(String message) {
         super(message);
         this.item = new ItemErrorInfo(message);
     }
