@@ -34,9 +34,10 @@ function displayBasket(result) {
     const allItems = $('<div>').addClass('offers row mx-auto d-flex flex-row justify-content-center .row-cols-auto');
     result.items.forEach(item => {
         const product = $('<div>').addClass('offer card col-sm-2 col-md-3  col-lg-3 m-2 p-0')
-            .attr({'id': 'each', 'value': item.itemId, 'name': 'itemId'});
+            .attr({'id': 'each', 'value': item.itemId, 'name': 'itemId'})
+            .css('min-width' , '250px');
 
-        const cardTop = $('<div>').addClass('card-img-top-wrapper').css({'height': '20rem'});
+        const cardTop = $('<div>').addClass('card-img-top-wrapper').css({'height': '15rem'});
         const photo = $('<img>').addClass('card-img-top').attr({'alt': 'image', 'src': item.photoUrl});
         cardTop.append(photo);
         product.append(cardTop);
