@@ -1,4 +1,14 @@
-const form = document.querySelector("form");
-form.addEventListener("submit", () => alert("Order created successfully"))
+//does not work:
 
-form.on('submit', () => console.log('Submitted'));
+/*
+const form = document.querySelector("form");
+console.log(form);
+debugger;
+form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    console.log("Order created successfully");
+    alert("Order created successfully");
+    // return true;
+});
+*/
+
