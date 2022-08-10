@@ -16,6 +16,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 public class RestOrderController {
@@ -32,7 +33,7 @@ public class RestOrderController {
         Long userId = user.getId();
         List<OneOrderInManyOrdersViewModel> ordersViewModels = new ArrayList<>();
 
-        getRespectiveOrders(roles, ordersViewModels, userId);
+        ordersViewModels = getRespectiveOrders(roles, ordersViewModels, userId);
 
         return ResponseEntity.ok(ordersViewModels);
     }
@@ -66,9 +67,9 @@ public class RestOrderController {
         }
 
         if (searchByOrderNumber.equals("")) {
-            getRespectiveOrders(roles, ordersViewModels, userId);
+            ordersViewModels = getRespectiveOrders(roles, ordersViewModels, userId);
         } else {
-            getRespectiveOrdersAndSearchCriteriaIncluded(searchByOrderNumber, roles, userId, ordersViewModels);
+            ordersViewModels = getRespectiveOrdersAndSearchCriteriaIncluded(searchByOrderNumber, roles, userId, ordersViewModels);
         }
 
         return ResponseEntity.ok(ordersViewModels);
@@ -85,37 +86,45 @@ public class RestOrderController {
 
         List<OneOrderInManyOrdersViewModel> ordersViewModels = new ArrayList<>();
 
-        getRespectiveOrdersAndSearchCriteriaIncluded(searchByOrderNumber, roles, userId, ordersViewModels);
+        ordersViewModels = getRespectiveOrdersAndSearchCriteriaIncluded(searchByOrderNumber, roles, userId, ordersViewModels);
 
         return ResponseEntity.ok(ordersViewModels);
     }
 
-    private void getRespectiveOrdersAndSearchCriteriaIncluded(String searchByOrderNumber, List<String> roles, Long userId, List<OneOrderInManyOrdersViewModel> ordersViewModels) {
+    private List<OneOrderInManyOrdersViewModel> getRespectiveOrdersAndSearchCriteriaIncluded(String searchByOrderNumber, List<String> roles, Long userId, List<OneOrderInManyOrdersViewModel> ordersViewModels) {
+        List<OneOrderInManyOrdersViewModel> sortedListOneOrderInManyOrdersViewModel = new ArrayList<>();
+
         //Get list of all orders if ADMIN or SALES employee, but with specific search criteria
         if (roles.contains("ROLE_ADMIN") || roles.contains("ROLE_EMPLOYEE_SALES")) {
             List<FinalOrderEntity> allOrdersLazySearched = this.finalOrderService.searchAllOrdersLazyByOrderNumber(searchByOrderNumber);
-            setAllOrdersView(ordersViewModels, allOrdersLazySearched);
+            sortedListOneOrderInManyOrdersViewModel = setAllOrdersView(ordersViewModels, allOrdersLazySearched);
         } else if (roles.contains("ROLE_CUSTOMER")) {
             //Get orders for the current client user only
             List<FinalOrderEntity> allCurrentUserOrdersSearched =
                     this.finalOrderService.searchAllOrdersByUserIdAndOrderNumber(userId, searchByOrderNumber);
-            setAllOrdersView(ordersViewModels, allCurrentUserOrdersSearched);
+            sortedListOneOrderInManyOrdersViewModel = setAllOrdersView(ordersViewModels, allCurrentUserOrdersSearched);
         }
+
+        return sortedListOneOrderInManyOrdersViewModel;
     }
 
-    private void getRespectiveOrders(List<String> roles, List<OneOrderInManyOrdersViewModel> ordersViewModels, Long userId) {
+    private List<OneOrderInManyOrdersViewModel> getRespectiveOrders(List<String> roles, List<OneOrderInManyOrdersViewModel> ordersViewModels, Long userId) {
+        List<OneOrderInManyOrdersViewModel> sortedListOneOrderInManyOrdersViewModel = new ArrayList<>();
+
         //Get list of all orders if ADMIN or SALES employee
         if (roles.contains("ROLE_ADMIN") || roles.contains("ROLE_EMPLOYEE_SALES")) {
             List<FinalOrderEntity> allOrdersLazy = this.finalOrderService.getAllOrdersLazy();
-            setAllOrdersView(ordersViewModels, allOrdersLazy);
+            sortedListOneOrderInManyOrdersViewModel = setAllOrdersView(ordersViewModels, allOrdersLazy);
         } else if (roles.contains("ROLE_CUSTOMER")) {
             //Get orders for the current client user only
             List<FinalOrderEntity> allCurrentUserOrders = this.finalOrderService.getAllOrdersByUserId(userId);
-            setAllOrdersView(ordersViewModels, allCurrentUserOrders);
+            sortedListOneOrderInManyOrdersViewModel = setAllOrdersView(ordersViewModels, allCurrentUserOrders);
         }
+
+        return sortedListOneOrderInManyOrdersViewModel;
     }
 
-    private void setAllOrdersView(List<OneOrderInManyOrdersViewModel> ordersViewModels, List<FinalOrderEntity> allOrdersLazy) {
+    private List<OneOrderInManyOrdersViewModel> setAllOrdersView(List<OneOrderInManyOrdersViewModel> ordersViewModels, List<FinalOrderEntity> allOrdersLazy) {
         for (FinalOrderEntity finalOrder : allOrdersLazy) {
             OneOrderInManyOrdersViewModel oneOrderInManyOrdersViewModel = new OneOrderInManyOrdersViewModel();
             oneOrderInManyOrdersViewModel
@@ -126,19 +135,19 @@ public class RestOrderController {
                     .setTotalValue(finalOrder.getTotalTotal())
                     .setOrderStatus(finalOrder.getStatus().toString());
 
-
             ordersViewModels.add(oneOrderInManyOrdersViewModel);
         }
+        int b = 5;
 
-        //TODO: SORTED by the last created order - as each order is saved first, so we just reverse the collection
-        Collections.reverse(ordersViewModels);
+        if (!ordersViewModels.isEmpty()) {
+            ordersViewModels = ordersViewModels.stream()
+                    .sorted((f, s) -> {
+                        return s.getCreatedAt().compareTo(f.getCreatedAt());
+                    })
+                    .collect(Collectors.toList());
+        }
+        int a = 5;
 
-//        if (!ordersViewModels.isEmpty()) {
-//            ordersViewModels = ordersViewModels.stream()
-//                    .sorted((f,s) -> {
-//                        f.getCreatedAt().compareTo()
-//                    })
-//                    .collect(Collectors.toList());
-//        }
+        return ordersViewModels;
     }
 }
