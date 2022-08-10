@@ -23,11 +23,11 @@ public class RestBasketController {
         this.basketService = basketService;
     }
 
-    //id is basketId
-    @GetMapping("/users/basket/viewitems/{id}")
-    public ResponseEntity<OneBasketViewModel> getBasketWithAllItems(@PathVariable String id,
+    //bId is basketId
+    @GetMapping("/users/basket/viewitems/{bId}")
+    public ResponseEntity<OneBasketViewModel> getBasketWithAllItems(@PathVariable String bId,
                                                                     @AuthenticationPrincipal AppUser user) {
-        final Long basketId = isItemIdANumber(id, "basketId");
+        final Long basketId = isItemIdANumber(bId, "basketId");
         Long userId = this.basketService.getUserIdByBasketId(basketId);
 
         if (userId != null && !Objects.equals(user.getId(), userId)) {
@@ -60,14 +60,14 @@ public class RestBasketController {
 
         //if condition - return response will be specific, and then I will be able to call alert message dialog box
         return switch (changeQuantityResult) {
-            case 1 -> ResponseEntity.ok(basket);  //Successfull 200
-            case -1 -> ResponseEntity.accepted().body(basket);  //Accepted 202
-            case -2 -> ResponseEntity.status(HttpStatus.CREATED).body(basket);  //Created 201
+            case 1 -> ResponseEntity.ok(basket);  //Successfull 200 //alert('Quantity changed successfully');
+            case -1 -> ResponseEntity.accepted().body(basket);  //Accepted 202  //alert('Last quantities of the changed item left!');
+            case -2 -> ResponseEntity.status(HttpStatus.CREATED).body(basket);  //Created 201  //not used yet in the project in reality this response, but I use alert('Quantity can not be negative or zero'); on the JS
             default -> throw new IllegalStateException("Unexpected value: " + changeQuantityResult);
         };
     }
 
-    //id is basketId
+    //bId is basketId
     @GetMapping("/users/basket/removeOneItemFromBasket/{bId}")
     public ResponseEntity<OneBasketViewModel> removeOneItemFromBasket(@PathVariable String bId,
                                                                       @RequestParam("itemId") String iId,
@@ -97,12 +97,15 @@ public class RestBasketController {
         //here no need to check if the user has access - we take the basketId from the userId
 
         Long basketId = this.basketService.getBaskeIdByUserId(user.getId());
-        boolean addingResult = this.basketService.addNewItemToBasket(itemId, basketId);
+        int addingResult = this.basketService.addNewItemToBasket(itemId, basketId);
 
         //if condition - return response will be specific, and then I will be able to call alert message dialog box
-        return addingResult
-                ? ResponseEntity.noContent().build()  //No content 204 Successfull
-                : ResponseEntity.badRequest().build();  //Bad request 400
+        return switch (addingResult) {
+            case 1 -> ResponseEntity.accepted().build();  //No content 202 Successfull  //alert('You have successfully added the item in your basket!')
+            case -1 -> ResponseEntity.badRequest().build();  //Bad request 400   //alert('This item is already added to your basket! You can not add a second time this item in your basket!')
+            case -2 -> ResponseEntity.noContent().build();  //No content 204 Successfull //alert('This item has ZERO quantity at the moment! You can not add it in your basket right now!')
+            default -> throw new IllegalStateException("Unexpected value: " + addingResult);
+        };
     }
 
     private Long isItemIdANumber(String commentId, String comment) {

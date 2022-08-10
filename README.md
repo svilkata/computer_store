@@ -28,7 +28,7 @@
   * пазим уникален model на всеки item
   * при добавяне на нов item, ако моделът му съществува, то зареждаме формата за Update/Едит и само го update-ваме с нови данни.
   * приемаме, че при update/edit реално ако залагаме нови покупни и продажни цени, то тези цени са за всички бройки артикули от този модел. Променяме (добавяме) главно количество, но не само.
-  * once a customer puts an item in his/her basket, it is not possible to delete the item
+  * once a customer puts an item in his/her basket, it is not possible to delete the item from the database
   * Може да има и редакция на снимка. Всяка качена снимка изтрива предишната снимка в Cloudinary, но Update-ва реда от PictireEntity (таблицата pictures) с новия public_id и url.
 
 ### Избор на продукти в Basket кошницата - само за логнати клиенти - **всеки потребител, който има и роля CUSTOMER**
@@ -54,7 +54,7 @@
 * Имплементиран search за дисплейване/намиране на поръчки чрез REST и Fetch API - работи само за логнати потребители и съответно достъпа е както следва:
 Всеки ADMIN и EMPLOYEE_SALES имат достъп до промяна на статуса на поръчката - за всички поръчки.
 Всеки потребител CUSTOMER или потребител PURCHASE & CUSTOMER има само стандартната информация - и то само за своите си поръчки, а не за всички поръчки.
-Работи сортиран като последно добавена поръчка излиза първа в списъка. 
+Работи сортиран (by date DESCENDING) като последно добавена поръчка излиза първа в списъка. 
 * //TODO - глобална търсачка в commons.html за всички типове продукти - по тип на продукта + име на модел/цена по-голяма от... - само чрез Thymeleaf
 
 
@@ -108,7 +108,7 @@
 * secured password change
 * secured admin user change
 * secured adding new employee of Computer store
-* secured (MVC secured and Rest JSON secured via @AuthenticationPrincipal) - adding/removing items or changing quantities of the basket or just viewing the basket, confirming basket into the final order, final order details and view final orders
+* secured (MVC @Controller secured and also @RestController JSON secured - both via @AuthenticationPrincipal) - adding/removing items or changing quantities of the basket or just viewing the basket, confirming basket into the final order, final order details, view final orders and change status of a final order.
 
 ### Error Handling 
 1. Spring security default re-direct to login page for not allowed operations/wrong urls - from anonymous users
@@ -123,6 +123,10 @@
 
 ### Loading data with FETCH api in the Thymeleaf html
 * Добавянето, изтриване и промяна количества на Item-s в кошницата чрез Rest и FETCH Api (jQuery and/or Vanilla JS)
+* Извикване на диалогови прозорци на база response статуса от RestController-a:
+- за добавяне на item в кошницата (за успешно добавен item, за дублиран вече такъв item или за item който е с нула количество)
+- при изтриване на item от кошницата
+- при промяна количества на item в кошницата
 * Дисплейване на всяка кошница - чрез Rest и Fetch Api (jQuery and JS)
 * Demo with text inlining - with Vanilla JS - for authorizing when displaying the orders
 * Дисплейване на поръчки, промяна статус на поръчка и търсене на поръчки - според ролите на user-а - чрез Rest и Fetch Api (jQuery and JS)

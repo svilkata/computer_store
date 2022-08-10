@@ -151,9 +151,13 @@ public class BasketService implements InitializableBasketService {
         this.basketRepository.save(basketToReset);
     }
 
-    public boolean addNewItemToBasket(Long itemId, Long basketId) {
+    public int addNewItemToBasket(Long itemId, Long basketId) {
         BasketOrderEntity basketOrder = this.basketRepository.findBasketOrderEntitiesById(basketId).orElseThrow();
         ItemEntity itemToAdd = this.allItemsRepository.findById(itemId).orElseThrow();
+        if (itemToAdd.getCurrentQuantity() == 0) {
+            return -2; //zero quantity
+        }
+
         List<ItemEntity> products = basketOrder.getProducts();
         List<ItemEntity> newProductList = new ArrayList<>();
 
@@ -163,7 +167,7 @@ public class BasketService implements InitializableBasketService {
             newProductList.add(itemToAdd);
         } else {
             if (products.contains(itemToAdd)) {
-                return false;
+                return -1; //product already added to the basket of the user
             } else {
                 for (ItemEntity product : products) {
                     newProductList.add(product);
@@ -176,7 +180,7 @@ public class BasketService implements InitializableBasketService {
         this.basketRepository.save(basketOrder);
         addOneItemToItemQuantity(basketOrder, itemToAdd);
 
-        return true;
+        return 1; //successfully added item in the basket
     }
 
     private void addOneItemToItemQuantity(BasketOrderEntity basketOrder, ItemEntity itemToAdd) {
@@ -249,12 +253,12 @@ public class BasketService implements InitializableBasketService {
 
         //when we try to order negative quantity
         if (currentItemQuantityInTheBasket.getQuantityBought() == 0 && newQtityOfItemInBasket == 0) {
-            return -2;
+            return -2; //negative quantity
         }
 
         //we have not changed the ordered quantity
         if (changedQuantity == 0) {
-            return -2;
+            return -2; //negative quantity
         }
 
         //we deduct the quantity bought
@@ -274,7 +278,7 @@ public class BasketService implements InitializableBasketService {
             currentItemQuantityInTheBasket.setQuantityBought(currentItemQuantityInTheBasket.getQuantityBought() + increasedQuantity);
             this.quantitiesItemsInBasketRepository.save(currentItemQuantityInTheBasket);
             if (increasedQuantity < -changedQuantity || increasedQuantity == 0) {
-                return -1;
+                return -1; //last items left
             }
         }
 
