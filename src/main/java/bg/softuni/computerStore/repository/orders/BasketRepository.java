@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -22,4 +23,7 @@ public interface BasketRepository extends JpaRepository<BasketOrderEntity, Long>
 
     @Query("SELECT b.user.id FROM BasketOrderEntity b WHERE b.id= :basketId")
     Long findUserIdByBasketId(Long basketId);
+
+    @Query("SELECT b FROM BasketOrderEntity b WHERE b.basketStatus = 'OPEN'")
+    List<BasketOrderEntity> findAllBasketsLazyWithStatusOpen();
 }

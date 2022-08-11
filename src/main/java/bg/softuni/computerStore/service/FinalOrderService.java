@@ -119,7 +119,7 @@ public class FinalOrderService implements InitializableFinalOrderService {
         }
 
         //Finally, we delete/reset the info in all 3 basket tables
-        this.basketService.resetOneBasket(basketId);
+        this.basketService.resetOneBasketWhenFinalOrderConfirmed(basketId);
 
         return savedFinalOrder.getOrderNumber();
     }

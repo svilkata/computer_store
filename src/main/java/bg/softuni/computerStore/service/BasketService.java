@@ -22,7 +22,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 @Service
 public class BasketService implements InitializableBasketService {
@@ -142,7 +141,7 @@ public class BasketService implements InitializableBasketService {
 
     @Transactional
     @Modifying
-    public void resetOneBasket(Long basketId) {
+    public void resetOneBasketWhenFinalOrderConfirmed(Long basketId) {
         this.quantitiesItemsInBasketRepository.deleteAllByBasket_Id(basketId);
         BasketOrderEntity basketToReset = this.basketRepository.findBasketByIdEager(basketId).orElseThrow();
         basketToReset.setProducts(new ArrayList<ItemEntity>());
@@ -338,5 +337,42 @@ public class BasketService implements InitializableBasketService {
                 .setCreationDateTime(LocalDateTime.now());
 
         this.basketRepository.save(basketOrder);
+    }
+
+    @Transactional
+    @Modifying
+    public void resetOneBasketWhen20MinutesPassed(Long basketId) {
+        List<ItemQuantityInBasketEntity> allQuantitiesForABasket = this.quantitiesItemsInBasketRepository.findAllByBasketId(basketId);
+        for (ItemQuantityInBasketEntity item : allQuantitiesForABasket) {
+            int quantityToReturn = item.getQuantityBought();
+            int currentQuantity = item.getItem().getCurrentQuantity();
+            ItemEntity itemEntity = item.getItem().setCurrentQuantity(currentQuantity + quantityToReturn);
+            this.allItemsRepository.save(itemEntity);
+        }
+
+        this.quantitiesItemsInBasketRepository.deleteAllByBasket_Id(basketId);
+
+
+        BasketOrderEntity basketToReset = this.basketRepository.findBasketByIdEager(basketId).orElseThrow();
+        basketToReset.setProducts(new ArrayList<ItemEntity>());
+        basketToReset.setBasketStatus(BasketStatus.CLOSED);
+        basketToReset.setCreationDateTime(null);
+        this.basketRepository.save(basketToReset);
+    }
+
+    public List<BasketOrderEntity> getAllBasketsCreatedMoreThan20MinutesAgo() {
+        List<BasketOrderEntity> resetListToReturn = new ArrayList<>();
+        LocalDateTime now = LocalDateTime.now();
+
+        List<BasketOrderEntity> all = this.basketRepository.findAllBasketsLazyWithStatusOpen();
+        for (BasketOrderEntity basket : all) {
+            LocalDateTime currentBasketcreationDateTime = basket.getCreationDateTime();
+            LocalDateTime currentBasketWithAdded20Minutes = currentBasketcreationDateTime.plusMinutes(20L);
+            if (currentBasketWithAdded20Minutes.isBefore(now)) {
+                resetListToReturn.add(basket);
+            }
+        }
+
+        return resetListToReturn;
     }
 }

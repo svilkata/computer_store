@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -12,10 +13,10 @@ public interface QuantitiesItemsInBasketRepository extends JpaRepository<ItemQua
 
     ItemQuantityInBasketEntity findByBasket_IdAndItem_ItemId(Long id, Long itemId);
 
-    Optional<ItemQuantityInBasketEntity> findByBasket_Id(Long id);
-
-//    @Query("DELETE FROM ItemQuantityInBasketEntity b WHERE b.basket.id = :basketId")
+    //    @Query("DELETE FROM ItemQuantityInBasketEntity b WHERE b.basket.id = :basketId")
     void deleteAllByBasket_Id(Long basketId);
 
     void deleteByBasket_IdAndItem_ItemId(Long basketId, Long itemId);
+
+    List<ItemQuantityInBasketEntity> findAllByBasketId(Long basketId);
 }
