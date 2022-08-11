@@ -137,7 +137,6 @@ public class RestOrderController {
 
             ordersViewModels.add(oneOrderInManyOrdersViewModel);
         }
-        int b = 5;
 
         if (!ordersViewModels.isEmpty()) {
             ordersViewModels = ordersViewModels.stream()
@@ -146,8 +145,9 @@ public class RestOrderController {
                     })
                     .collect(Collectors.toList());
         }
-        int a = 5;
 
         return ordersViewModels;
     }
+
+
 }

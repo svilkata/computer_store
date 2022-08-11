@@ -1,5 +1,6 @@
 package bg.softuni.computerStore.web;
 
+import bg.softuni.computerStore.service.eventServices.GlobalVariablesEventServices;
 import bg.softuni.computerStore.exception.BasketForbiddenException;
 import bg.softuni.computerStore.exception.ObjectIdNotANumberException;
 import bg.softuni.computerStore.exception.OrderForbiddenException;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -95,7 +97,8 @@ public class BasketAndOrderController {
                                                          BindingResult bindingResult,
                                                          RedirectAttributes redirectAttributes,
                                                          @PathVariable String bId,
-                                                         @AuthenticationPrincipal AppUser user) {
+                                                         @AuthenticationPrincipal AppUser user,
+                                                         HttpSession httpSession) {
         final Long basketId = isItemIdANumber(bId, "basketId");
         Long userId = this.basketService.getUserIdByBasketId(basketId);
 
@@ -119,6 +122,9 @@ public class BasketAndOrderController {
 
         //Creation order is successfull, we start creating the order
         String orderNumber = this.finalOrderService.processOrder(basketId, clientExtraOrderInfo, basket.getTotalValue());
+
+        //При успешно потвърждаване на поръчка, то чак тогава да сменим http cookie-то стойността
+        httpSession.setAttribute("totalOrdersCount", GlobalVariablesEventServices.totalNumberOfOrders);
 
         return "redirect:/users/order/" + orderNumber + "/details";
     }

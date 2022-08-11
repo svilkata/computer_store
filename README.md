@@ -40,7 +40,7 @@
 * Възможност за изтриване на част от продуктите от кошницата - връщаме съответното количество обратно към наличното
 * Потвърждаване на продуктите в кошницата - изтриване на кошницата и помощните таблици за тази кошница и създаваме на реална поръчката.
 * Даване на номер реалната поръчка - чрез UUID генератора
-* За логнати потребители - периодично минаване (на всеки 5 минути) за изтриване на кошници със статус OPEN (направени преди повече от 20 минути и все още незатворени) - при изтриване връщаме количеството на всеки Item обратно към наличното в магазина.
+* Scheduled event - за логнати потребители - периодично минаване (на всеки 5 минути) за изтриване на кошници със статус OPEN (направени преди повече от 20 минути и все още незатворени) - при изтриване връщаме количеството на всеки Item обратно към наличното в магазина.
 
 ### Реалната поръчка
 * При реална поръчка, клиента въвежда данни за **адрес на доставка**, **телефонен номер** и **бележки** - отделна таблица client_orders_extra_info, която е свързана и с таблица orders и с таблица users!
@@ -50,6 +50,10 @@
   * Продавача проверява физически дали ги има артикулите, пакетира доставката, сменя статуса на поръчката на CONFIRMED_BY_STORE, вика куриер – само от EMPLOYEE_SALES и от ADMIN.
   * След като пратката/поръчката е получена от клиента, продавача получава известие от куриера и променя ръчно статуса на поръчката на DELIVERED – само от EMPLOYEE_SALES и от ADMIN.
 * Статус поръчка – проверка дали дадена поръчка е на статус CONFIRMED_BY_CUSTOMER, CONFIRMED_BY_STORE, DELIVERED. – от CUSTOMER, EMPLOYEE_SALES, ADMIN - за момента само за логнати потребители спрямо тяхното ниво на достъп.
+
+### Проследимост на обшия брой поръчки
+* В горния ляв ъгъл се показва общия брой поръчки до момента
+* Demo using Spring event when an order is created - we catch the Spring custom event by Event listener - we increase the total numbers of orders. We also prepare for sending e-mail to the user and for adding bonus points to the user.
 
 ### Search
 * Имплементиран search за дисплейване/намиране на поръчки чрез REST и Fetch API - работи само за логнати потребители и съответно достъпа е както следва:
@@ -94,7 +98,7 @@
 ### Interceptors
 * report for http request from anonymous and authenticated user
 * I18N – change language - just a demo for the header part and some title/paragraphs of pages - from English to Bulgarian and vice versa
-* //ТODO - YESS - колко потребителя има активни в момента - ще го дисплейваме на commons (NOOO!!! - how many people visited the website or the sales report)
+* //ТODO - YESS - колко потребителя има активни в момента - ще го дисплейваме на commons (NOOO!!! - how many people visited the website)
 
 ### Generating HTML
 * with Thymeleaf engine secured 
@@ -135,24 +139,32 @@
 * Когато поръчка е на статус CONFIRMED_BY_CUSTOMER, то имаме опция да сменим статуса само на CONFIRMED_BY_STORE
 * Когато поръчка е на статус CONFIRMED_BY_STORE, то имаме опция да сменим статуса само на DELIVERED
 
-### Unit and integration testing
-* A-MUST-TODO - pending, to make it until 13.08.2022 Saturday morning!!!
-
 ###	Scheduling jobs and Spring events
 * Schedule a job - за логнати потребители - периодично минаване (на всеки 5 минути) за изтриване на кошници със статус OPEN (направени преди повече от 20 минути и все още незатворени) - при нулиране на кошницата, то връщаме количеството на всеки Item обратно към наличното в магазина.
-* //TODO - to use Spring event somewhere
+* Using Spring event when an order is created - we catch the Spring custom event by Event listener - we increase the total numbers of orders. We also prepare for sending e-mail to the user and for adding bonus points to the user.
+* Особеност при дисплейване на общия брой поръчки в горния ляв ъгъл:
+    - използваме в commons.html следния thymeleaf израз:  ${#session.getAttribute('totalOrdersCount')
+    - първоначалните автоматично създаваните поръчки не се хващат от нашия custom event listener (не ги регистрирам publish-вам listener-ите изрично при първоначалнотостартиране на приложението)
+    - задаваме статична глобална променлива за пазене на общия брой поръчки като вземаме при стартиране бройката поръчки от базата данни
+    - задаваме на http session cookie-то JSESSIONID атрибут "totalOrdersCount" - при първоначално логване на страница от url "/" със стойността на глобалното статично поле за брой поръчки
+    - създаден custom event class OrderCreatedEvent
+    - създаваме инстанция на OrderCreatedEvent и я публикуваме
+    - създадени 3 класа с метод с анотация @EventListener(OrderCreatedEvent.class) - for increasing total orders number, and for e-mail sending to user and bonus points
+    - event Listener-a за увеличаване на общия брой поръчки хваща събитието създадена поръчка, и увеличава статичната променлива с 1-ца
+    - на предпоследния ред, и след като вече поръчката е създадена, на метода viewOrderWithItemsAndAddAddressConfirm от BasketAndOrderController класа, задаваме нова стойност на атрибута http cookie session JSESSIONID
 
 ### Search
 * Търсене на поръчки - според ролите на user-а - чрез Rest и Fetch Api (jQuery and JS)
 * //TODO - глобална търсачка в commons.html за всички типове продукти - по тип на продукта + име на модел/цена по-голяма от... - само чрез Thymeleaf
 
+### Unit and integration testing
+* A-MUST-TODO - pending, to make it until 13.08.2022 Saturday morning!!!
 
 
 
 
-## III. More TODOs
+## III. General MORE TODOs
 ### SoftUni TODOs
-* Use Spring Event somewhere in your application.
 * Implement one or more Advice (AOP).
 * Host the application in a cloud environment.
 
@@ -178,7 +190,7 @@
 * Pageable and sorted – to implement it. – лесно става в Java, но за да се display-не на html-a, то:
   - При client-side rendering трябва чрез JS да ги вземаме нещата.
   - При server-side rendering с обикновен контролер -  трябва в Thymeleaf модела да ги сложим
-  - Чрез Page . content вземаме лист от елементите от текущия Page, previous enabled, next enabled, previousPage, next
+  - Чрез Page . content вземаме лист от елементите от текущия Page, previous enabled, next enabled, previousPage, nextPage
 
 
 * Възможност за нелогнат потребител да си добавя продукти в кошница. За да ги поръча обаче трябва да се логне – след регистрация и логване, кошницата дали ще може да се запази.

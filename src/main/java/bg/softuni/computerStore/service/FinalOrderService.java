@@ -1,5 +1,6 @@
 package bg.softuni.computerStore.service;
 
+import bg.softuni.computerStore.event.OrderCreatedEvent;
 import bg.softuni.computerStore.exception.OrderForbiddenException;
 import bg.softuni.computerStore.initSeed.InitializableFinalOrderService;
 import bg.softuni.computerStore.model.binding.order.ClientOrderExtraInfoGetViewModel;
@@ -13,6 +14,9 @@ import bg.softuni.computerStore.model.enums.OrderStatusEnum;
 import bg.softuni.computerStore.repository.orders.FinalOrderRepository;
 import bg.softuni.computerStore.repository.orders.QuantitiesItemsInOrderRepository;
 import bg.softuni.computerStore.repository.users.ClientExtraInfoRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,11 +34,15 @@ public class FinalOrderService implements InitializableFinalOrderService {
     private final ClientExtraInfoRepository clientExtraInfoRepository;
     private final QuantitiesItemsInOrderRepository quantitiesItemsInOrderRepository;
 
-    public FinalOrderService(FinalOrderRepository finalOrderRepository, BasketService basketService, ClientExtraInfoRepository clientExtraInfoRepository, QuantitiesItemsInOrderRepository quantitiesItemsInOrderRepository) {
+    private static final Logger LOGGER = LoggerFactory.getLogger(FinalOrderService.class);
+    private final ApplicationEventPublisher eventPublisher;
+
+    public FinalOrderService(FinalOrderRepository finalOrderRepository, BasketService basketService, ClientExtraInfoRepository clientExtraInfoRepository, QuantitiesItemsInOrderRepository quantitiesItemsInOrderRepository, ApplicationEventPublisher eventPublisher) {
         this.finalOrderRepository = finalOrderRepository;
         this.basketService = basketService;
         this.clientExtraInfoRepository = clientExtraInfoRepository;
         this.quantitiesItemsInOrderRepository = quantitiesItemsInOrderRepository;
+        this.eventPublisher = eventPublisher;
     }
 
     @Override
@@ -57,6 +65,8 @@ public class FinalOrderService implements InitializableFinalOrderService {
     @Modifying
     public String processOrder(Long basketId, ClientOrderExtraInfoGetViewModel clientOrderExtraInfoGetViewModel,
                                BigDecimal totalTotal) {
+        LOGGER.info("Starting creating order from basket with id: {}", basketId);
+
         BasketOrderEntity basketOrder = this.basketService.readOneBasket(basketId);
         ClientOrderExtraInfoEntity clientOrderExtraInfoEntity = new ClientOrderExtraInfoEntity()
                 .setDeliveryAddress(clientOrderExtraInfoGetViewModel.getDeliveryAddress())
@@ -120,6 +130,15 @@ public class FinalOrderService implements InitializableFinalOrderService {
 
         //Finally, we delete/reset the info in all 3 basket tables
         this.basketService.resetOneBasketWhenFinalOrderConfirmed(basketId);
+
+        //first creating the event
+        OrderCreatedEvent orderCreatedEvent = new OrderCreatedEvent(
+                FinalOrderService.class.getSimpleName(),
+                savedFinalOrder.getId().toString()
+        );
+
+        //then we publish the event
+        eventPublisher.publishEvent(orderCreatedEvent);
 
         return savedFinalOrder.getOrderNumber();
     }

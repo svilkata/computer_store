@@ -11,12 +11,12 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Component
-public class BasketDatabaseClearData {
-    private static final Logger LOGGER = LoggerFactory.getLogger(BasketDatabaseClearData.class);
+public class BasketDatabaseClearDataScheduler {
+    private static final Logger LOGGER = LoggerFactory.getLogger(BasketDatabaseClearDataScheduler.class);
 
     private final BasketService basketService;
 
-    public BasketDatabaseClearData(BasketService basketService) {
+    public BasketDatabaseClearDataScheduler(BasketService basketService) {
         this.basketService = basketService;
     }
 
@@ -24,14 +24,13 @@ public class BasketDatabaseClearData {
     //on each 15 minutes
     @Scheduled(fixedRate  = 300000, initialDelay = 60000)
     public void resetBaskets(){
-        LOGGER.info("Baskets reseting/clearing operation started at {}", LocalDateTime.now());
+        LOGGER.info("Baskets resetting/clearing operation started at {}", LocalDateTime.now());
         List<BasketOrderEntity> basketsCreatedMoreThan20MinutesAgo = this.basketService.getAllBasketsCreatedMoreThan20MinutesAgo();
 
         for (BasketOrderEntity basket : basketsCreatedMoreThan20MinutesAgo) {
             this.basketService.resetOneBasketWhen20MinutesPassed(basket.getId());
         }
 
-
-        LOGGER.info("{} baskets successfully cleared at {}", basketsCreatedMoreThan20MinutesAgo.size(), LocalDateTime.now());
+        LOGGER.info("{} number of baskets successfully cleared at {}", basketsCreatedMoreThan20MinutesAgo.size(), LocalDateTime.now());
     }
 }
