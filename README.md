@@ -157,8 +157,13 @@
 * Търсене на поръчки - според ролите на user-а - чрез Rest и Fetch Api (jQuery and JS)
 * //TODO - глобална търсачка в commons.html за всички типове продукти - по тип на продукта + име на модел/цена по-голяма от... - само чрез Thymeleaf
 
-### Unit and integration testing
-* A-MUST-TODO - pending, to make it until 13.08.2022 Saturday morning!!!
+### Unit and integration testing - 14% global coverage by line done for now
+* Unit testing in the services
+* Integration testing in the web controllers and in the services - with in-memory database HyperSQL Database
+* Important notes before starting testing:
+  - first, disable in the class AppSeedInit.java  the @PostConstrict annotated method beginInit()
+  - second, copy the real CLOUDINARY_SECRET in the application.yml in the test section
+* AdminController tested 100% (all in green) using also annotation @Order
 
 
 

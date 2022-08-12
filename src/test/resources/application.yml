@@ -23,7 +23,8 @@ spring:
 cloudinary:
   cloud_name: "dtfd8gw16"
   api_key: "218356847735493"
-  api_secret: ${CLOUDINARY_SECRET}
+  api_secret:
+#  ${CLOUDINARY_SECRET}
 
 app:
   default:
