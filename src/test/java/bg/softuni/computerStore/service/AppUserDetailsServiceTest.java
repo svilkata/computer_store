@@ -18,6 +18,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+
 @ExtendWith(MockitoExtension.class)
 public class AppUserDetailsServiceTest {
     private UserEntity testUser;
@@ -66,7 +67,5 @@ public class AppUserDetailsServiceTest {
                 .collect(Collectors.joining(", "));
         String expectedRoles = "ROLE_ADMIN, ROLE_CUSTOMER";
         Assertions.assertEquals(expectedRoles, actualRoles);
-
-
     }
 }

@@ -67,7 +67,6 @@ public class UserService implements InitializableUserService {
             initAdmin(Set.of(adminRole, purchaseRole, salesRole, customerRole));
             initEmployeePurchases(Set.of(purchaseRole, customerRole));
             initEmployeeSales(Set.of(salesRole, customerRole));
-
             initCustomer(Set.of(customerRole));
         }
     }
@@ -122,7 +121,7 @@ public class UserService implements InitializableUserService {
     }
 
     //customers
-    public void registerUserAndAutoLogin(UserRegisterBindingDTO userRegisterBindingDTO) {
+    public Long registerUserAndAutoLogin(UserRegisterBindingDTO userRegisterBindingDTO) {
         //The customer user role
         UserRoleEntity userRole = userRoleRepository.findById(4L).get();
 
@@ -140,9 +139,10 @@ public class UserService implements InitializableUserService {
         //Creating here the relevant basket
         this.basketService.addBasketForRegisteredUser(savedUser);
 
-        //this is the Spring representation of a User - after register, we AUTO log-in the users directly
+        //this is the Spring representation of a User - after register, we AUTO log-in the users directly = THE LOGIN PROCESS
         UserDetails userDetails =
                 appUserDetailsService.loadUserByUsername(newCustomer.getUsername());
+
 
         Authentication authentication =
                 new UsernamePasswordAuthenticationToken(
@@ -154,6 +154,8 @@ public class UserService implements InitializableUserService {
         SecurityContextHolder.
                 getContext().
                 setAuthentication(authentication);
+
+        return savedUser.getId();
     }
 
     public List<UserViewModel> getEmployeeUsers() {

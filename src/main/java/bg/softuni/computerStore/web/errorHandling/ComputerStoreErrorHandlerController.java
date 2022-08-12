@@ -9,7 +9,7 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 
 @Controller
-public class ComputerStoreErrorHandler implements ErrorController {
+public class ComputerStoreErrorHandlerController implements ErrorController {
     @RequestMapping("/error")
     public String handleError(HttpServletRequest request) {
         Object status =
