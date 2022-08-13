@@ -29,7 +29,7 @@
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto col-12 justify-content-between">
-                <li class="nav-item nav-link" th:text="'Total orders count: ' + ${#session.getAttribute('totalOrdersCount')}">
+                <li class="nav-item nav-link" th:text="#{navbar_total_orders} + ${#session.getAttribute('totalOrdersCount')}">
 
                 </li>
 

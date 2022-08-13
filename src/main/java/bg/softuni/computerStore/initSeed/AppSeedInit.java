@@ -25,12 +25,12 @@ public class AppSeedInit {
         this.finalOrderService = finalOrderService;
     }
 
-//    @PostConstruct
-//    public void beginInit() {
-//        this.userServices.init();  //1 initSeed method
-//        this.pictureService.init();  //1 initSeed method
-//        this.allProductServices.forEach(srvc -> srvc.init()); //many independent not in any order inits methods of eacg product
-//        this.basketServices.init();  //1 initSeed method
-//        this.finalOrderService.init(); //1 initSeed method
-//    }
+    @PostConstruct
+    public void beginInit() {
+        this.userServices.init();  //1 initSeed method
+        this.pictureService.init();  //1 initSeed method
+        this.allProductServices.forEach(srvc -> srvc.init()); //many independent not in any order inits methods of eacg product
+        this.basketServices.init();  //1 initSeed method
+        this.finalOrderService.init(); //1 initSeed method
+    }
 }
