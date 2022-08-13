@@ -34,7 +34,7 @@ public class CloudinaryAndPictureService implements InitializablePictureService 
     }
 
     @Override
-    public void init() {
+    public Long init() {
         if (pictureRepository.count() == 0) {
             initOnePicture(1L, IMAGE_PUBLIC_ID_COMPUTER_1, IMAGE_URL_COMPUTER_1);
             initOnePicture(2L, IMAGE_PUBLIC_ID_COMPUTER_2, IMAGE_URL_COMPUTER_2);
@@ -45,9 +45,12 @@ public class CloudinaryAndPictureService implements InitializablePictureService 
             initOnePicture(7L, IMAGE_PUBLIC_ID_MONITOR_2, IMAGE_URL_MONITOR_2);
             initOnePicture(8L, IMAGE_PUBLIC_ID_MONITOR_3, IMAGE_URL_MONITOR_3);
         }
+
+        return 8L;
     }
 
     private void initOnePicture(Long itemId, String publicId, String imageUrl) {
+        int a = 5;
         PictureEntity picture = new PictureEntity();
         picture.setItemId(itemId).setPublicId(publicId)
                 .setUrl(imageUrl);

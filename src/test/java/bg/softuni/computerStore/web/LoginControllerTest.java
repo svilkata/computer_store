@@ -10,8 +10,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -23,20 +22,24 @@ class LoginControllerTest {
     private static final String USER_CONTROLLER_PREFIX = "/users";
 
     @Test
-    void login() throws Exception {
+    void loginTest() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get(
                         USER_CONTROLLER_PREFIX + "/login"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("/user/auth-login"));
+                .andExpect(view().name("/user/auth-login"))
+                .andExpect(model().attributeExists("userLoginDto"))
+                .andExpect(model().attributeExists("notFound"));
     }
 
     @Test
-    void failedLogin() throws Exception {
+    void failedLoginTest() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.post(USER_CONTROLLER_PREFIX + "/login-error")
-                        .param("name", "Starshi")
+                        .param("username", "Starshi")
                         .param("password", "11111")
-                        .with(csrf())).
-                andExpect(status().is3xxRedirection());
+                        .with(csrf()))
+                .andExpect(status().is3xxRedirection());
+//                .andExpect(flash().attributeExists("bad_credentials", "userLoginDto"))
+//                .andExpect(redirectedUrl("http://localhost/users/login"));
     }
 }
 

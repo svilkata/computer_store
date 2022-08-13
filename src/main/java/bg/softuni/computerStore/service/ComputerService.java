@@ -38,6 +38,7 @@ public class ComputerService implements InitializableProductService {
 
     @Override
     public void init() {
+        int a = 5;
         if (allItemsRepository.findCounItemsByType("computer") < 1) {
             initOneComputer("Dell", "Dell Vostro 3681 SFF", 1000, 1150, 5,
                     "Intel Core i3-10100 (3.6/4.3GHz, 6M)", "Intel UHD Graphics 630",

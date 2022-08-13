@@ -32,11 +32,11 @@ public class LoginController {
             BindingResult bindingResult,
             RedirectAttributes redirectAttributes) {
 
-        redirectAttributes.addFlashAttribute("userLoginDto", userLoginBindingDto);
-        redirectAttributes.addFlashAttribute(
-                "org.springframework.validation.BindingResult.userLoginDto", bindingResult);
-        redirectAttributes.addFlashAttribute(UsernamePasswordAuthenticationFilter.SPRING_SECURITY_FORM_USERNAME_KEY, username);
-        redirectAttributes.addFlashAttribute("bad_credentials", true);
+        redirectAttributes
+                .addFlashAttribute("userLoginDto", userLoginBindingDto)
+                .addFlashAttribute("org.springframework.validation.BindingResult.userLoginDto", bindingResult)
+                .addFlashAttribute(UsernamePasswordAuthenticationFilter.SPRING_SECURITY_FORM_USERNAME_KEY, username)
+                .addFlashAttribute("bad_credentials", true);
 
         return "redirect:/users/login";
     }

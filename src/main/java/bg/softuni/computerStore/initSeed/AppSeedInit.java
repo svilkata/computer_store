@@ -10,9 +10,9 @@ public class AppSeedInit {
     //Всички service класове, които сме имплементирали с InitializableService interface,
     // тук ни се зареждат автоматично - Open-Close principle
     private final InitializableUserService userServices;
+    private final InitializablePictureService pictureService;
     private final List<InitializableProductService> allProductServices;
     private final InitializableBasketService basketServices;
-    private final InitializablePictureService pictureService;
     private final InitializableFinalOrderService finalOrderService;
 
     public AppSeedInit(InitializableUserService userServices, List<InitializableProductService> allProductServices,

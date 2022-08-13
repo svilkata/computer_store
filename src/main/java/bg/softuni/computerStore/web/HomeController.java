@@ -17,7 +17,7 @@ public class HomeController {
         return "index";
     }
 
-    //За всяка заявка или само за заявка потвърждаване на поръчка да сменяме http cookie-то стойността
+    //Само за заявка потвърждаване на поръчка да сменяме стойността на атрибута totalOrdersCount на http cookie session-a
 
 
 }

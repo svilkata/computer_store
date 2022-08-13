@@ -50,20 +50,23 @@ class RegistrationControllerTest {
 
     @AfterEach
     public void clear() {
-        userRepository.deleteAll();
+
     }
 
     @Test
-    void register() throws Exception {
+    void registerTest() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get(USER_CONTROLLER_PREFIX_REGISTER))
                 .andExpect(status().isOk())
                 .andExpect(view().name("/user/auth-registerUser"));
     }
 
     @Test
-    void registerConfirm() throws Exception {
+    void registerConfirmTestSuccessfull() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.post(USER_CONTROLLER_PREFIX_REGISTER)
-                        .param("username", "Pesho")
+                        .param("username", "pesh")
+                        .param("email", "Pesho@mail.bg")
+                        .param("firstName", "Pesho")
+                        .param("lastName", "Peshovich")
                         .param("password", "123456")
                         .param("confirmPassword", "123456")
                         .with(csrf())).
