@@ -2,6 +2,7 @@ package bg.softuni.computerStore.service;
 
 import bg.softuni.computerStore.event.OrderCreatedEvent;
 import bg.softuni.computerStore.exception.OrderForbiddenException;
+import bg.softuni.computerStore.exception.OrderNotFoundException;
 import bg.softuni.computerStore.initSeed.InitializableFinalOrderService;
 import bg.softuni.computerStore.model.binding.order.ClientOrderExtraInfoGetViewModel;
 import bg.softuni.computerStore.model.entity.orders.BasketOrderEntity;
@@ -182,7 +183,7 @@ public class FinalOrderService implements InitializableFinalOrderService {
 
     public FinalOrderEntity getOrderByOrderNumber(String orderNumber) {
         return this.finalOrderRepository.findByOrderNumber(orderNumber)
-                .orElseThrow(() -> new OrderForbiddenException(String.format("You do not have an authorization for a final order %s or such an order does not exist", orderNumber)));
+                .orElseThrow(() -> new OrderNotFoundException(String.format("A final order number: %s  does not exist", orderNumber)));
     }
 
     public List<ItemQuantityInOrderEntity> getProductQuantitiesFromOrderByOrderNumber(String orderNumber) {

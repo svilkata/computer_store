@@ -53,5 +53,14 @@ public class GlobalExceptionHandler {
 
         return modelAndView;
     }
+
+    @ExceptionHandler(value = {OrderNotFoundException.class})
+    public ModelAndView handleDbExceptions(OrderNotFoundException e) {
+        ModelAndView modelAndView = new ModelAndView("errors/order-notfound");
+        modelAndView.addObject("item", e.getItem());
+        modelAndView.setStatus(HttpStatus.NOT_FOUND);
+
+        return modelAndView;
+    }
 }
 

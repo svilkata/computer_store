@@ -249,15 +249,4 @@ class AdminControllerTest {
                 .andExpect(flash().attribute("atLeastTwoRolesShouldBeSelected", true))
                 .andExpect(redirectedUrl("/pages/admins/register-new-employee"));
     }
-
-//    @Test
-//    @Order(11)
-//    @WithMockUser(username = "admin", roles = {"ADMIN"})
-//    void changeAdminUserConfirmTestSuccessful() throws Exception {
-//        mockMvc.perform(MockMvcRequestBuilders.post(ADMIN_CONTROLLER_PREFIX + "/change-admin-user")
-//                        .param("username", "purchase")
-//                        .param("roles", "EMPLOYEE_PURCHASES", "EMPLOYEE_SALES", "ADMIN", "CUSTOMER")
-//                        .with(csrf()))
-//                .andExpect(redirectedUrl("/users/logout"));
-//    }
 }

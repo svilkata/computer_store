@@ -125,6 +125,8 @@
 3. More customs error handling experience with @ControllerAdvice
 * using global application exception handling with @ControllerAdvice on all GET operations - connected with items, baskets, orders
 * Exceptions for @ControllerAdvice for POST, PATCH, DELETE operations not needed as they are secured by the Spring security and CSFR (but I included them also for extra security)
+4. //TODO - Nobody can see other baskets and/or the page confirming the basket into a final order - except his/her own basket - one more handler here to add
+5. Only EMPLOYEE_SALES and ADMIN can see all the final orders. EMPLOYEE_PURCHASES and CUSTOMER can see only their own orders.
 
 ### Loading data with FETCH api in the Thymeleaf html
 * Добавянето, изтриване и промяна количества на Item-s в кошницата чрез Rest и FETCH Api (jQuery and/or Vanilla JS)
