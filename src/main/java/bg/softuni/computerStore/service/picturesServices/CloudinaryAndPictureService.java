@@ -46,11 +46,10 @@ public class CloudinaryAndPictureService implements InitializablePictureService 
             initOnePicture(8L, IMAGE_PUBLIC_ID_MONITOR_3, IMAGE_URL_MONITOR_3);
         }
 
-        return 8L;
+        return pictureRepository.count();
     }
 
     private void initOnePicture(Long itemId, String publicId, String imageUrl) {
-        int a = 5;
         PictureEntity picture = new PictureEntity();
         picture.setItemId(itemId).setPublicId(publicId)
                 .setUrl(imageUrl);

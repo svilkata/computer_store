@@ -22,6 +22,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -179,7 +180,7 @@ public class UserService implements InitializableUserService {
                 .forEach(r -> {
                     UserRoleEntity userRole = userRoleRepository.
                             findByUserRole(UserRoleEnum.valueOf(r)).orElseThrow(
-                                    () -> new IllegalStateException("Employee user Role not found. Please seed the roles."));
+                                    () -> new IllegalArgumentException(("Employee user Role not found. Please seed the roles.")));
 
                     user.getUserRoles().add(userRole);
                 });
@@ -190,9 +191,16 @@ public class UserService implements InitializableUserService {
 
     public void disableAdminRoleForCurrentAdminUser() {
         UserEntity disablingCurrentAdminUser = this.userRepository.getCurrentAdminUser();
-        UserRoleEntity userRoleEntityAdmin = userRoleRepository.getById(1L);
+//        UserRoleEntity userRoleEntityAdmin = userRoleRepository.getById(1L);
+        List<UserRoleEntity> allRoles = this.userRoleRepository.findAll();
+        Set<UserRoleEntity> newAdminRoles = new LinkedHashSet<>();
+        for (UserRoleEntity role : allRoles) {
+            if (role.getUserRole() != UserRoleEnum.ADMIN) {
+                newAdminRoles.add(role);
+            }
+        }
 
-        disablingCurrentAdminUser.getUserRoles().remove(userRoleEntityAdmin);
+        disablingCurrentAdminUser.setUserRoles(newAdminRoles);
         userRepository.save(disablingCurrentAdminUser);
     }
 
