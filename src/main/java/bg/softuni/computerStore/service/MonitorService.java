@@ -6,12 +6,12 @@ import bg.softuni.computerStore.exception.ItemNotFoundException;
 import bg.softuni.computerStore.exception.ItemsWithTypeNotFoundException;
 import bg.softuni.computerStore.initSeed.InitializableProductService;
 import bg.softuni.computerStore.model.binding.product.AddUpdateMonitorBindingDTO;
-import bg.softuni.computerStore.model.entity.cloudinary.PictureEntity;
+import bg.softuni.computerStore.model.entity.picture.PictureEntity;
 import bg.softuni.computerStore.model.entity.products.ItemEntity;
 import bg.softuni.computerStore.model.entity.products.MonitorEntity;
 import bg.softuni.computerStore.model.view.product.MonitorViewGeneralModel;
 import bg.softuni.computerStore.repository.products.AllItemsRepository;
-import bg.softuni.computerStore.service.picturesServices.CloudinaryAndPictureService;
+import bg.softuni.computerStore.service.picturesServices.PictureService;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -27,12 +27,12 @@ import static bg.softuni.computerStore.constants.Constants.*;
 public class MonitorService implements InitializableProductService {
     private final AllItemsRepository allItemsRepository;
     private final StructMapper structMapper;
-    private final CloudinaryAndPictureService cloudinaryAndPictureService;
+    private final PictureService pictureService;
 
-    public MonitorService(AllItemsRepository allItemsRepository, StructMapper structMapper, CloudinaryAndPictureService cloudinaryAndPictureService) {
+    public MonitorService(AllItemsRepository allItemsRepository, StructMapper structMapper, PictureService pictureService) {
         this.allItemsRepository = allItemsRepository;
         this.structMapper = structMapper;
-        this.cloudinaryAndPictureService = cloudinaryAndPictureService;
+        this.pictureService = pictureService;
     }
 
     @Override
@@ -73,7 +73,7 @@ public class MonitorService implements InitializableProductService {
                 .setBrightness(brightness)
                 .setMoreInfo(moreInfo);
 
-        PictureEntity picture = this.cloudinaryAndPictureService.getPictureByPublicId(photoPublicId);
+        PictureEntity picture = this.pictureService.getPictureByPublicId(photoPublicId);
         toAdd.setPhoto(picture);
 
         this.allItemsRepository.save(toAdd.setCreationDateTime(LocalDateTime.now()));
@@ -130,7 +130,7 @@ public class MonitorService implements InitializableProductService {
     public void deleteMonitorAndQuantity(String itemId) {
         final Long id = isItemIdANumber(itemId);
 
-         //Изтриване на снимка от PictureRepositoty при изтриване на самия Item
+        //Изтриване на снимка от PictureRepositoty при изтриване на самия Item
         ItemEntity itemEntityToDelete = this.allItemsRepository.findItemEntityByTypeAndItemId("monitor", id)
                 .orElseThrow(() -> new ItemNotFoundException(String.format("No monitor item with this %d to be deleted!", id), id));
 
@@ -138,9 +138,8 @@ public class MonitorService implements InitializableProductService {
             List<String> collect = Arrays.stream(itemEntityToDelete.getPhoto().getUrl().split("/")).toList();
             String publicId = collect.get(collect.size() - 1);
             publicId = publicId.substring(0, publicId.length() - 4);
-            if (this.cloudinaryAndPictureService.deleteFromCloudinary(publicId)) {
-                this.cloudinaryAndPictureService.deleteFromPictureRepository(publicId);
-            }
+
+            this.pictureService.deleteFromPictureRepository(publicId);
         }
 
         this.allItemsRepository.deleteById(id);
@@ -213,7 +212,7 @@ public class MonitorService implements InitializableProductService {
         final Long itemLongId;
         try {
             itemLongId = Long.parseLong(itemId);
-        } catch (Exception e){
+        } catch (Exception e) {
             throw new ObjectIdNotANumberException(String.format("%s is not a valid monitor item number!", itemId));
         }
         return itemLongId;

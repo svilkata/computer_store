@@ -165,9 +165,10 @@
 * Integration testing in the web controllers and in the services - with in-memory database HyperSQL Database
 * Important notes before starting testing:
   - first, disable in the class AppSeedInit.java  the @PostConstrict annotated method beginInit()
-  - second, copy the real CLOUDINARY_SECRET in the application.yml in the test section
+  - second, copy the real CLOUDINARY_SECRET in the application.yml in the test section // or other option is to set Enviromental Variables for every test class manually
 * AdminController tested 100% (all in green) using also annotation @Order
 * UserService tested 100%
+* For testing - do not use columnDefinition @Column(name = "more_info", columnDefinition = "TEXT") - (in the ItemEntity class for field moreInfo, I removed the columnDefinition so that the in-memory HyperSQL grammar is satisfied)
 
 
 

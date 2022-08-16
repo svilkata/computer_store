@@ -1,4 +1,4 @@
-package bg.softuni.computerStore.model.entity.cloudinary;
+package bg.softuni.computerStore.model.entity.picture;
 
 import javax.persistence.*;
 

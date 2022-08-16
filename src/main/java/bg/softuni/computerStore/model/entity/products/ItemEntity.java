@@ -1,7 +1,7 @@
 package bg.softuni.computerStore.model.entity.products;
 
 
-import bg.softuni.computerStore.model.entity.cloudinary.PictureEntity;
+import bg.softuni.computerStore.model.entity.picture.PictureEntity;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -32,7 +32,8 @@ public abstract class ItemEntity {
     private BigDecimal sellingPrice;
     @Column(name = "quantity")
     private int currentQuantity;
-    @Column(name = "more_info", columnDefinition = "TEXT")
+//    @Column(name = "more_info", columnDefinition = "TEXT")
+    @Column(name = "more_info")
     private String moreInfo;
 //    private String photoUrl;
     @OneToOne

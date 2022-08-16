@@ -1,6 +1,6 @@
 package bg.softuni.computerStore.service;
 
-import bg.softuni.computerStore.service.picturesServices.CloudinaryAndPictureService;
+import bg.softuni.computerStore.service.picturesServices.PictureService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,9 +10,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 @AutoConfigureTestDatabase
-class CloudinaryAndPictureServiceTest {
+class PictureServiceTest {
     @Autowired
-    private CloudinaryAndPictureService cloudinaryAndPictureService;
+    private PictureService pictureService;
 
     @BeforeEach
     public void setup() {
@@ -21,7 +21,7 @@ class CloudinaryAndPictureServiceTest {
 
     @Test
     void viewOneComputerTest() throws Exception {
-        Long resultCountOfInits = this.cloudinaryAndPictureService.init();
+        Long resultCountOfInits = this.pictureService.init();
         Long expectdCountShouldBe8 = 8L;
 
         Assertions.assertEquals(expectdCountShouldBe8, resultCountOfInits);

@@ -9,7 +9,7 @@ import bg.softuni.computerStore.model.entity.products.ItemEntity;
 import bg.softuni.computerStore.model.entity.products.LaptopEntity;
 import bg.softuni.computerStore.model.view.product.LaptopViewGeneralModel;
 import bg.softuni.computerStore.repository.products.AllItemsRepository;
-import bg.softuni.computerStore.service.picturesServices.CloudinaryAndPictureService;
+import bg.softuni.computerStore.service.picturesServices.PictureService;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -19,12 +19,12 @@ import java.util.List;
 public class LaptopService implements InitializableProductService {
     private final AllItemsRepository allItemsRepository;
     private final StructMapper structMapper;
-    private final CloudinaryAndPictureService cloudinaryAndPictureService;
+    private final PictureService pictureService;
 
-    public LaptopService(AllItemsRepository allItemsRepository, StructMapper structMapper, CloudinaryAndPictureService cloudinaryAndPictureService) {
+    public LaptopService(AllItemsRepository allItemsRepository, StructMapper structMapper, PictureService pictureService) {
         this.allItemsRepository = allItemsRepository;
         this.structMapper = structMapper;
-        this.cloudinaryAndPictureService = cloudinaryAndPictureService;
+        this.pictureService = pictureService;
     }
 
     @Override

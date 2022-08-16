@@ -6,13 +6,13 @@ import bg.softuni.computerStore.exception.ItemNotFoundException;
 import bg.softuni.computerStore.exception.ItemsWithTypeNotFoundException;
 import bg.softuni.computerStore.initSeed.InitializableProductService;
 import bg.softuni.computerStore.model.binding.product.AddUpdateComputerBindingDTO;
-import bg.softuni.computerStore.model.entity.cloudinary.PictureEntity;
+import bg.softuni.computerStore.model.entity.picture.PictureEntity;
 import bg.softuni.computerStore.model.entity.products.ComputerEntity;
 import bg.softuni.computerStore.model.entity.products.ItemEntity;
 import bg.softuni.computerStore.model.view.product.ComputerViewGeneralModel;
 import bg.softuni.computerStore.repository.cloudinary.PictureRepository;
 import bg.softuni.computerStore.repository.products.AllItemsRepository;
-import bg.softuni.computerStore.service.picturesServices.CloudinaryAndPictureService;
+import bg.softuni.computerStore.service.picturesServices.PictureService;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -28,17 +28,16 @@ import static bg.softuni.computerStore.constants.Constants.*;
 public class ComputerService implements InitializableProductService {
     private final AllItemsRepository allItemsRepository;
     private final StructMapper structMapper;
-    private final CloudinaryAndPictureService cloudinaryAndPictureService;
+    private final PictureService pictureService;
 
-    public ComputerService(AllItemsRepository allItemsRepository, StructMapper structMapper, PictureRepository pictureRepository, CloudinaryAndPictureService cloudinaryAndPictureService) {
+    public ComputerService(AllItemsRepository allItemsRepository, StructMapper structMapper, PictureRepository pictureRepository, PictureService pictureService) {
         this.allItemsRepository = allItemsRepository;
         this.structMapper = structMapper;
-        this.cloudinaryAndPictureService = cloudinaryAndPictureService;
+        this.pictureService = pictureService;
     }
 
     @Override
     public void init() {
-        int a = 5;
         if (allItemsRepository.findCounItemsByType("computer") < 1) {
             initOneComputer("Dell", "Dell Vostro 3681 SFF", 1000, 1150, 5,
                     "Intel Core i3-10100 (3.6/4.3GHz, 6M)", "Intel UHD Graphics 630",
@@ -85,7 +84,7 @@ public class ComputerService implements InitializableProductService {
                 .setDisk(disk)
                 .setSsd(ssd);
 
-        PictureEntity picture = this.cloudinaryAndPictureService.getPictureByPublicId(photoPublicId);
+        PictureEntity picture = this.pictureService.getPictureByPublicId(photoPublicId);
         toAdd.setPhoto(picture);
 
         this.allItemsRepository.save(toAdd.setCreationDateTime(LocalDateTime.now()));
@@ -148,9 +147,9 @@ public class ComputerService implements InitializableProductService {
             List<String> collect = Arrays.stream(itemEntityToDelete.getPhoto().getUrl().split("/")).toList();
             String publicId = collect.get(collect.size() - 1);
             publicId = publicId.substring(0, publicId.length() - 4);
-            if (this.cloudinaryAndPictureService.deleteFromCloudinary(publicId)) {
-                this.cloudinaryAndPictureService.deleteFromPictureRepository(publicId);
-            }
+
+            //TODO: change 1
+            this.pictureService.deleteFromPictureRepository(publicId);
         }
 
         this.allItemsRepository.deleteById(id);
@@ -221,7 +220,7 @@ public class ComputerService implements InitializableProductService {
         final Long itemLongId;
         try {
             itemLongId = Long.parseLong(itemId);
-        } catch (Exception e){
+        } catch (Exception e) {
             throw new ObjectIdNotANumberException(String.format("%s is not a valid computer item number!", itemId));
         }
         return itemLongId;

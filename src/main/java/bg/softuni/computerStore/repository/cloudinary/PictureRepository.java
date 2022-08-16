@@ -1,6 +1,6 @@
 package bg.softuni.computerStore.repository.cloudinary;
 
-import bg.softuni.computerStore.model.entity.cloudinary.PictureEntity;
+import bg.softuni.computerStore.model.entity.picture.PictureEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

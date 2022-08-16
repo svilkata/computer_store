@@ -18,7 +18,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
@@ -44,9 +43,6 @@ class UserServiceTest {
     @Autowired
     private PasswordEncoder passwordEncoder;
     private String adminPass = "11111";
-
-//    private ModelMapper modelMapper;
-//    private BasketService basketService;
 
     @BeforeEach
     void init() {

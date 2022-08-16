@@ -1,4 +1,4 @@
-package bg.softuni.computerStore.service.picturesServices;
+package bg.softuni.computerStore.model.entity.picture;
 
 public class CloudinaryImage {
     private String url;

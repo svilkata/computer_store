@@ -1,6 +1,6 @@
 package bg.softuni.computerStore.config.mapper;
 
-import bg.softuni.computerStore.model.entity.cloudinary.PictureEntity;
+import bg.softuni.computerStore.model.entity.picture.PictureEntity;
 import bg.softuni.computerStore.model.entity.products.ComputerEntity;
 import bg.softuni.computerStore.model.entity.products.LaptopEntity;
 import bg.softuni.computerStore.model.entity.products.MonitorEntity;

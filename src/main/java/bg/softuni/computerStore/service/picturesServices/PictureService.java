@@ -1,36 +1,31 @@
 package bg.softuni.computerStore.service.picturesServices;
 
 import bg.softuni.computerStore.initSeed.InitializablePictureService;
-import bg.softuni.computerStore.model.entity.cloudinary.PictureEntity;
+import bg.softuni.computerStore.model.entity.picture.CloudinaryImage;
+import bg.softuni.computerStore.model.entity.picture.PictureEntity;
 import bg.softuni.computerStore.model.entity.products.ItemEntity;
 import bg.softuni.computerStore.repository.cloudinary.PictureRepository;
 import bg.softuni.computerStore.repository.products.AllItemsRepository;
-import com.cloudinary.Cloudinary;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.Map;
 import java.util.Optional;
 
 import static bg.softuni.computerStore.constants.Constants.*;
 
 @Service
-public class CloudinaryAndPictureService implements InitializablePictureService {
-    private final Cloudinary cloudinary;
+public class PictureService implements InitializablePictureService {
     private final PictureRepository pictureRepository;
     private final AllItemsRepository allItemsRepository;
-    private static final String TEMP_file = "temp-file";
-    private static final String URL = "url";
-    private static final String PUBLIC_ID = "public_id";
+    private final CloudinaryService cloudinaryService;
 
     @Autowired
-    public CloudinaryAndPictureService(Cloudinary cloudinary, PictureRepository pictureRepository, AllItemsRepository allItemsRepository) {
-        this.cloudinary = cloudinary;
+    public PictureService(PictureRepository pictureRepository, AllItemsRepository allItemsRepository, CloudinaryService cloudinaryService) {
         this.pictureRepository = pictureRepository;
         this.allItemsRepository = allItemsRepository;
+        this.cloudinaryService = cloudinaryService;
     }
 
     @Override
@@ -57,32 +52,14 @@ public class CloudinaryAndPictureService implements InitializablePictureService 
         this.pictureRepository.save(picture);
     }
 
+    public PictureEntity createPictureEntity(MultipartFile multipartFile, Long itemId) throws IOException {
+        final CloudinaryImage uploaded = this.cloudinaryService.upload(multipartFile);
 
-    public CloudinaryImage upload(MultipartFile multipartFile) throws IOException {
-        File tempFile = File.createTempFile(TEMP_file, multipartFile.getOriginalFilename());
-        multipartFile.transferTo(tempFile);
-
-        try {
-            @SuppressWarnings("unchecked")
-            Map<String, String> uploadResult = cloudinary
-                    .uploader()
-                    .upload(tempFile, Map.of());
-//                    .upload(tempFile, Map.of("use_filename"));
-
-            //The long string is a funny photo for Error
-            String url = uploadResult.getOrDefault(URL, FUNNY_PHOTO_FOR_ERROR);
-            String publicId = uploadResult.getOrDefault(PUBLIC_ID, "");
-
-            var result = new CloudinaryImage()
-                    .setPublicId(publicId)
-                    .setUrl(url);
-
-            return result;
-        } finally {
-            tempFile.delete();
-        }
+        return new PictureEntity()
+                .setPublicId(uploaded.getPublicId())
+                .setUrl(uploaded.getUrl())
+                .setItemId(itemId);
     }
-
 
     public void savePhoto(PictureEntity picture) {
         Optional<PictureEntity> pictureEntityOpt =
@@ -93,7 +70,7 @@ public class CloudinaryAndPictureService implements InitializablePictureService 
             String oldPublicId = updatedPictureEntity.getPublicId();
 
             //deleting from picturesServices the old photo with the old publicId
-            deleteFromCloudinary(oldPublicId);
+            this.cloudinaryService.deleteFromCloudinary(oldPublicId);
 
             updatedPictureEntity
                     .setUrl(picture.getUrl())
@@ -113,21 +90,14 @@ public class CloudinaryAndPictureService implements InitializablePictureService 
         this.allItemsRepository.save(byId);
     }
 
-    public boolean deleteFromCloudinary(String publicId) {
-        try {
-            this.cloudinary.uploader().destroy(publicId, Map.of());
-        } catch (IOException e) {
-            return false;
-        }
-
-        return true;
-    }
-
     public void deleteFromPictureRepository(String publicId) {
-        this.pictureRepository.deleteByPublicId(publicId);
+        if (this.cloudinaryService.deleteFromCloudinary(publicId)) {
+            this.pictureRepository.deleteByPublicId(publicId);
+        }
     }
 
     public PictureEntity getPictureByPublicId(String photoPublicId) {
         return this.pictureRepository.findPictureEntityByPublicId(photoPublicId).orElseThrow();
     }
 }
+
