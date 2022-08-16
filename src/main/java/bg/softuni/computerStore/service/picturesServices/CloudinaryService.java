@@ -26,6 +26,7 @@ public class CloudinaryService {
     public CloudinaryImage upload(MultipartFile multipartFile) throws IOException {
         File tempFile = File.createTempFile(TEMP_file, multipartFile.getOriginalFilename());
         multipartFile.transferTo(tempFile);
+        CloudinaryImage result;
 
         try {
             @SuppressWarnings("unchecked")
@@ -38,12 +39,15 @@ public class CloudinaryService {
             String url = uploadResult.getOrDefault(URL, FUNNY_PHOTO_FOR_ERROR);
             String publicId = uploadResult.getOrDefault(PUBLIC_ID, "");
 
-            var result = new CloudinaryImage()
+            return result = new CloudinaryImage()
                     .setPublicId(publicId)
                     .setUrl(url);
-
-            return result;
-        } finally {
+        }
+//        catch (Exception e){
+//            result = null;
+//            System.out.println(e.getMessage());
+//        }
+        finally {
             tempFile.delete();
         }
     }

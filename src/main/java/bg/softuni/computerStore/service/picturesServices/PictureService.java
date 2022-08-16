@@ -29,7 +29,7 @@ public class PictureService implements InitializablePictureService {
     }
 
     @Override
-    public Long init() {
+    public void init() {
         if (pictureRepository.count() == 0) {
             initOnePicture(1L, IMAGE_PUBLIC_ID_COMPUTER_1, IMAGE_URL_COMPUTER_1);
             initOnePicture(2L, IMAGE_PUBLIC_ID_COMPUTER_2, IMAGE_URL_COMPUTER_2);
@@ -40,8 +40,6 @@ public class PictureService implements InitializablePictureService {
             initOnePicture(7L, IMAGE_PUBLIC_ID_MONITOR_2, IMAGE_URL_MONITOR_2);
             initOnePicture(8L, IMAGE_PUBLIC_ID_MONITOR_3, IMAGE_URL_MONITOR_3);
         }
-
-        return pictureRepository.count();
     }
 
     private void initOnePicture(Long itemId, String publicId, String imageUrl) {
