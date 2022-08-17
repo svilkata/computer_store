@@ -148,8 +148,7 @@ public class ComputerService implements InitializableProductService {
             String publicId = collect.get(collect.size() - 1);
             publicId = publicId.substring(0, publicId.length() - 4);
 
-            //TODO: change 1
-            this.pictureService.deleteFromPictureRepository(publicId);
+             this.pictureService.deleteFromPictureRepository(publicId);
         }
 
         this.allItemsRepository.deleteById(id);

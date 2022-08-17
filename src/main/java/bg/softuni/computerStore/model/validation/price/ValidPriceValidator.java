@@ -25,7 +25,6 @@ public class ValidPriceValidator implements ConstraintValidator<ValidPrice, Stri
         this.context = context;
         this.context.disableDefaultConstraintViolation();
 
-        int a = 5;
         if (!shouldNotBeNullBlankEmpty()) {
             violationsCount++;
             setMessage(SHOULD_NOT_BE_NULL_BLANK_EMPTY);
