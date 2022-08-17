@@ -62,5 +62,26 @@ public class GlobalExceptionHandler {
 
         return modelAndView;
     }
+
+    @ExceptionHandler(value = {MyFileUploadException.class})
+    public ModelAndView handleUploadToCloudinaryExceptions(MyFileUploadException e) {
+        ModelAndView modelAndView = new ModelAndView("errors/upload-to-cloudinary-conflict");
+        modelAndView.addObject("item", e.getItem());
+        modelAndView.setStatus(HttpStatus.CONFLICT);
+
+        return modelAndView;
+    }
+
+    @ExceptionHandler(value = {MyFileDestroyFromCloudinaryException.class})
+    public ModelAndView handleDeleteFromCloudinaryExceptions(MyFileDestroyFromCloudinaryException e) {
+        ModelAndView modelAndView = new ModelAndView("errors/delete-from-cloudinary-conflict");
+        modelAndView.addObject("item", e.getItem());
+        modelAndView.setStatus(HttpStatus.CONFLICT);
+
+        return modelAndView;
+    }
+
+
+
 }
 

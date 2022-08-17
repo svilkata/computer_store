@@ -50,7 +50,7 @@ public class PictureService implements InitializablePictureService {
         this.pictureRepository.save(picture);
     }
 
-    public PictureEntity createPictureEntity(MultipartFile multipartFile, Long itemId) throws IOException {
+    public PictureEntity createPictureEntity(MultipartFile multipartFile, Long itemId) {
         final CloudinaryImage uploaded = this.cloudinaryService.upload(multipartFile);
 
         return new PictureEntity()
@@ -63,7 +63,8 @@ public class PictureService implements InitializablePictureService {
         Optional<PictureEntity> pictureEntityOpt =
                 this.pictureRepository.findPictureEntitiesByItemId(picture.getItemId());
         PictureEntity savedPhoto = null;
-        if (pictureEntityOpt.isPresent()) {
+
+        if (pictureEntityOpt.isPresent()) { //updating existing photo
             PictureEntity updatedPictureEntity = pictureEntityOpt.get();
             String oldPublicId = updatedPictureEntity.getPublicId();
 

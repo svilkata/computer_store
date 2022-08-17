@@ -1,46 +1,93 @@
 package bg.softuni.computerStore.service.picturesServices;
 
+import bg.softuni.computerStore.exception.MyFileDestroyFromCloudinaryException;
+import bg.softuni.computerStore.exception.MyFileUploadException;
 import bg.softuni.computerStore.model.entity.picture.CloudinaryImage;
+import com.cloudinary.Cloudinary;
+import com.cloudinary.Uploader;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
+import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
 
-@SpringBootTest
-@AutoConfigureTestDatabase
-@WithMockUser(username = "purchase", roles = {"EMPLOYEE_PURCHASES"})
+@ExtendWith(MockitoExtension.class)
 class CloudinaryServiceTest {
-    private static final String MOCK_file = "mock-file";
-//    private static final String TEST_URL = "testurl.com";
-//    private static final String PUBLIC_ID = "public_id";
-
     @Mock
-    private CloudinaryService cloudinaryService;
+    private Cloudinary cloudinary;
 
     @Test
-    void upload() throws IOException {
-        //Arrange
-        MockMultipartFile multipartFile =
-                new MockMultipartFile(MOCK_file,
-                        "original file name",
-                        MediaType.TEXT_PLAIN_VALUE, "Hello world".getBytes());
+    public void upload_must_return_correct_cloudirary_image() throws IOException {
+        // Arrange
+        Uploader mockUploader = Mockito.mock(Uploader.class);
+        when(cloudinary.uploader()).thenReturn(mockUploader);
+        when(mockUploader.upload(any(File.class), any(Map.class)))
+                .thenReturn(Map.of("url", "success_url", "public_id", "success_id"));
+        CloudinaryService service = new CloudinaryService(cloudinary);
 
+        // Act
+        CloudinaryImage result = service.upload(new MockMultipartFile("FileName", new byte[0]));
 
-        CloudinaryImage uploadedCloduinaryImage = this.cloudinaryService.upload(multipartFile);
-
-
+        // Assert
+        assertEquals("success_url", result.getUrl());
+        assertEquals("success_id", result.getPublicId());
     }
 
     @Test
-    void deleteFromCloudinary() {
+    public void upload_must_throw_exception_when() throws IOException {
+        // arrange
+        Uploader mockUploader = Mockito.mock(Uploader.class);
+        when(cloudinary.uploader()).thenReturn(mockUploader);
+        when(mockUploader.upload(any(File.class), any(Map.class)))
+                .thenThrow(new IOException());
+        CloudinaryService service = new CloudinaryService(cloudinary);
+
+        // act & assert
+        assertThrows(MyFileUploadException.class,
+                () -> service.upload(new MockMultipartFile("FileName", new byte[0])),
+                "Can not upload file 'FileName'");
+    }
+
+    @Test
+    public void deleteFromCloudinaryTestMustDeleteAnImageFromCloudinary() throws IOException {
+        // Arrange
+        Uploader mockUploader = Mockito.mock(Uploader.class);
+        when(cloudinary.uploader()).thenReturn(mockUploader);
+        when(mockUploader.destroy(anyString(), any(Map.class)))
+                .thenReturn(Map.of("url", "success_url", "public_id", "success_id"));
+        CloudinaryService service = new CloudinaryService(cloudinary);
+
+        // Act
+        boolean isDeleted = service.deleteFromCloudinary("1");
+
+        // Assert
+        assertEquals(true, isDeleted);
+    }
+
+    @Test
+    public void deleteFromCloudinaryTestMustThrowExceptionWhenDeleteAnImageFromCloudinary() throws IOException {
+        // Arrange
+        Uploader mockUploader = Mockito.mock(Uploader.class);
+        when(cloudinary.uploader()).thenReturn(mockUploader);
+        when(mockUploader.destroy(anyString(), any(Map.class)))
+                .thenThrow(new IOException());
+        CloudinaryService service = new CloudinaryService(cloudinary);
+
+        // Act & Assert
+//        boolean isDeleted = service.deleteFromCloudinary("1");
+        assertThrows(MyFileDestroyFromCloudinaryException.class,
+                () -> service.deleteFromCloudinary("1"),
+                "Error deleting from cloudinary a file with publicId '1'");
     }
 }

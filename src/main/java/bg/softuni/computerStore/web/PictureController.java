@@ -21,8 +21,9 @@ public class PictureController {
         this.pictureService = pictureService;
     }
 
-    @PostMapping("/computers/{id}/addpicture")
-    public String addComputerPicture(PictureBindingModel bindingModel, @PathVariable("id") Long itemId) throws IOException {
+    @PostMapping("/computers/{itemId}/addpicture")
+    public String addComputerPicture(PictureBindingModel bindingModel, @PathVariable("itemId") Long itemId) {
+        PictureBindingModel aaa = bindingModel;
         var picture = this.pictureService.createPictureEntity(bindingModel.getPicture(), itemId);
 
         this.pictureService.savePhoto(picture);
@@ -31,7 +32,7 @@ public class PictureController {
     }
 
     @PostMapping("/monitors/{id}/addpicture")
-    public String addMonitorPicture(PictureBindingModel bindingModel, @PathVariable("id") Long itemId) throws IOException {
+    public String addMonitorPicture(PictureBindingModel bindingModel, @PathVariable("id") Long itemId) {
         var picture = this.pictureService.createPictureEntity(bindingModel.getPicture(), itemId);
 
         this.pictureService.savePhoto(picture);
