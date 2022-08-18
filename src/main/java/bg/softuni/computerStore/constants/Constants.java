@@ -27,5 +27,8 @@ public class Constants {
 
     public final static String FUNNY_PHOTO_FOR_ERROR = "https://thumbs.dreamstime.com/b/illustration-internet-connection-problem-concept-error-page-not-found-isolated-white-background-funny-blue-dinosaur-230224212.jpg";
 
-    public final static String UUID_ORDER_NUMBER_TESTING = "3a79f39c-0c13-4371-ba2d-fede779a5e08";
+//    public final static String UUID_ORDER_NUMBER_TESTING = "3a79f39c-0c13-4371-ba2d-fede779a5e08";
+
+    public final static String IMAGE_PUBLIC_ID_LAPTOP_1 = "laptop1_ryz8ar.jpg";
+    public final static String IMAGE_URL_LAPTOP_1 = "https://res.cloudinary.com/dtfd8gw16/image/upload/v1660814048/computerStore/laptops/laptop1_ryz8ar.jpg";
 }

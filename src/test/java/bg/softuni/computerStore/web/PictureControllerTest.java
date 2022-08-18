@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -36,17 +37,16 @@ public class PictureControllerTest {
     private Long itemId = 1L;
 
     @Autowired
-    private PictureController pictureController;
-    @Autowired
     private MockMvc mockMvc;
     @Autowired
     private UserDetailsService appUserDetailsService;
     @Autowired
     private UserService userService;
+
     private PictureBindingModel pictureBindingModel;
     private MockMultipartFile mockedMultipartFile;
 
-    @Mock
+    @MockBean
     private PictureService mockedPictureService;
 
     @BeforeEach
@@ -56,8 +56,10 @@ public class PictureControllerTest {
         loginUser("purchase");
 
         //Arrange more
+        //Залагаме име на файла името на полето "picture" от PictureBindingModel -
+        // за да може reflection-а да си го вземе multipart обекта правилно. Яко.
         mockedMultipartFile = new MockMultipartFile(
-                "file",
+                "picture",
                 "hello.txt",
                 MediaType.TEXT_PLAIN_VALUE,
                 "Hello World".getBytes());
@@ -77,7 +79,7 @@ public class PictureControllerTest {
 
         doNothing().when(this.mockedPictureService).savePhoto(pictureEntity);
 
-        pictureController = new PictureController(mockedPictureService);
+//        pictureController = new PictureController(mockedPictureService); // we do not need it
     }
 
     private void loginUser(String username) {
@@ -98,14 +100,12 @@ public class PictureControllerTest {
     }
 
     @Test
-    void addComputerPictureTest() throws Exception {
+    void addComputerPictureTestSuccessfull() throws Exception {
         MockHttpServletRequestBuilder builder = MockMvcRequestBuilders
-//                .multipart()
-//                .file(mockedMultipartFile)
-                .post(PURCHASE_CONTROLLER_PREFIX + "/computers/" + this.itemId + "/addpicture")
+                .multipart(PURCHASE_CONTROLLER_PREFIX + "/computers/" + this.itemId + "/addpicture")
+                .file(mockedMultipartFile)
                 .param("itemId", this.itemId + "")
                 .with(csrf());
-
 
 
         mockMvc.perform(builder)
@@ -114,6 +114,30 @@ public class PictureControllerTest {
     }
 
 //    @Test
-//    void addMonitorPicture() {
+//    void addComputerPictureTestConflict() throws Exception {
+//        MockHttpServletRequestBuilder builder = MockMvcRequestBuilders
+//                .multipart(PURCHASE_CONTROLLER_PREFIX + "/computers/" + this.itemId + "/addpicture")
+//                .file(mockedMultipartFile)
+//                .param("itemId", this.itemId + "")
+//                .with(csrf());
+//
+//
+//        mockMvc.perform(builder)
+//                .andExpect(view().name("errors/upload-to-cloudinary-conflict"))
+//                .andExpect(status().is4xxClientError());
 //    }
+
+    @Test
+    void addMonitorPicture() throws Exception {
+        MockHttpServletRequestBuilder builder = MockMvcRequestBuilders
+                .multipart(PURCHASE_CONTROLLER_PREFIX + "/monitors/" + this.itemId + "/addpicture")
+                .file(mockedMultipartFile)
+                .param("itemId", this.itemId + "")
+                .with(csrf());
+
+
+        mockMvc.perform(builder)
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/items/all/monitor/details/" + this.itemId));
+    }
 }

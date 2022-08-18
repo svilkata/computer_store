@@ -22,16 +22,16 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-//@ExtendWith(MockitoExtension.class)
 @AutoConfigureTestDatabase
 @SpringBootTest
-//@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class PictureServiceTest {
     @Autowired
     private PictureService pictureService;
@@ -109,8 +109,6 @@ public class PictureServiceTest {
 
         //Assert
         assertEquals(expected.getPublicId(), result.getPublicId());
-//        assertThrows(NoSuchElementException.class,
-//                () -> this.pictureService.getPictureByPublicId(testPhotoPublicId));
     }
 
     @Test

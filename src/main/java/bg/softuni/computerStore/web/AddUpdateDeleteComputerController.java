@@ -33,7 +33,7 @@ public class AddUpdateDeleteComputerController {
     }
 
     @PostMapping("/items/add/computer/**")
-//    @PreAuthorize("hasRole('ROLE_ADMIN') || hasRole('ROLE_EMPLOYEE_PURCHASES')") //тези май не вършат работа
+//    @PreAuthorize("hasRole('ROLE_ADMIN') || hasRole('ROLE_EMPLOYEE_PURCHASES')")
     public String addNewComputerConfirm(
             @Valid AddUpdateComputerBindingDTO addUpdateComputerBindingDTO,
             BindingResult bindingResult,
@@ -53,7 +53,7 @@ public class AddUpdateDeleteComputerController {
 
     //IMPORTANT - once a customer puts an item in his/her basket, it is not possible to delete the item
     //We better delete in the beginning before ordering - in case we have done a mistake
-    //Otherwise, we may update the item
+    //Otherwise, we may only update the item
     @DeleteMapping("/computers/delete/{id}")
     public String deleteComputer(@PathVariable String id) {
         this.computerService.deleteComputerAndQuantity(id);

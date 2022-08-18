@@ -20,9 +20,8 @@ public class LaptopEntity extends ItemEntity{
     public LaptopEntity() {
     }
 
-    public LaptopEntity(String brand, String model, BigDecimal buyingPrice, BigDecimal sellingPrice, int newQuantity, String moreInfo, String resolution) {
+    public LaptopEntity(String brand, String model, BigDecimal buyingPrice, BigDecimal sellingPrice, int newQuantity, String moreInfo) {
         super(ITEM_TYPE, brand, model, buyingPrice, sellingPrice, newQuantity, moreInfo);
-        this.resolution = resolution;
     }
 
     public String getResolution() {

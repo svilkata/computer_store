@@ -23,7 +23,6 @@ public class PictureController {
 
     @PostMapping("/computers/{itemId}/addpicture")
     public String addComputerPicture(PictureBindingModel bindingModel, @PathVariable("itemId") Long itemId) {
-        PictureBindingModel aaa = bindingModel;
         var picture = this.pictureService.createPictureEntity(bindingModel.getPicture(), itemId);
 
         this.pictureService.savePhoto(picture);

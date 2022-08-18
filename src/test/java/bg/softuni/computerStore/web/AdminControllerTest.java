@@ -15,6 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
@@ -73,7 +74,6 @@ class AdminControllerTest {
                 .andExpect(model().attributeExists("userRolesBindingDTO"))
                 .andExpect(status().isOk());
     }
-
 
     @Test
     @Order(2)

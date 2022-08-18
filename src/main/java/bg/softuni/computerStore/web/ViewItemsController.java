@@ -27,10 +27,10 @@ public class ViewItemsController {
         this.laptopService = laptopService;
     }
 
-    @GetMapping("/computer/details/{id}")
-    public String viewOneComputer(Model model, @PathVariable String id) {
+    @GetMapping("/computer/details/{itemId}")
+    public String viewOneComputer(Model model, @PathVariable String itemId) {
         if (!model.containsAttribute("oneComputer")) {
-            ComputerViewGeneralModel oneComputer = this.computerService.findOneComputerById(id);
+            ComputerViewGeneralModel oneComputer = this.computerService.findOneComputerById(itemId);
             model.addAttribute("oneComputer", oneComputer);
         }
 

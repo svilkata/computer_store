@@ -38,13 +38,6 @@ class AdminControllerChangeAdminTestOnly {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private UserRoleRepository userRoleRepository;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
     @BeforeEach
     public void setup() {
         this.userService.init();

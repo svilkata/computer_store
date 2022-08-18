@@ -38,7 +38,7 @@ class LoginControllerTest {
                         .param("password", "11111")
                         .with(csrf()))
                 .andExpect(status().is3xxRedirection());
-//                .andExpect(flash().attributeExists("bad_credentials", "userLoginDto"))
+//                .andExpect(flash().attributeExists("bad_credentials"));
 //                .andExpect(redirectedUrl("http://localhost/users/login"));
     }
 }

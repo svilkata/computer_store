@@ -57,7 +57,8 @@ public class AdminController {
 
     @PostMapping("/set-user-role")
 //    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public String addUserRoleConfirm(@Valid UserRolesBindingDTO userRolesBindingDTO, RedirectAttributes redirectAttributes) {
+    public String addUserRoleConfirm(@Valid UserRolesBindingDTO userRolesBindingDTO,
+                                     RedirectAttributes redirectAttributes) {
         if (userRolesBindingDTO.getUsername().isEmpty()) {
             redirectAttributes.addFlashAttribute("userRolesBindingDTO", userRolesBindingDTO);
             redirectAttributes.addFlashAttribute("employeeNotSelected", true);
