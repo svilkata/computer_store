@@ -1,5 +1,6 @@
 package bg.softuni.computerStore.web;
 
+import bg.softuni.computerStore.service.UserService;
 import bg.softuni.computerStore.service.eventServices.GlobalVariablesEventServices;
 import bg.softuni.computerStore.exception.BasketForbiddenException;
 import bg.softuni.computerStore.exception.ObjectIdNotANumberException;
@@ -33,10 +34,12 @@ import java.util.Objects;
 public class BasketAndOrderController {
     private final BasketService basketService;
     private final FinalOrderService finalOrderService;
+    private final UserService userService;
 
-    public BasketAndOrderController(BasketService basketService, FinalOrderService finalOrderService) {
+    public BasketAndOrderController(BasketService basketService, FinalOrderService finalOrderService, UserService userService) {
         this.basketService = basketService;
         this.finalOrderService = finalOrderService;
+        this.userService = userService;
     }
 
     //userId == uId
@@ -45,6 +48,10 @@ public class BasketAndOrderController {
                                       @PathVariable String uId,
                                       @AuthenticationPrincipal AppUser user) {
         final Long userId = isItemIdANumber(uId, "userId");
+
+        if (userId <= 0 || userId > userService.getCountOfRegisteredUsers()) {
+            throw new ObjectIdNotANumberException(String.format("%s is not a valid %s!", userId, "userId"));
+        }
         Long basketId = this.basketService.getBaskeIdByUserId(userId);
 
         if (basketId != null && !Objects.equals(user.getId(), userId)) {

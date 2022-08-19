@@ -241,4 +241,8 @@ public class UserService implements InitializableUserService {
 
         userRepository.save(userEntity);
     }
+
+    public int getCountOfRegisteredUsers(){
+        return this.userRepository.findAll().size();
+    }
 }

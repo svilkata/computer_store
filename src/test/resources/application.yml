@@ -3,9 +3,9 @@ spring:
     defer-datasource-initialization: true
     hibernate:
       properties:
-        dialect: org.hibernate.dialect.HSQLDialect
+        dialect: org.hibernate.dialect.H2Dialect
       ddl-auto: create-drop
-#    database-platform: org.hibernate.dialect.H2Dialect
+#    dialect: org.hibernate.dialect.HSQLDialect
   sql:
     init:
       mode: never

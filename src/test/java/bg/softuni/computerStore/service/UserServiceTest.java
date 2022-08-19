@@ -144,7 +144,7 @@ class UserServiceTest {
     }
 
     @Test
-    void registerEmployee() {
+    void registerEmployeeTest() {
         EmployeeRegisterBindingDTO employeeRegisterBindingDTO = new EmployeeRegisterBindingDTO();
         employeeRegisterBindingDTO
                 .setFirstName("Dragan")
@@ -161,7 +161,7 @@ class UserServiceTest {
     }
 
     @Test
-    void changeCurrentUserPassword() {
+    void changeCurrentUserPasswordTest() {
         ChangeUserPasswordDTO changeUserPasswordDTO = new ChangeUserPasswordDTO();
         changeUserPasswordDTO
                 .setUsername("sales")
@@ -177,5 +177,13 @@ class UserServiceTest {
         boolean checkPasswords = passwordEncoder.matches("22222", sales.getPassword());
 
         assertEquals(true, checkPasswords);
+    }
+
+    @Test
+    void getCountOfRegisteredUsersTest() {
+        int result = this.userService.getCountOfRegisteredUsers();
+        int expected = this.userRepository.findAll().size();
+
+        Assertions.assertEquals(expected, result);
     }
 }

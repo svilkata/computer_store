@@ -249,4 +249,21 @@ class AdminControllerTest {
                 .andExpect(flash().attribute("atLeastTwoRolesShouldBeSelected", true))
                 .andExpect(redirectedUrl("/pages/admins/register-new-employee"));
     }
+
+    @Test
+    @Order(15)
+    @WithMockUser(username = "admin", roles = {"ADMIN"})
+    void registerNewEmployeeConfirmTestLessThanTwoRolesAndBindingModelHasErrors() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.post(ADMIN_CONTROLLER_PREFIX + "/register-new-employee")
+                        .param("username", "")
+                        .param("email", "Tifwf@dqwed.com")
+                        .param("firstName", "")
+                        .param("lastName", "Tihomirov")
+                        .param("password", "1234")
+                        .param("roles", "EMPLOYEE_PURCHASES")
+                        .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(flash().attribute("atLeastTwoRolesShouldBeSelected", true))
+                .andExpect(redirectedUrl("/pages/admins/register-new-employee"));
+    }
 }

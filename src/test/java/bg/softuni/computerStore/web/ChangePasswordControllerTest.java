@@ -97,8 +97,8 @@ class ChangePasswordControllerTest {
     public void registerTestWhenOnlyBindingErrors() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.post(SALES_CONTROLLER_CHANGEPASSWORD)
                         .param("currentPassword", "11111")
-                        .param("newPassword", "22222")
-                        .param("confirmNewPassword", "11")
+                        .param("newPassword", "1234")
+                        .param("confirmNewPassword", "5678")
                         .with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(flash().attributeExists("changeUserPasswordDTO"))

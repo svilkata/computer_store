@@ -1,12 +1,16 @@
 package bg.softuni.computerStore.service;
 
+import bg.softuni.computerStore.model.entity.orders.BasketOrderEntity;
+import bg.softuni.computerStore.model.entity.users.UserEntity;
 import bg.softuni.computerStore.repository.orders.BasketRepository;
+import bg.softuni.computerStore.repository.users.UserRepository;
 import bg.softuni.computerStore.service.picturesServices.PictureService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -19,8 +23,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-//@DataJpaTest
-//@AutoConfigureTestDatabase
+@AutoConfigureTestDatabase
 @WithMockUser(username = "customer", roles = {"CUSTOMER"})
 class BasketServiceTest {
     @Autowired
@@ -36,6 +39,8 @@ class BasketServiceTest {
     private UserDetailsService appUserDetailsService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired
     private BasketService basketService;
@@ -125,47 +130,65 @@ class BasketServiceTest {
         Assertions.assertEquals(result, 1);
     }
 
-//    @Test
-//    void viewAllItemsFromOneBasket() {
-//    }
-//
-//    @Test
-//    void getUserIdByBasketId() {
-//    }
-//
-//    @Test
-//    void changeOrderedQuantity() {
-//    }
-//
-//    @Test
-//    void removeOneItemFromBasket() {
-//    }
-//
-//    @Test
-//    void getItemFromItemQuantityInBasketEntityByBasketItem() {
-//    }
-//
-//    @Test
-//    void readOneBasket() {
-//    }
-//
-//    @Test
-//    void getOneBasket() {
-//    }
-//
-//    @Test
-//    void getBaskeIdByUserId() {
-//    }
-//
-//    @Test
-//    void addBasketForRegisteredUser() {
-//    }
-//
-//    @Test
-//    void resetOneBasketWhen20MinutesPassed() {
-//    }
-//
-//    @Test
-//    void getAllBasketsCreatedMoreThan20MinutesAgo() {
-//    }
+    @Test
+    void viewAllItemsFromOneBasketTest() {
+        this.basketService.viewAllItemsFromOneBasket(1L);
+    }
+
+    @Test
+    void getUserIdByBasketIdTestSuccessfull() {
+        //For user 1, the basketId is 1
+        Long userIdByBasketId = this.basketService.getUserIdByBasketId(1L);
+
+        Assertions.assertEquals(1L, userIdByBasketId);
+    }
+
+    @Test
+    void changeOrderedQuantityTestSuccessfull() {
+        Long basketId = 1L;
+        Long itemId = 2L;
+        Long newQuantity = 3L;
+        this.basketService.changeOrderedQuantity(basketId, itemId, newQuantity);
+    }
+
+    @Test
+    void removeOneItemFromBasketTestNoMatterSuccessfullOrNot() {
+        Long basketId = 1L;
+        Long itemId = 2L;
+        this.basketService.removeOneItemFromBasket(basketId, itemId);
+    }
+
+    @Test
+    void readOneBasket() {
+        BasketOrderEntity basketOrder = this.basketService.readOneBasket(1L);
+        Assertions.assertEquals(basketOrder.getId(), 1L);
+    }
+
+    @Test
+    void getOneBasketTest() {
+        BasketOrderEntity basketOrder = this.basketService.getOneBasket(1L);
+        Assertions.assertEquals(basketOrder.getId(), 1L);
+    }
+
+    @Test
+    void getBaskeIdByUserIdTest() {
+        Long baskeIdByUserId = this.basketService.getBaskeIdByUserId(1L);
+        Assertions.assertEquals(baskeIdByUserId, 1L);
+    }
+
+    @Test
+    void addBasketForRegisteredUserTest() {
+        UserEntity userEntity = this.userRepository.findByUsername("purchase").orElseThrow();
+        this.basketService.addBasketForRegisteredUser(userEntity);
+    }
+
+    @Test
+    void resetOneBasketWhen20MinutesPassedTest() {
+        this.basketService.resetOneBasketWhen20MinutesPassed(1L);
+    }
+
+    @Test
+    void getAllBasketsCreatedMoreThan20MinutesAgoTest() {
+        this.basketService.getAllBasketsCreatedMoreThan20MinutesAgo();
+    }
 }

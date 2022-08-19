@@ -176,6 +176,7 @@ public class FinalOrderService implements InitializableFinalOrderService {
     }
 
     //iqo name comes from ItemQuantityInOrderEntity
+    // uuid here is order.getId()
     public List<ItemQuantityInOrderEntity> findIQOUUIDPrimary(UUID uuid) {
         List<ItemQuantityInOrderEntity> allByUUIDPrimary = this.quantitiesItemsInOrderRepository.findAllByUUIDPrimary(uuid);
         return allByUUIDPrimary;
