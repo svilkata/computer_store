@@ -36,6 +36,8 @@ public class PictureService implements InitializablePictureService {
             initOnePicture(3L, IMAGE_PUBLIC_ID_COMPUTER_3, IMAGE_URL_COMPUTER_3);
             initOnePicture(4L, IMAGE_PUBLIC_ID_COMPUTER_4, IMAGE_URL_COMPUTER_4);
             initOnePicture(5L, IMAGE_PUBLIC_ID_COMPUTER_5, IMAGE_URL_COMPUTER_5);
+            initOnePicture(5L, IMAGE_PUBLIC_ID_COMPUTER_6, IMAGE_URL_COMPUTER_6);
+            initOnePicture(5L, IMAGE_PUBLIC_ID_COMPUTER_7, IMAGE_URL_COMPUTER_7);
             initOnePicture(6L, IMAGE_PUBLIC_ID_MONITOR_1, IMAGE_URL_MONITOR_1);
             initOnePicture(7L, IMAGE_PUBLIC_ID_MONITOR_2, IMAGE_URL_MONITOR_2);
             initOnePicture(8L, IMAGE_PUBLIC_ID_MONITOR_3, IMAGE_URL_MONITOR_3);

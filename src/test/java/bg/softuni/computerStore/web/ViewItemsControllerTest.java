@@ -40,9 +40,9 @@ class ViewItemsControllerTest {
     @BeforeEach
     void setUp(){
         pictureService.init();
-        computerService.init();
-        monitorService.init();
-        laptopService.init();
+        computerService.init(); //7 items
+        monitorService.init();  //3 items
+        laptopService.init();  //1 item
     }
 
     @Test
@@ -93,7 +93,7 @@ class ViewItemsControllerTest {
 
     @Test
     void viewOneLaptopTest() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get(LAPTOP_PREFIX + "/details/" + 9))
+        mockMvc.perform(MockMvcRequestBuilders.get(LAPTOP_PREFIX + "/details/" + 11))
                 .andExpect(view().name("/viewItems/one-laptop-details"))
                 .andExpect(model().attributeExists("oneLaptop"))
                 .andExpect(status().isOk());

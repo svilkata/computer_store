@@ -88,7 +88,7 @@ class ComputerServiceTest {
         Long itemId = this.computerService.saveNewComputer(addUpdateComputerBindingDTO);
 
         //This is the 6th item we generate, and it is computer
-        Assertions.assertEquals(6L, itemId);
+        Assertions.assertEquals(8L, itemId);
     }
 
     @Test

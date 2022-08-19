@@ -68,6 +68,19 @@ public class ComputerService implements InitializableProductService {
                     "8 GB DDR4 2933 MHz SoDIMM", "512 GB SSD M.2 NVMe", "",
                     "23.8 (60.45cm) 1920x1080 IPS матов дисплей; 24 месеца гаранция",
                     IMAGE_PUBLIC_ID_COMPUTER_5);
+
+            initOneComputer("ASUS", "ASUS PN51 Mini - 90MR00K1-M00800_16GBSODIMM_512NVMESSD_W10P", 1830, 1950, 4,
+                    "AMD Ryzen 7 5700U (1.8/4.3GHz, 8M)", "AMD Radeon Vega 8 Graphics",
+                    "16 GB DDR4 SoDIMM", "512 GB SSD M.2 NVMe", "",
+                    "Поддържа M.2 SSD, Поддържа 2.5\" SSD/HDD.  24 месеца гаранция",
+                    IMAGE_PUBLIC_ID_COMPUTER_6);
+
+            // Zero
+            initOneComputer("Lenovo", "Lenovo IdeaCentre 5 Tower - 90RW005VRI", 1510, 1611, 0,
+                    "AMD Ryzen 5 5600G (3.9/4.4GHz, 16M)", "NVIDIA GTX 1650 Super 4GB",
+                    "16 GB DDR4 3200 MHz", "512 GB SSD M.2 NVMe", "",
+                    "24 месеца гаранция",
+                    IMAGE_PUBLIC_ID_COMPUTER_7);
         }
     }
 

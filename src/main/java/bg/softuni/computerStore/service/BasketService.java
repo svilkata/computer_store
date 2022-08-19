@@ -22,6 +22,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 public class BasketService implements InitializableBasketService {
@@ -152,6 +153,7 @@ public class BasketService implements InitializableBasketService {
 
     public int addNewItemToBasket(Long itemId, Long basketId) {
         BasketOrderEntity basketOrder = this.basketRepository.findBasketOrderEntitiesById(basketId).orElseThrow();
+//        BasketOrderEntity basketOrder = this.basketRepository.findBasketByIdEager(basketId).orElseThrow();
         ItemEntity itemToAdd = this.allItemsRepository.findById(itemId).orElseThrow();
         if (itemToAdd.getCurrentQuantity() == 0) {
             return -2; //zero quantity
@@ -165,7 +167,7 @@ public class BasketService implements InitializableBasketService {
             basketOrder.setCreationDateTime(LocalDateTime.now());
             newProductList.add(itemToAdd);
         } else {
-            if (products.contains(itemToAdd)) {
+            if (products.stream().map(p -> p.getItemId()).collect(Collectors.toList()).contains(itemToAdd.getItemId())) {
                 return -1; //product already added to the basket of the user
             } else {
                 for (ItemEntity product : products) {

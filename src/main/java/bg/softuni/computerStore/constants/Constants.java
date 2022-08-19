@@ -16,6 +16,12 @@ public class Constants {
     public final static String IMAGE_PUBLIC_ID_COMPUTER_5 = "fvvprmrsv3y8z69d4taj";
     public final static String IMAGE_URL_COMPUTER_5 = "https://res.cloudinary.com/dtfd8gw16/image/upload/v1658760551/computerStore/computers/fvvprmrsv3y8z69d4taj.jpg";
 
+    public final static String IMAGE_PUBLIC_ID_COMPUTER_6 = "xrj7ebfam52rdv3fxhxv";
+    public final static String IMAGE_URL_COMPUTER_6 = "https://res.cloudinary.com/dtfd8gw16/image/upload/v1660860177/computerStore/computers/xrj7ebfam52rdv3fxhxv.jpg";
+
+    public final static String IMAGE_PUBLIC_ID_COMPUTER_7 = "cbb2xlbrs0qepleqyrc5";
+    public final static String IMAGE_URL_COMPUTER_7 = "https://res.cloudinary.com/dtfd8gw16/image/upload/v1660860767/computerStore/computers/cbb2xlbrs0qepleqyrc5.jpg";
+
     public final static String IMAGE_PUBLIC_ID_MONITOR_1 = "vzatlbjnobgshvq1inlg";
     public final static String IMAGE_URL_MONITOR_1 = "https://res.cloudinary.com/dtfd8gw16/image/upload/v1658780154/computerStore/monitors/vzatlbjnobgshvq1inlg.jpg";
 
