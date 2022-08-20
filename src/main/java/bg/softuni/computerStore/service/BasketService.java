@@ -97,7 +97,7 @@ public class BasketService implements InitializableBasketService {
         this.basketRepository.save(basketOrder4);
 
         //==>>
-         for (ItemEntity basketOrder4OneItem : basketOrder4Items) {
+        for (ItemEntity basketOrder4OneItem : basketOrder4Items) {
             ItemQuantityInBasketEntity rec = new ItemQuantityInBasketEntity();
             int boughtQuantity = 2;
             int orderedQuantity = checkBeginningAvailableQuantityOfItem(basketOrder4OneItem, boughtQuantity);
@@ -125,7 +125,6 @@ public class BasketService implements InitializableBasketService {
             this.quantitiesItemsInBasketRepository.save(rec);
         }
     }
-
 
     private int checkBeginningAvailableQuantityOfItem(ItemEntity basketOrderOnеItem, int extraBought) {
         if (basketOrderOnеItem.getCurrentQuantity() > extraBought) {  //we have available quantity stock
@@ -155,7 +154,7 @@ public class BasketService implements InitializableBasketService {
     public int addNewItemToBasket(Long itemId, Long basketId) {
         BasketOrderEntity basketOrder = this.basketRepository.findBasketOrderEntitiesById(basketId).orElseThrow();
 //        BasketOrderEntity basketOrder = this.basketRepository.findBasketByIdEager(basketId).orElseThrow();
-            ItemEntity itemToAdd = this.allItemsRepository.findById(itemId).orElseThrow();
+        ItemEntity itemToAdd = this.allItemsRepository.findById(itemId).orElseThrow();
         if (itemToAdd.getCurrentQuantity() == 0) {
             return -2; //zero quantity
         }
@@ -377,6 +376,10 @@ public class BasketService implements InitializableBasketService {
         }
 
         return resetListToReturn;
+    }
+
+    public int getCountOfBaskets() {
+        return this.basketRepository.findAll().size();
     }
 }
 

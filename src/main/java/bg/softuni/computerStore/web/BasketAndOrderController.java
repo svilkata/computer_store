@@ -73,6 +73,9 @@ public class BasketAndOrderController {
         final Long basketId = isItemIdANumber(bId, "basketId");
         Long userId = this.basketService.getUserIdByBasketId(basketId);
 
+        if (basketId <= 0 || basketId > basketService.getCountOfBaskets()) {
+            throw new ObjectIdNotANumberException(String.format("%s is not a valid %s!", basketId, "basketId"));
+        }
         if (userId != null && !Objects.equals(user.getId(), userId)) {
             throw new BasketForbiddenException(String.format("You do not have authorization to the confirmation page of the basket into a final order - for user with id %d ", userId));
         }
@@ -108,6 +111,10 @@ public class BasketAndOrderController {
                                                          HttpSession httpSession) {
         final Long basketId = isItemIdANumber(bId, "basketId");
         Long userId = this.basketService.getUserIdByBasketId(basketId);
+
+        if (basketId <= 0 || basketId > basketService.getCountOfBaskets()) {
+            throw new ObjectIdNotANumberException(String.format("%s is not a valid %s!", basketId, "basketId"));
+        }
 
         if (userId != null && !Objects.equals(user.getId(), userId)) {
             throw new BasketForbiddenException(String.format("You do not have authorization to confirm the basket of user with id %d into a final order", userId));

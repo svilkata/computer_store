@@ -19,6 +19,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -44,8 +45,8 @@ class BasketServiceTest {
 
     @Autowired
     private BasketService basketService;
-//    @Autowired
-//    private FinalOrderService finalOrderService;
+    @Autowired
+    private BasketRepository basketRepository;
 
     @BeforeEach
     void setUp() {
@@ -58,7 +59,6 @@ class BasketServiceTest {
         loginUser("admin");
 
         this.basketService.init();
-//        this.finalOrderService.init();
     }
 
     private void loginUser(String username) {
@@ -79,12 +79,14 @@ class BasketServiceTest {
     }
 
     @Test
+    @Transactional
     void resetOneBasketWhenFinalOrderConfirmedTestSuccessfull() {
         Long openBasketWithId = 1L;
         this.basketService.resetOneBasketWhenFinalOrderConfirmed(openBasketWithId);
     }
 
     @Test
+    @Transactional
     void addNewItemToBasketTestSuccessfull() {
         Long itemWIthItemIdForAddingToBasket = 8L;
         Long basketWithIdToAddItemIn = 4L;
@@ -94,6 +96,7 @@ class BasketServiceTest {
     }
 
     @Test
+    @Transactional
     void addNewItemToBasketTestItemHasZeroQuantity() {
         Long itemWithItemIdForAddingToBasketWithZeroQuantity = 7L;
         Long basketWithIdToAddItemIn = 4L;
@@ -103,6 +106,7 @@ class BasketServiceTest {
     }
 
     @Test
+    @Transactional
     void addNewItemToBasketTestWhenWeTryAddSecondTimeSameProduct() {
         //Arrange
         Long itemWithItemIdTwoTimes = 8L;
@@ -117,6 +121,7 @@ class BasketServiceTest {
     }
 
     @Test
+    @Transactional
     void addNewItemToBasketTestSuccessfullWhenInitialBasketIsEmpty() {
         //Arrange
         Long itemWithItemId = 8L;
@@ -131,6 +136,7 @@ class BasketServiceTest {
     }
 
     @Test
+    @Transactional
     void viewAllItemsFromOneBasketTest() {
         this.basketService.viewAllItemsFromOneBasket(1L);
     }
@@ -144,6 +150,7 @@ class BasketServiceTest {
     }
 
     @Test
+    @Transactional
     void changeOrderedQuantityTestSuccessfull() {
         Long basketId = 1L;
         Long itemId = 2L;
@@ -152,6 +159,7 @@ class BasketServiceTest {
     }
 
     @Test
+    @Transactional
     void removeOneItemFromBasketTestNoMatterSuccessfullOrNot() {
         Long basketId = 1L;
         Long itemId = 2L;
@@ -165,6 +173,7 @@ class BasketServiceTest {
     }
 
     @Test
+    @Transactional
     void getOneBasketTest() {
         BasketOrderEntity basketOrder = this.basketService.getOneBasket(1L);
         Assertions.assertEquals(basketOrder.getId(), 1L);
@@ -183,6 +192,7 @@ class BasketServiceTest {
     }
 
     @Test
+    @Transactional
     void resetOneBasketWhen20MinutesPassedTest() {
         this.basketService.resetOneBasketWhen20MinutesPassed(1L);
     }
@@ -190,5 +200,13 @@ class BasketServiceTest {
     @Test
     void getAllBasketsCreatedMoreThan20MinutesAgoTest() {
         this.basketService.getAllBasketsCreatedMoreThan20MinutesAgo();
+    }
+
+    @Test
+    void getCountOfBasketsTest(){
+        int result = this.basketService.getCountOfBaskets();
+        int expected = this.basketRepository.findAll().size();
+
+        Assertions.assertEquals(expected, result);
     }
 }

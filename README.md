@@ -89,6 +89,8 @@
 * using MySQL
 * implemented Single Table inheritance for all the products
 * all tables interconnected one another relationally
+* userId е реално винаги и basketId
+* към момента заложената релационна връзка е да има повече от една кошница за user, но ние реално ползваме само една единствена кошница за user 
 * Особеност при basket и order - имаме един кръг от четири таблици свързани релационно и можем да подходим от две посоки за каквото и да е
 ![img_1.png](img_1.png)
 
@@ -161,18 +163,18 @@
 
 ### Unit and integration testing
 ### Coverage so far - global lines 681 (32%), service logic lines 451 (58%), web layer controllers lines 127 (27%)
-* Unit testing in the services
-* Integration testing in the web controllers and in the services - with in-memory database HyperSQL Database
+* Integration testing in the web controllers and in the services - with in-memory database HyperSQL database and/or H2 database
 * Important notes before starting testing:
   - first, disable in the class AppSeedInit.java  the @PostConstrict annotated method beginInit()
   - second, copy the real CLOUDINARY_SECRET in the application.yml in the test section // or other option is to set Enviromental Variables for every test class manually
 * For testing - do not use columnDefinition @Column(name = "more_info", columnDefinition = "TEXT") - (in the ItemEntity class for field moreInfo, I removed the columnDefinition so that the in-memory HyperSQL grammar is satisfied)
+* Testing with BasketServiceTest.java  - test each method separately as I am using @Transactional to re-enable the Hibernate session
 
 
 
 
 ## III. General MORE TODOs
-### SoftUni TODOs
+### SoftUni MUST-TODOs
 * Implement one or more Advice (AOP).
 * Host the application in a cloud environment.
 
