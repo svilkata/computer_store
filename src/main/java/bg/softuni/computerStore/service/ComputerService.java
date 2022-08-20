@@ -63,20 +63,20 @@ public class ComputerService implements InitializableProductService {
                     "36 месеца гаранция",
                     IMAGE_PUBLIC_ID_COMPUTER_4);
 
-            initOneComputer("HP", "HP Pavilion 24-k1024nu All-in-One - 5Z7T6EA", 1700, 1807, 4,
+            initOneComputer("HP", "HP Pavilion 24-k1024nu All-in-One - 5Z7T6EA", 1700, 1807, 8,
                     "Intel Core i5-11500T (1.5/3.9GHz, 12M)", "Intel UHD Graphics 750",
                     "8 GB DDR4 2933 MHz SoDIMM", "512 GB SSD M.2 NVMe", "",
                     "23.8 (60.45cm) 1920x1080 IPS матов дисплей; 24 месеца гаранция",
                     IMAGE_PUBLIC_ID_COMPUTER_5);
 
-            initOneComputer("ASUS", "ASUS PN51 Mini - 90MR00K1-M00800_16GBSODIMM_512NVMESSD_W10P", 1830, 1950, 4,
+            initOneComputer("ASUS", "ASUS PN51 Mini - 90MR00K1-M00800_16GBSODIMM_512NVMESSD_W10P", 1830, 1950, 7,
                     "AMD Ryzen 7 5700U (1.8/4.3GHz, 8M)", "AMD Radeon Vega 8 Graphics",
                     "16 GB DDR4 SoDIMM", "512 GB SSD M.2 NVMe", "",
                     "Поддържа M.2 SSD, Поддържа 2.5\" SSD/HDD.  24 месеца гаранция",
                     IMAGE_PUBLIC_ID_COMPUTER_6);
 
             // Zero
-            initOneComputer("Lenovo", "Lenovo IdeaCentre 5 Tower - 90RW005VRI", 1510, 1611, 0,
+            initOneComputer("Lenovo", "Lenovo IdeaCentre 5 Tower - 90RW005VRI", 1510, 1611, 1,
                     "AMD Ryzen 5 5600G (3.9/4.4GHz, 16M)", "NVIDIA GTX 1650 Super 4GB",
                     "16 GB DDR4 3200 MHz", "512 GB SSD M.2 NVMe", "",
                     "24 месеца гаранция",

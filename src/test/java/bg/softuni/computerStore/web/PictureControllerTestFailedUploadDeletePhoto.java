@@ -1,5 +1,6 @@
 package bg.softuni.computerStore.web;
 
+import bg.softuni.computerStore.exception.MyFileDestroyFromCloudinaryException;
 import bg.softuni.computerStore.exception.MyFileUploadException;
 import bg.softuni.computerStore.model.binding.cloudinary.PictureBindingModel;
 import bg.softuni.computerStore.model.entity.picture.PictureEntity;
@@ -32,7 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureTestDatabase
 @AutoConfigureMockMvc
 @WithMockUser(username = "purchase", roles = {"EMPLOYEE_PURCHASES"})
-public class PictureControllerTest {
+public class PictureControllerTestFailedUploadDeletePhoto {
     private static final String PURCHASE_CONTROLLER_PREFIX = "/pages/purchases";
     private Long itemId = 1L;
 
@@ -43,11 +44,11 @@ public class PictureControllerTest {
     @Autowired
     private UserService userService;
 
-    private PictureBindingModel pictureBindingModelSuccess;
+    private PictureBindingModel pictureBindingModelWrong;
     private MockMultipartFile mockedMultipartFile;
 
     @MockBean
-    private PictureService mockedPictureServiceSuccess;
+    private PictureService mockedPictureServiceWrong;
 
     @BeforeEach
     public void setup() {
@@ -64,7 +65,7 @@ public class PictureControllerTest {
                 MediaType.TEXT_PLAIN_VALUE,
                 "Hello World".getBytes());
 
-        pictureBindingModelSuccess = new PictureBindingModel().setPicture(mockedMultipartFile);
+        pictureBindingModelWrong = new PictureBindingModel().setPicture(mockedMultipartFile);
 
         PictureEntity pictureEntity = new PictureEntity()
                 .setPublicId("public_id")
@@ -72,14 +73,7 @@ public class PictureControllerTest {
                 .setItemId(itemId)
                 .setId(1L);
 
-        doReturn(pictureEntity).when(mockedPictureServiceSuccess)
-                .createPictureEntity(pictureBindingModelSuccess.getPicture(), itemId);
-//        when(this.mockedPictureService.createPictureEntity(pictureBindingModel.getPicture(), itemId))
-//                .thenReturn(pictureEntity);
-
-        doNothing().when(this.mockedPictureServiceSuccess).savePhoto(pictureEntity);
-
-//        pictureController = new PictureController(mockedPictureService); // we do not need it
+        doNothing().when(this.mockedPictureServiceWrong).savePhoto(pictureEntity);
     }
 
     private void loginUser(String username) {
@@ -100,7 +94,11 @@ public class PictureControllerTest {
     }
 
     @Test
-    void addComputerPictureTestSuccessfull() throws Exception {
+    void addComputerPictureTestConflictDuringUpload() throws Exception {
+        Exception e = null;
+        when(mockedPictureServiceWrong.createPictureEntity(pictureBindingModelWrong.getPicture(), itemId))
+                .thenThrow(new MyFileUploadException("Can not upload file", e));
+
         MockHttpServletRequestBuilder builder = MockMvcRequestBuilders
                 .multipart(PURCHASE_CONTROLLER_PREFIX + "/computers/" + this.itemId + "/addpicture")
                 .file(mockedMultipartFile)
@@ -109,21 +107,25 @@ public class PictureControllerTest {
 
 
         mockMvc.perform(builder)
-                .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/items/all/computer/details/" + this.itemId));
+                .andExpect(view().name("errors/upload-to-cloudinary-conflict"))
+                .andExpect(status().is4xxClientError());
     }
 
     @Test
-    void addMonitorPicture() throws Exception {
+    void addComputerPictureTestConflictDuringDelete() throws Exception {
+        Exception e = null;
+        when(mockedPictureServiceWrong.createPictureEntity(pictureBindingModelWrong.getPicture(), itemId))
+                .thenThrow(new MyFileDestroyFromCloudinaryException("Error deleting from cloudinary a file with publicId ", e));
+
         MockHttpServletRequestBuilder builder = MockMvcRequestBuilders
-                .multipart(PURCHASE_CONTROLLER_PREFIX + "/monitors/" + this.itemId + "/addpicture")
+                .multipart(PURCHASE_CONTROLLER_PREFIX + "/computers/" + this.itemId + "/addpicture")
                 .file(mockedMultipartFile)
                 .param("itemId", this.itemId + "")
                 .with(csrf());
 
 
         mockMvc.perform(builder)
-                .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/items/all/monitor/details/" + this.itemId));
+                .andExpect(view().name("errors/delete-from-cloudinary-conflict"))
+                .andExpect(status().is4xxClientError());
     }
 }

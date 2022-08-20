@@ -63,7 +63,6 @@ public class GlobalExceptionHandler {
         return modelAndView;
     }
 
-    //TODO: these 2 below I can test in the picture controller
     @ExceptionHandler(value = {MyFileUploadException.class})
     public ModelAndView handleUploadToCloudinaryExceptions(MyFileUploadException e) {
         ModelAndView modelAndView = new ModelAndView("errors/upload-to-cloudinary-conflict");

@@ -162,7 +162,7 @@
 * //TODO - глобална търсачка в commons.html за всички типове продукти - по тип на продукта + име на модел/цена по-голяма от... - само чрез Thymeleaf
 
 ### Unit and integration testing
-### Coverage so far - global lines 681 (32%), service logic lines 451 (58%), web layer controllers lines 127 (27%)
+### Coverage so far - global lines 1253 (59%), service logic lines 751 (98%), web layer controllers lines 399 (83%)
 * Integration testing in the web controllers and in the services - with in-memory database HyperSQL database and/or H2 database
 * Important notes before starting testing:
   - first, disable in the class AppSeedInit.java  the @PostConstrict annotated method beginInit()

@@ -32,7 +32,6 @@ public class BasketService implements InitializableBasketService {
     private final AllItemsRepository allItemsRepository;
     private final QuantitiesItemsInBasketRepository quantitiesItemsInBasketRepository;
 
-
     public BasketService(BasketRepository basketRepository, UserRepository userRepository, AllItemsRepository allItemsRepository, QuantitiesItemsInBasketRepository quantitiesItemsInBasketRepository) {
         this.basketRepository = basketRepository;
         this.userRepository = userRepository;
@@ -64,7 +63,7 @@ public class BasketService implements InitializableBasketService {
 
         //Basket 2
         UserEntity purchase = userRepository.findByUsername("purchase").orElseThrow();
-        List<ItemEntity> basketOrder2Items = allItemsInTheCurrentBasket.subList(6, 8);
+        List<ItemEntity> basketOrder2Items = allItemsInTheCurrentBasket.subList(8, 9);
         BasketOrderEntity basketOrder2 = new BasketOrderEntity()
                 .setUser(purchase)
                 .setProducts(basketOrder2Items)
@@ -76,7 +75,7 @@ public class BasketService implements InitializableBasketService {
 
         //Basket 3
         UserEntity sales = userRepository.findByUsername("sales").orElseThrow();
-        List<ItemEntity> basketOrder3Items = allItemsInTheCurrentBasket.subList(3, 6);
+        List<ItemEntity> basketOrder3Items = allItemsInTheCurrentBasket.subList(2, 3);
         BasketOrderEntity basketOrder3 = new BasketOrderEntity()
                 .setUser(sales)
                 .setProducts(basketOrder3Items)
@@ -99,7 +98,7 @@ public class BasketService implements InitializableBasketService {
         //==>>
         for (ItemEntity basketOrder4OneItem : basketOrder4Items) {
             ItemQuantityInBasketEntity rec = new ItemQuantityInBasketEntity();
-            int boughtQuantity = 2;
+            int boughtQuantity = 1;
             int orderedQuantity = checkBeginningAvailableQuantityOfItem(basketOrder4OneItem, boughtQuantity);
             rec
                     .setBasket(basketOrder4)
@@ -252,15 +251,15 @@ public class BasketService implements InitializableBasketService {
 
         int changedQuantity = currentItemQuantityInTheBasket.getQuantityBought() - newQtityOfItemInBasket;
 
-        //when we try to order negative quantity
-        if (currentItemQuantityInTheBasket.getQuantityBought() == 0 && newQtityOfItemInBasket == 0) {
+        //when we try to order negative quantity or zero quantity
+        if (currentItemQuantityInTheBasket.getQuantityBought() >= 0 && newQtityOfItemInBasket <= 0) {
             return -2; //negative quantity
         }
 
         //we have not changed the ordered quantity
-        if (changedQuantity == 0) {
-            return -2; //negative quantity
-        }
+//        if (changedQuantity == 0) {
+//            return -3; //no change in the quantity
+//        }
 
         //we deduct the quantity bought
         if (changedQuantity > 0) {

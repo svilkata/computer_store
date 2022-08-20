@@ -47,10 +47,10 @@ public class BasketAndOrderController {
     public String viewBasketWithItems(Model model,
                                       @PathVariable String uId,
                                       @AuthenticationPrincipal AppUser user) {
-        final Long userId = isItemIdANumber(uId, "userId");
+        final Long userId = isObjectIdANumber(uId, "userId");
 
         if (userId <= 0 || userId > userService.getCountOfRegisteredUsers()) {
-            throw new ObjectIdNotANumberException(String.format("%s is not a valid %s!", userId, "userId"));
+            throw new ObjectIdNotANumberException(String.format("%s is not a valid existing %s number!", userId, "userId"));
         }
         Long basketId = this.basketService.getBaskeIdByUserId(userId);
 
@@ -70,15 +70,11 @@ public class BasketAndOrderController {
     public String viewOrderWithItemsAndAddAddress(Model model,
                                                   @PathVariable String bId,
                                                   @AuthenticationPrincipal AppUser user) {
-        final Long basketId = isItemIdANumber(bId, "basketId");
+        final Long basketId = isObjectIdANumber(bId, "basketId");
         Long userId = this.basketService.getUserIdByBasketId(basketId);
 
-        if (basketId <= 0 || basketId > basketService.getCountOfBaskets()) {
-            throw new ObjectIdNotANumberException(String.format("%s is not a valid %s!", basketId, "basketId"));
-        }
-        if (userId != null && !Objects.equals(user.getId(), userId)) {
-            throw new BasketForbiddenException(String.format("You do not have authorization to the confirmation page of the basket into a final order - for user with id %d ", userId));
-        }
+        isBasketIdAValidExistingNumber(basketId);
+        doesUserHasAccessToBasket(user, userId);
 
         OneBasketViewModel basket = this.basketService.viewAllItemsFromOneBasket(basketId);
 
@@ -109,16 +105,11 @@ public class BasketAndOrderController {
                                                          @PathVariable String bId,
                                                          @AuthenticationPrincipal AppUser user,
                                                          HttpSession httpSession) {
-        final Long basketId = isItemIdANumber(bId, "basketId");
+        final Long basketId = isObjectIdANumber(bId, "basketId");
         Long userId = this.basketService.getUserIdByBasketId(basketId);
 
-        if (basketId <= 0 || basketId > basketService.getCountOfBaskets()) {
-            throw new ObjectIdNotANumberException(String.format("%s is not a valid %s!", basketId, "basketId"));
-        }
-
-        if (userId != null && !Objects.equals(user.getId(), userId)) {
-            throw new BasketForbiddenException(String.format("You do not have authorization to confirm the basket of user with id %d into a final order", userId));
-        }
+        isBasketIdAValidExistingNumber(basketId);
+        doesUserHasAccessToBasket(user, userId);
 
         OneBasketViewModel basket = this.basketService.viewAllItemsFromOneBasket(basketId);
         if (bindingResult.hasErrors()) {
@@ -211,13 +202,25 @@ public class BasketAndOrderController {
         return "/customer/view-orders";
     }
 
-    private Long isItemIdANumber(String objectId, String comment) {
+    private Long isObjectIdANumber(String objectId, String comment) {
         final Long userLongId;
         try {
             userLongId = Long.parseLong(objectId);
         } catch (Exception e) {
-            throw new ObjectIdNotANumberException(String.format("%s is not a valid %s!", objectId, comment));
+            throw new ObjectIdNotANumberException(String.format("%s is not a %s number!", objectId, comment));
         }
         return userLongId;
+    }
+
+    private void isBasketIdAValidExistingNumber(Long basketId) {
+        if (basketId <= 0 || basketId > basketService.getCountOfBaskets()) {
+            throw new ObjectIdNotANumberException(String.format("%s is not a valid existing %s number!", basketId, "basketId"));
+        }
+    }
+
+    private void doesUserHasAccessToBasket(AppUser user, Long userId) {
+        if (userId != null && !Objects.equals(user.getId(), userId)) {
+            throw new BasketForbiddenException(String.format("You do not have authorization to confirm the basket of user with id %d into a final order", userId));
+        }
     }
 }
