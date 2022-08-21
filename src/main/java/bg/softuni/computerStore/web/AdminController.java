@@ -1,5 +1,6 @@
 package bg.softuni.computerStore.web;
 
+import bg.softuni.computerStore.aop.TrackLatency;
 import bg.softuni.computerStore.model.binding.user.EmployeeRegisterBindingDTO;
 import bg.softuni.computerStore.model.binding.user.UserRolesBindingDTO;
 import bg.softuni.computerStore.model.view.stats.StatsViewModelReportSales;
@@ -36,6 +37,7 @@ public class AdminController {
         return modelAndView;
     }
 
+    @TrackLatency(latency = "get sales statistics")
     @GetMapping("/statssales")
 //    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     public ModelAndView statisticsSales() {

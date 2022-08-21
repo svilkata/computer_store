@@ -161,6 +161,12 @@
 * Търсене на поръчки - според ролите на user-а - чрез Rest и Fetch Api (jQuery and JS)
 * //TODO - глобална търсачка в commons.html за всички типове продукти - по тип на продукта + име на модел/цена по-голяма от... - само чрез Thymeleaf
 
+
+### Advice (AOP)
+* Implemented Around Advice for tracking the latency of a few operations - adding an item to the basket, creating the fina order, get sales statistics
+* The latency info is saved in logs/logfile.log
+
+
 ### Unit and integration testing
 ### Coverage so far - global lines 1253 (59%), service logic lines 751 (98%), web layer controllers lines 399 (83%)
 * Integration testing in the web controllers and in the services - with in-memory database HyperSQL database and/or H2 database
@@ -171,14 +177,14 @@
 * Testing with BasketServiceTest.java  - test each method separately as I am using @Transactional to re-enable the Hibernate session
 
 
+### Host the application in a cloud environment
+* //TODO:
+
+
+
 
 
 ## III. General MORE TODOs
-### SoftUni MUST-TODOs
-* Implement one or more Advice (AOP).
-* Host the application in a cloud environment.
-
-### Other TODOs
 * Накрая на представянето на проекта, може да добавя за демо, да се инициализират и 2 монитора от data.sql файла, но по принцип не му харесва на Hibernate след това. Сменяме от never на always, добавяме си 2 мониторa, a след това задаваме 'never' веднага преди ново пускане на системата
   sql:
   init:

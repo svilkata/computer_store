@@ -213,15 +213,6 @@ class RestBasketControllerTest {
     }
 
     @Test
-    void addItemToBasketTestSuccessfull() throws Exception {
-        //itemIds 6 and 7
-        //we add item 4 in the basket
-        this.mockMvc.perform(get("/users/basket/additemtobasket/{itmId}", 4)
-                        .with(csrf()))
-                .andExpect(status().isAccepted());
-    }
-
-    @Test
     void addItemToBasketTestItemAlreadyAddedInBasket() throws Exception {
         //itemIds 6 and 7
         //we try to add item 6 in the basket

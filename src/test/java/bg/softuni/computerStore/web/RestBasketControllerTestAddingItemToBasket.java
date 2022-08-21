@@ -21,7 +21,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.Optional;
 
 import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -31,7 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureTestDatabase
 @AutoConfigureMockMvc
 @WithMockUser(username = "customer", roles = {"CUSTOMER"})
-class RestBasketControllerTestRemovingItemFromBasket {
+class RestBasketControllerTestAddingItemToBasket {
     @Autowired
     private MockMvc mockMvc;
 
@@ -86,16 +85,11 @@ class RestBasketControllerTestRemovingItemFromBasket {
     }
 
     @Test
-    void removeOneItemFromBasketTestSuccessfull() throws Exception {
-        Optional<UserEntity> customer = this.userRepository.findByUsername("customer");
-        Long basketAndUserId = customer.get().getId();
-
-        //itemIds 6 - 1 quantity and 7 - 1 quantity
-        this.mockMvc.perform(get("/users/basket/removeOneItemFromBasket/{bId}", basketAndUserId)
-                        .queryParam("itemId", 6 + "")
+    void addItemToBasketTestSuccessfull() throws Exception {
+        //itemIds 6 and 7
+        //we add item 4 in the basket
+        this.mockMvc.perform(get("/users/basket/additemtobasket/{itmId}", 4)
                         .with(csrf()))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.items", hasSize(1)));
+                .andExpect(status().isAccepted());
     }
-
 }

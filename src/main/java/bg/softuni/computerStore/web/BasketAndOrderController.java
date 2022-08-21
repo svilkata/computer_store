@@ -1,5 +1,6 @@
 package bg.softuni.computerStore.web;
 
+import bg.softuni.computerStore.aop.TrackLatency;
 import bg.softuni.computerStore.service.UserService;
 import bg.softuni.computerStore.service.eventServices.GlobalVariablesEventServices;
 import bg.softuni.computerStore.exception.BasketForbiddenException;
@@ -98,6 +99,7 @@ public class BasketAndOrderController {
     }
 
     //basketId == bId
+    @TrackLatency(latency = "create order")
     @PostMapping("/users/order/{bId}")
     public String viewOrderWithItemsAndAddAddressConfirm(@Valid ClientOrderExtraInfoGetViewModel clientExtraOrderInfo,
                                                          BindingResult bindingResult,

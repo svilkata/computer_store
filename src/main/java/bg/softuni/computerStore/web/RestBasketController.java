@@ -1,5 +1,6 @@
 package bg.softuni.computerStore.web;
 
+import bg.softuni.computerStore.aop.TrackLatency;
 import bg.softuni.computerStore.exception.BasketForbiddenException;
 import bg.softuni.computerStore.exception.ObjectIdNotANumberException;
 import bg.softuni.computerStore.model.view.order.OneBasketViewModel;
@@ -91,6 +92,7 @@ public class RestBasketController {
         return ResponseEntity.ok(basket);  //Successfull 200
     }
 
+    @TrackLatency(latency = "adding item to basket")
     @GetMapping("/users/basket/additemtobasket/{itmId}")
     public ResponseEntity<String> addItemToBasket(@PathVariable String itmId,
                                                   @AuthenticationPrincipal AppUser user) {
