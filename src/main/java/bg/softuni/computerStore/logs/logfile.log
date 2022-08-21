@@ -1,3 +1,15 @@
 21-08-2022 12:07:51 The latency for get sales statistics is: 22ms
 21-08-2022 12:08:51 The latency for create order is: 79ms
 21-08-2022 12:12:17 The latency for adding item to basket is: 129ms
+21-08-2022 13:52:50 The latency for get sales statistics is: 36ms
+21-08-2022 13:53:42 The latency for create order is: 19ms
+21-08-2022 13:53:43 The latency for create order is: 62ms
+21-08-2022 13:58:11 The latency for adding item to basket is: 11ms
+21-08-2022 13:58:11 The latency for adding item to basket is: 8ms
+21-08-2022 13:58:42 The latency for adding item to basket is: 65ms
+21-08-2022 16:19:13 The latency for get sales statistics is: 17ms
+21-08-2022 16:19:56 The latency for create order is: 15ms
+21-08-2022 16:19:57 The latency for create order is: 37ms
+21-08-2022 16:23:19 The latency for adding item to basket is: 9ms
+21-08-2022 16:23:20 The latency for adding item to basket is: 8ms
+21-08-2022 16:23:46 The latency for adding item to basket is: 51ms

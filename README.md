@@ -161,14 +161,13 @@
 * Търсене на поръчки - според ролите на user-а - чрез Rest и Fetch Api (jQuery and JS)
 * //TODO - глобална търсачка в commons.html за всички типове продукти - по тип на продукта + име на модел/цена по-голяма от... - само чрез Thymeleaf
 
-
 ### Advice (AOP)
 * Implemented Around Advice for tracking the latency of a few operations - adding an item to the basket, creating the fina order, get sales statistics
 * The latency info is saved in logs/logfile.log
 
-
 ### Unit and integration testing
-### Coverage so far - global lines 1253 (59%), service logic lines 751 (98%), web layer controllers lines 399 (83%)
+### Coverage so far - service logic 751 lines (98%), web layer controllers 462 lines (96%). Global lines coverage - 1317 lines (61%)
+![img_2.png](img_2.png)
 * Integration testing in the web controllers and in the services - with in-memory database HyperSQL database and/or H2 database
 * Important notes before starting testing:
   - first, disable in the class AppSeedInit.java  the @PostConstrict annotated method beginInit()

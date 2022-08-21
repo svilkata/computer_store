@@ -151,6 +151,7 @@ public class BasketAndOrderController {
 
         OneOrderDetailsViewModel orderDetailsViewModel = new OneOrderDetailsViewModel();
 
+        //!!! checking also if the order number exists or not
         FinalOrderEntity finalOrderEntity = this.finalOrderService.getOrderByOrderNumber(orderNumber);
         orderDetailsViewModel
                 .setOrderNumber(finalOrderEntity.getOrderNumber())

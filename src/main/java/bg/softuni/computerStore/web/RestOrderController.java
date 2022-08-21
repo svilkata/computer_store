@@ -1,6 +1,7 @@
 package bg.softuni.computerStore.web;
 
 import bg.softuni.computerStore.exception.OrderForbiddenException;
+import bg.softuni.computerStore.exception.OrderNotFoundException;
 import bg.softuni.computerStore.model.entity.orders.FinalOrderEntity;
 import bg.softuni.computerStore.model.view.order.OneOrderInManyOrdersViewModel;
 import bg.softuni.computerStore.service.FinalOrderService;
@@ -50,7 +51,7 @@ public class RestOrderController {
                     "EMPLOYEE_SALES cannot change order status!");
         }
 
-        //checking only if the order number exists or not
+        //!!! checking only if the order number exists or not
         this.finalOrderService.getOrderByOrderNumber(orderNumber);
 
         Long userId = user.getId();
