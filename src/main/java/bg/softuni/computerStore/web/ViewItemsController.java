@@ -8,6 +8,7 @@ import bg.softuni.computerStore.service.LaptopService;
 import bg.softuni.computerStore.service.MonitorService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -42,7 +43,10 @@ public class ViewItemsController {
 
     @GetMapping("/computer")
     public String viewAllComputers(Model model,
-                                  @PageableDefault(page = 0, size = 3) Pageable pageable) {
+                                   @PageableDefault(page = 0,
+                                           size = 3,
+                                           sort = "sellingPrice",
+                                           direction = Sort.Direction.ASC) Pageable pageable) {
         if (!model.containsAttribute("computers")) {
 //            List<ComputerViewGeneralModel> computers = this.computerService.findAllComputers();
             Page<ComputerViewGeneralModel> computers = this.computerService.getAllComputersPageable(pageable);
@@ -92,7 +96,6 @@ public class ViewItemsController {
 
         return "/viewItems/all-laptops";
     }
-
 
 
 }

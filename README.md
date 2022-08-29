@@ -127,8 +127,8 @@
 3. More customs error handling experience with @ControllerAdvice
 * using global application exception handling with @ControllerAdvice on all GET operations - connected with items, baskets, orders
 * Exceptions for @ControllerAdvice for POST, PATCH, DELETE operations not needed as they are secured by the Spring security and CSFR (but I included them also for extra security)
-4. //TODO - Nobody can see other baskets and/or the page confirming the basket into a final order - except his/her own basket - one more handler here to add
-5. Only EMPLOYEE_SALES and ADMIN can see all the final orders. EMPLOYEE_PURCHASES and CUSTOMER can see only their own orders.
+4. Nobody can see other baskets and/or the page confirming the basket into a final order - except his/her own basket.
+5. Only users who have roles EMPLOYEE_SALES and ADMIN can see all the final orders. EMPLOYEE_PURCHASES and CUSTOMER can see only their own orders.
 
 ### Loading data with FETCH api in the Thymeleaf html
 * Добавянето, изтриване и промяна количества на Item-s в кошницата чрез Rest и FETCH Api (jQuery and/or Vanilla JS)
@@ -175,6 +175,10 @@
 * For testing - do not use columnDefinition @Column(name = "more_info", columnDefinition = "TEXT") - (in the ItemEntity class for field moreInfo, I removed the columnDefinition so that the in-memory HyperSQL grammar is satisfied)
 * Testing with BasketServiceTest.java  - test each method separately as I am using @Transactional to re-enable the Hibernate session
 
+### Pageable and sorted
+* Server-side rendering implementation on the computers - с обикновен контролер и в Thymeleaf модела
+* Default page size 3
+* Sorting by sellingPrice ascending 
 
 ### Host the application in a cloud environment
 * //TODO:
@@ -202,18 +206,12 @@
 * Подобие на чат (ако остане време)
 
 
-* Pageable and sorted – to implement it. – лесно става в Java, но за да се display-не на html-a, то:
+* Pageable and sorted on the client-side rendering via JS:
   - При client-side rendering трябва чрез JS да ги вземаме нещата.
-  - При server-side rendering с обикновен контролер -  трябва в Thymeleaf модела да ги сложим
-  - Чрез Page . content вземаме лист от елементите от текущия Page, previous enabled, next enabled, previousPage, nextPage
 
 
 * Възможност за нелогнат потребител да си добавя продукти в кошница. За да ги поръча обаче трябва да се логне – след регистрация и логване, кошницата дали ще може да се запази.
 * За нелогнати потребители - не е готово - периодично минаване (на всеки 60 минути) за изтриване на кошници със статус OPEN (направени преди повече от 30 минути и все още незатворени) - при изтриване връщаме количеството на всеки Item обратно към наличното в магазина.
-
-
-* Възможност за статистика:
-  * за брой клиенти и средна стойност в лева за една поръчка;
 
 
 * При 20 000 артикула, то допълнителната информация може да я слагаме във вложени JSON-и
