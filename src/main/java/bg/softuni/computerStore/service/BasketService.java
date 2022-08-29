@@ -48,7 +48,7 @@ public class BasketService implements InitializableBasketService {
     }
 
     private void basketsInit() {
-        List<ItemEntity> allItemsInTheCurrentBasket = this.allItemsRepository.findAll();
+        List<ItemEntity> allItemsInTheCurrentBasket = (List<ItemEntity>) this.allItemsRepository.findAll();
 
         //Basket 1
         UserEntity admin = userRepository.findByUsername("admin").orElseThrow();

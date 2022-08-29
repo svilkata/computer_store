@@ -144,7 +144,7 @@ public class BasketAndOrderController {
         List<String> roles = user.getAuthorities().stream()
                 .map(Object::toString).toList();
 
-        if ((orderNumber!= null && !Objects.equals(user.getId(), userId))
+        if ((orderNumber != null && !Objects.equals(user.getId(), userId))
                 && !(roles.contains("ROLE_ADMIN") || roles.contains("ROLE_EMPLOYEE_SALES"))) {
             throw new OrderForbiddenException(String.format("You do not have an authorization for a final order of user with id %d", userId));
         }
@@ -173,7 +173,9 @@ public class BasketAndOrderController {
                     .setQuantity(boughtQuantity)
                     .setPricePerUnit(sellingPricePerUnit)
                     .setSellingPriceForAllQuantity(sellingPricePerUnit.multiply(BigDecimal.valueOf(boughtQuantity)))
-                    .setPhotoUrl(productQuantity.getItem().getPhoto().getUrl());
+                    .setPhotoUrl(productQuantity.getItem().getPhoto() != null
+                            ? productQuantity.getItem().getPhoto().getUrl()
+                            : "");
 
             itemsInOrder.add(oneItem);
         }

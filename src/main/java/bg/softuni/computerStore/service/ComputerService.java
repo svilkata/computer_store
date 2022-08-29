@@ -13,6 +13,9 @@ import bg.softuni.computerStore.model.view.product.ComputerViewGeneralModel;
 import bg.softuni.computerStore.repository.cloudinary.PictureRepository;
 import bg.softuni.computerStore.repository.products.AllItemsRepository;
 import bg.softuni.computerStore.service.picturesServices.PictureService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -21,6 +24,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static bg.softuni.computerStore.constants.Constants.*;
 
@@ -129,6 +133,15 @@ public class ComputerService implements InitializableProductService {
         return allComputersView;
     }
 
+    public Page<ComputerViewGeneralModel> getAllComputersPageable(Pageable pageable) {
+        Page<ComputerViewGeneralModel> allComputers = this.allItemsRepository
+                .findAllByType("computer", pageable)
+                .map(comp -> this.structMapper
+                        .computerEntityToComputerSalesViewGeneralModel((ComputerEntity) comp));
+
+        return allComputers;
+    }
+
     public Long saveNewComputer(AddUpdateComputerBindingDTO addUpdateComputerBindingDTO) {
         //From ItemEntity
         ComputerEntity toAdd = new ComputerEntity(addUpdateComputerBindingDTO.getBrand(), addUpdateComputerBindingDTO.getModel(),
@@ -161,7 +174,7 @@ public class ComputerService implements InitializableProductService {
             String publicId = collect.get(collect.size() - 1);
             publicId = publicId.substring(0, publicId.length() - 4);
 
-             this.pictureService.deleteFromPictureRepository(publicId);
+            this.pictureService.deleteFromPictureRepository(publicId);
         }
 
         this.allItemsRepository.deleteById(id);
@@ -237,4 +250,5 @@ public class ComputerService implements InitializableProductService {
         }
         return itemLongId;
     }
+
 }

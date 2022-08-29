@@ -13,36 +13,37 @@
 <main>
     <div class="container-fluid">
         <h2 class="text-center text-white">Search for offers</h2>
-<!--        <form-->
-<!--                th:method="POST"-->
-<!--                th:action="@{/offers/search}"-->
-<!--                th:object="${searchOfferModel}"-->
-<!--                class="form-inline"-->
-<!--                style="justify-content: center; margin-top: 50px;"-->
-<!--        >-->
-<!--            <div style="position: relative">-->
-<!--                <input-->
-<!--                        th:field="*{query}"-->
-<!--                        th:errorclass="is-invalid"-->
-<!--                        class="form-control mr-sm-2"-->
-<!--                        style="width: 280px;"-->
-<!--                        type="search"-->
-<!--                        placeholder="Search by offer model name..."-->
-<!--                        aria-label="Search"-->
-<!--                        id="searchOffer"-->
-<!--                />-->
-<!--                <small-->
-<!--                        id="searchOfferHelpInline"-->
-<!--                        class="bg-danger text-light rounded invalid-feedback"-->
-<!--                        style="width: 97%; position: absolute; padding: 3px 15px; text-align: center;"-->
-<!--                >-->
-<!--                    Try writing something this time.-->
-<!--                </small>-->
-<!--            </div>-->
-<!--            <button class="btn btn-outline-info my-2 my-sm-0" type="submit">Search</button>-->
-<!--        </form>-->
+        <!--        <form-->
+        <!--                th:method="POST"-->
+        <!--                th:action="@{/offers/search}"-->
+        <!--                th:object="${searchOfferModel}"-->
+        <!--                class="form-inline"-->
+        <!--                style="justify-content: center; margin-top: 50px;"-->
+        <!--        >-->
+        <!--            <div style="position: relative">-->
+        <!--                <input-->
+        <!--                        th:field="*{query}"-->
+        <!--                        th:errorclass="is-invalid"-->
+        <!--                        class="form-control mr-sm-2"-->
+        <!--                        style="width: 280px;"-->
+        <!--                        type="search"-->
+        <!--                        placeholder="Search by offer model name..."-->
+        <!--                        aria-label="Search"-->
+        <!--                        id="searchOffer"-->
+        <!--                />-->
+        <!--                <small-->
+        <!--                        id="searchOfferHelpInline"-->
+        <!--                        class="bg-danger text-light rounded invalid-feedback"-->
+        <!--                        style="width: 97%; position: absolute; padding: 3px 15px; text-align: center;"-->
+        <!--                >-->
+        <!--                    Try writing something this time.-->
+        <!--                </small>-->
+        <!--            </div>-->
+        <!--            <button class="btn btn-outline-info my-2 my-sm-0" type="submit">Search</button>-->
+        <!--        </form>-->
 
-        <h2 class="text-center text-white mt-5 greybg" th:text="#{view_all_computers}">.........All Computers.......</h2>
+        <h2 class="text-center text-white mt-5 greybg" th:text="#{view_all_computers}">.........All
+            Computers.......</h2>
         <div class="offers row mx-auto d-flex flex-row justify-content-center .row-cols-auto">
             <div
                     th:each="c : ${computers}" th:object="${c}"
@@ -70,7 +71,8 @@
                         <div th:if="*{!ssd.isBlank()}" class="card-text"><span th:text="'* ' + *{ssd}">SSD</span></div>
                         <div th:if="*{!moreInfo.isBlank()}" class="card-text"><span th:text="'* ' + *{moreInfo}">More info</span>
                         </div>
-                        <div class="card-text"><span th:text="'We sell at: ' + *{sellingPrice} + ' лв'" style="font-weight: bold">Selling price</span></div>
+                        <div class="card-text"><span th:text="'We sell at: ' + *{sellingPrice} + ' лв'"
+                                                     style="font-weight: bold">Selling price</span></div>
                     </li>
                 </ul>
                 <div class="card-body">
@@ -90,6 +92,45 @@
                     </div>
                 </div>
             </div>
+        </div>
+
+        <div class="container-fluid row justify-content-center">
+            <nav>
+                <ul class="pagination">
+                    <li class="page-item" th:classappend="${computers.isFirst()} ? 'disabled' : ''">
+                        <a th:unless="${computers.isFirst()}"
+                           class="page-link"
+                           th:href="@{/items/all/computer(size=${computers.getSize()},page=0)}">First</a>
+                    </li>
+                </ul>
+            </nav>
+            <nav>
+                <ul class="pagination">
+                    <li class="page-item" th:classappend="${computers.hasPrevious() ? '' : 'disabled'}">
+                        <a th:if="${computers.hasPrevious()}"
+                           class="page-link"
+                           th:href="@{/items/all/computer(size=${computers.getSize()},page=${computers.getNumber() - 1})}">Previous</a>
+                    </li>
+                </ul>
+            </nav>
+            <nav>
+                <ul class="pagination">
+                    <li class="page-item" th:classappend="${computers.hasNext() ? '' : 'disabled'}">
+                        <a th:if="${computers.hasNext()}"
+                           class="page-link"
+                           th:href="@{/items/all/computer(size=${computers.getSize()},page=${computers.getNumber() + 1})}">Next</a>
+                    </li>
+                </ul>
+            </nav>
+            <nav>
+                <ul class="pagination">
+                    <li class="page-item" th:classappend="${computers.isLast()} ? 'disabled' : ''">
+                        <a th:unless="${computers.isLast()}"
+                           class="page-link"
+                           th:href="@{/items/all/computer(size=${computers.getSize()},page=${computers.getTotalPages()-1})}">Last</a>
+                    </li>
+                </ul>
+            </nav>
         </div>
     </div>
 </main>
