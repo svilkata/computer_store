@@ -1,5 +1,6 @@
 package bg.softuni.computerStore.web;
 
+import bg.softuni.computerStore.model.binding.product.SearchProductItemDTO;
 import bg.softuni.computerStore.model.view.product.ComputerViewGeneralModel;
 import bg.softuni.computerStore.model.view.product.LaptopViewGeneralModel;
 import bg.softuni.computerStore.model.view.product.MonitorViewGeneralModel;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -41,6 +43,7 @@ public class ViewItemsController {
         return "/viewItems/one-computer-details";
     }
 
+    /*
     @GetMapping("/computer")
     public String viewAllComputers(Model model,
                                    @PageableDefault(page = 0,
@@ -50,6 +53,31 @@ public class ViewItemsController {
         if (!model.containsAttribute("computers")) {
 //            List<ComputerViewGeneralModel> computers = this.computerService.findAllComputers();
             Page<ComputerViewGeneralModel> computers = this.computerService.getAllComputersPageable(pageable);
+            model.addAttribute("computers", computers);
+        }
+
+        return "/viewItems/all-computers";
+    }
+     */
+
+    @GetMapping("/computer")
+    public String viewAllComputers(Model model,
+                                   @Valid SearchProductItemDTO searchProductItemDTO,
+                                   @PageableDefault(page = 0,
+                                           size = 3,
+                                           sort = "sellingPrice",
+                                           direction = Sort.Direction.ASC) Pageable pageable) {
+
+        if (!model.containsAttribute("searchProductItemDTO")) {
+            model.addAttribute("searchProductItemDTO", searchProductItemDTO);
+        }
+
+        //in all cases, we set the attribute computers
+        if (searchProductItemDTO.isEmpty()) {
+            Page<ComputerViewGeneralModel> computers = this.computerService.getAllComputersPageable(pageable);
+            model.addAttribute("computers", computers);
+        } else {
+            Page<ComputerViewGeneralModel> computers = this.computerService.getAllComputersPageableAndSearched(pageable, searchProductItemDTO);
             model.addAttribute("computers", computers);
         }
 

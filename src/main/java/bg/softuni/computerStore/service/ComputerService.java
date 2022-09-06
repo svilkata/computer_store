@@ -6,15 +6,16 @@ import bg.softuni.computerStore.exception.ItemNotFoundException;
 import bg.softuni.computerStore.exception.ItemsWithTypeNotFoundException;
 import bg.softuni.computerStore.initSeed.InitializableProductService;
 import bg.softuni.computerStore.model.binding.product.AddUpdateComputerBindingDTO;
+import bg.softuni.computerStore.model.binding.product.SearchProductItemDTO;
 import bg.softuni.computerStore.model.entity.picture.PictureEntity;
 import bg.softuni.computerStore.model.entity.products.ComputerEntity;
 import bg.softuni.computerStore.model.entity.products.ItemEntity;
 import bg.softuni.computerStore.model.view.product.ComputerViewGeneralModel;
 import bg.softuni.computerStore.repository.cloudinary.PictureRepository;
 import bg.softuni.computerStore.repository.products.AllItemsRepository;
+import bg.softuni.computerStore.repository.products.ProductItemSpecification;
 import bg.softuni.computerStore.service.picturesServices.PictureService;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +25,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Locale;
 
 import static bg.softuni.computerStore.constants.Constants.*;
 
@@ -138,6 +139,21 @@ public class ComputerService implements InitializableProductService {
                 .findAllByType("computer", pageable)
                 .map(comp -> this.structMapper
                         .computerEntityToComputerSalesViewGeneralModel((ComputerEntity) comp));
+
+        return allComputers;
+    }
+
+
+    public Page<ComputerViewGeneralModel> getAllComputersPageableAndSearched(
+            Pageable pageable, SearchProductItemDTO searchProductItemDTO) {
+
+        Page<ComputerViewGeneralModel> allComputers = this.allItemsRepository
+                .findAll(new ProductItemSpecification(searchProductItemDTO), pageable)
+//                .findAllByTypeAndSearch("computer", pageable, new ProductItemSpecification(searchProductItemDTO))
+//                .findAllByType("computer", pageable)
+                .map(comp -> this.structMapper
+                        .computerEntityToComputerSalesViewGeneralModel((ComputerEntity) comp));
+
 
         return allComputers;
     }

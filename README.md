@@ -1,10 +1,10 @@
 # Computer Store - diploma web project on JAVA and SPRING
-# Online магазин за продажба на компютри и компютърни компоненти
+# Online store for selling computers and computer components
 
 ## I. User functionality of the system
-### Инициализация на първоначални данни
-* Инициализация на първоначални данни - чрез InitialazbleService интерфейси съгласно Open-Close принципа - в init/AppInit.java class в @PostConstruct анотирания метод.
-* Инициализация от data.sql - възможна, но Hibernatе не му харесва (виж края на този Readme файл)
+### Initialization of initial data
+* Initialization of the initial data - via InitialazbleService interfaces according to the  Open-Close SOLID principle - at init/AppInit.java class in @PostConstruct annotated method.
+* Initialization from data.sql - see the end of this Readme file
 
 ### ADMIN панел функционалност - **само от ADMIN**
 * Служител е user с роля/роли EMPLOYEE_PURCHASES или EMPLOYEE_SALES
@@ -56,51 +56,50 @@
 * Demo using Spring event when an order is created - we catch the Spring custom event by Event listener - we increase the total numbers of orders. We also prepare for sending e-mail to the user and for adding bonus points to the user.
 
 ### Search
-* Имплементиран search за дисплейване/намиране на поръчки чрез REST и Fetch API - работи само за логнати потребители и съответно достъпа е както следва:
-Всеки ADMIN и EMPLOYEE_SALES имат достъп до промяна на статуса на поръчката - за всички поръчки.
-Всеки потребител CUSTOMER или потребител PURCHASE & CUSTOMER има само стандартната информация - и то само за своите си поръчки, а не за всички поръчки.
-Работи сортиран (by date DESCENDING) като последно добавена поръчка излиза първа в списъка. 
-* //TODO - глобална търсачка в commons.html за всички типове продукти - по тип на продукта + име на модел/цена по-голяма от... - само чрез Thymeleaf
-
+* Implemented client-side search for displaying/finding orders by order number via REST and Fetch API - it works only for logged-in users and the authorization is as follows:
+Each user with roles either ADMIN and/or EMPLOYEE_SALES has access to change the order status - for all existing orders possible.
+Each user with role CUSTOMER or with rolse EMPLOYEE_PURCHASES & CUSTOMER  has only the standard access - i.e. only access to his/her own orders, and not access to any / all orders.
+It works sorted by default (by created datetime DESCENDING) and the last added order appears first in the result list. 
+* Implemented server-side combined search for finding computers and integrated with Pagination and default sorted by price ASCENDING - the combined search criteria is by model name (brand name is always a part of the model name) and by minSellingPrice and maxSellingPrice
 
 
 
 
 ## II. SoftUni Requirements done
-### Използвани структури от данни
-* Sets - за ролите
-* Lists - като връщаме и Unmodifiable когато е неoбходимо
+### Used data srtuctures
+* Sets - for the user roles
+* Lists - and we also return Unmodifiable when needed
 
-### Преубразуване на данни
-* Чрез ModelMapper
-* Чрез MapStruct - плюс един деклариран default mapping method (about the photo)
-* Ръчно - чрез constructor и setters
+### Transforming data
+* Via ModelMapper
+* Via MapStruct - plus one declared default mapping method (about the photo - from PictureEntity photo  to photo.getUrl())
+* Manually - via constructor и setters
 
-### Validating input data
+### Validating user html input data
 * client-side via HTML
 * server-side via @Valid annotation
 
-### Три custom annotation валидации
-* За това дали username или e-mail вече съществуват в базата данни
-* За това дали паролите се еднакви
-* За това дали покупна и продажна цена са валидни цели и/или дробни числа
+### 3 custom annotation validations
+* whether the username and the e-mail already exist in the database - when we register
+* whether the pass and repass are one and the same/equal - when we register
+* whether the buyingPrice and sellingPrice are valid whole or fractional number and not a text - when adding new products/amending existing products in the store
 
 ### Spring data, Hibernate and database
 * using MySQL
 * implemented Single Table inheritance for all the products
 * all tables interconnected one another relationally
-* userId е реално винаги и basketId
-* към момента заложената релационна връзка е да има повече от една кошница за user, но ние реално ползваме само една единствена кошница за user 
-* Особеност при basket и order - имаме един кръг от четири таблици свързани релационно и можем да подходим от две посоки за каквото и да е
+* userId is in our project in realoty always basketId  (userId === basketId in our project)
+* at the moment the arranged relational connection between BasketOrderEntity and UserEntity is that each user is able to have more than one basket, but in our project we use in reality only one single basket per user (maybe in the future we may need more than 1 basket per user) 
+* Special feature for basket and order - we have a circle of 4 tables interconnected relationally and we can approach in both directions for anything we may need
 ![img_1.png](img_1.png)
 
 ### Cloudinary
-* За качване/смяна на снимка за всеки продукт
+* For uploading or for changing the picture of each product
 
 ### Interceptors
 * report for http request from anonymous and authenticated user
 * I18N – change language - just a demo for the header part and some title/paragraphs of pages - from English to Bulgarian and vice versa
-* //ТODO - YESS - колко потребителя има активни в момента - ще го дисплейваме на commons (NOOO!!! - how many people visited the website)
+* //ТODO  How many active users there are at the moment - we can display it on commons.html (NOOO!!! - how many people visited the website)
 
 ### Generating HTML
 * with Thymeleaf engine secured 
@@ -131,35 +130,37 @@
 5. Only users who have roles EMPLOYEE_SALES and ADMIN can see all the final orders. EMPLOYEE_PURCHASES and CUSTOMER can see only their own orders.
 
 ### Loading data with FETCH api in the Thymeleaf html
-* Добавянето, изтриване и промяна количества на Item-s в кошницата чрез Rest и FETCH Api (jQuery and/or Vanilla JS)
-* Извикване на диалогови прозорци на база response статуса от RestController-a:
-  - за добавяне на item в кошницата (за успешно добавен item, за дублиран вече такъв item или за item който е с нула количество)
-  - при изтриване на item от кошницата
-  - при промяна количества на item в кошницата
-* Дисплейване на всяка кошница - чрез Rest и Fetch Api (jQuery and JS)
+* Adding, deleting and changing item quantities in the basket - via Rest and FETCH Api (jQuery and/or Vanilla JS)
+* Calling dialog boxes based on the response status of the RestController:
+  - for adding a new item in the basket (when successfully added new item, when we have already added this model in the basket, or when trying to add an item with zero quantity in the store available stock)
+  - for deleting/removing an item off the basket
+  - for changing item quantities of each item in the basket
+* Displaying the user basket - via Rest and Fetch Api (jQuery and JS)
 * Demo with text inlining - with Vanilla JS - for authorizing when displaying the orders
-* Дисплейване на поръчки, промяна статус на поръчка и търсене на поръчки - според ролите на user-а - чрез Rest и Fetch Api (jQuery and JS)
-* Комбинирано търсене с промяна на статус - при едновременно зададен критерий за търсене и при смяна на статус поръчка, то се визуализират само поръчките отговарящи на търсения критерий (в повечето случай е само 1 поръчка), като по този начин на една и съща поръчка можем лесно без да търсим допълнително да й сменим на два пъти статуса
-* Когато поръчка е на статус CONFIRMED_BY_CUSTOMER, то имаме опция да сменим статуса само на CONFIRMED_BY_STORE
-* Когато поръчка е на статус CONFIRMED_BY_STORE, то имаме опция да сменим статуса само на DELIVERED
+* Displaying orders, changing final order status and searching orders - according to user roles - via Rest and Fetch Api (jQuery and JS)
+* Combined search when changing order status - when simultaneously search criteria present (entered by the user) and the user with role SALES, for example, is changing the order status, then after client-side rendering we visualize again only the orders matching the search criteria (and we keep the search criteria info displaying). In most cases we have searched for only 1 order, and thus this one and the same order we will not lose easily (and no need of new search) - we can change its status   twice   easy and quick.
+* When order is on status CONFIRMED_BY_CUSTOMER, then we have only the option to change its status to CONFIRMED_BY_STORE
+* When order is on status CONFIRMED_BY_STORE, then we have only the option to change its status to DELIVERED
 
 ###	Scheduling jobs and Spring events
-* Schedule a job - за логнати потребители - периодично минаване (на всеки 5 минути) за изтриване на кошници със статус OPEN (направени преди повече от 20 минути и все още незатворени) - при нулиране на кошницата, то връщаме количеството на всеки Item обратно към наличното в магазина.
+* Schedule a job - for logged users - periodically, on every 5 minutes passed, resetting the baskets that became on status OPEN and with products in them  more than 20 minutes ago andnot yet CLOSED - after resetting the user basket, then we return the items quantities back to the available store stock quantity.
 * Using Spring event when an order is created - we catch the Spring custom event by Event listener - we increase the total numbers of orders. We also prepare for sending e-mail to the user and for adding bonus points to the user.
-* Особеност при дисплейване на общия брой поръчки в горния ляв ъгъл:
-    - използваме в commons.html следния thymeleaf израз:  ${#session.getAttribute('totalOrdersCount')
-    - първоначалните автоматично създаваните поръчки не се хващат от нашия custom event listener (не ги регистрирам publish-вам listener-ите изрично при първоначалнотостартиране на приложението)
-    - задаваме статична глобална променлива за пазене на общия брой поръчки като вземаме при стартиране бройката поръчки от базата данни
-    - задаваме на http session cookie-то JSESSIONID атрибут "totalOrdersCount" - при първоначално логване на страница от url "/" със стойността на глобалното статично поле за брой поръчки
-    - създаден custom event class OrderCreatedEvent
-    - създаваме инстанция на OrderCreatedEvent и я публикуваме
-    - създадени 3 класа с метод с анотация @EventListener(OrderCreatedEvent.class) - for increasing total orders number, and for e-mail sending to user and bonus points
-    - event Listener-a за увеличаване на общия брой поръчки хваща събитието създадена поръчка, и увеличава статичната променлива с 1-ца
-    - на предпоследния ред, и след като вече поръчката е създадена, на метода viewOrderWithItemsAndAddAddressConfirm от BasketAndOrderController класа, задаваме нова стойност на атрибута http cookie session JSESSIONID
+* Specificity for displaying the total number of orders at the upper left corner of the webpage:
+    - in commons.html we use the following Thymeleaf phrase:  ${#session.getAttribute('totalOrdersCount')
+    - when we initially start/run our whole application, the initial automatically created orders do not catch the Spring event - I do not publish these events, so our custom event listener can not catch them. (in fact our event listener is registered quite later and for sure after the @PostConstruct annotated method is first executed. We can re-arrange the event listener to be registered earlier when the application starts, but the efforts showed that the @PostConstruct is again first executed) 
+    - we set a global variable for keeping the total number of orders - as we take the initial number of orders from the database
+    - we add on the  "http session cookie" the JSESSIONID attribute "totalOrdersCount" - when initial start of the whole application we display on the main webpage (at URL /), before logging (and after logging), the value of the above mentioned global variable for total number of orders made so far
+    - we created a custom event class OrderCreatedEvent
+    - we make an instance of OrderCreatedEvent and then publish it
+    - created 3 classes that all contain a method annotated with @EventListener(OrderCreatedEvent.class) - for increasing number of total orders, and for e-mail sending to user and for bonus points
+    - the event Listener for increasing number of orders catches the event  "created order", and increases the global static variable with plus 1
+    - in the method viewOrderWithItemsAndAddAddressConfirm from the class BasketAndOrderController.java, at the last but one row and after the final order is finally created, we set a new value (already increased with 1)  on the attribute "totalOrdersCount" of JSESSIONID part of  http cookie session.
 
 ### Search
-* Търсене на поръчки - според ролите на user-а - чрез Rest и Fetch Api (jQuery and JS)
-* //TODO - глобална търсачка в commons.html за всички типове продукти - по тип на продукта + име на модел/цена по-голяма от... - само чрез Thymeleaf
+* Searching of orders at the client-side and default sorted according to the user roles - via Rest and @RestController and Fetch Api (jQuery and JS)
+* //TODO: We can make the search feature at the client-side rendering with Pagination functionality for the final orders - we should use JS via the rest and make all the logic for pageable in JS.
+* //TODO:!!Not completely working yet !! Searching computers at the server-side and integrated with Pagination and default sorted - via Thymeleaf and @Controller - combined search criteria by model name (brand name is always a part of the model name) and by minSellingPrice and maxSellingPrice using CriteriaBuilder
+* //TODO: We can make a search feature at the server-side also for other items or we can make it a global search for all or specific types of product items
 
 ### Advice (AOP)
 * Implemented Around Advice for tracking the latency of a few operations - adding an item to the basket, creating the fina order, get sales statistics
@@ -172,13 +173,13 @@
 * Important notes before starting testing:
   - first, disable in the class AppSeedInit.java  the @PostConstrict annotated method beginInit()
   - second, copy the real CLOUDINARY_SECRET in the application.yml in the test section // or other option is to set Enviromental Variables for every test class manually
-* For testing - do not use columnDefinition @Column(name = "more_info", columnDefinition = "TEXT") - (in the ItemEntity class for field moreInfo, I removed the columnDefinition so that the in-memory HyperSQL grammar is satisfied)
+* For testing - do not use columnDefinition @Column(name = "more_info", columnDefinition = "TEXT") - (in the ItemEntity class for field moreInfo, I removed the columnDefinition so that the in-memory HyperSQL / H2 grammar is satisfied)
 * Testing with BasketServiceTest.java  - test each method separately as I am using @Transactional to re-enable the Hibernate session
 
 ### Pageable and sorted
-* Server-side rendering implementation on the computers - с обикновен контролер и в Thymeleaf модела
+* Server-side rendering implementation on the computers - with @Controller and in the Thymeleaf model
 * Default page size 3
-* Sorting by sellingPrice ascending 
+* Default sorting by sellingPrice ascending
 
 ### Host the application in a cloud environment
 * //TODO:
@@ -188,30 +189,29 @@
 
 
 ## III. General MORE TODOs
-* Накрая на представянето на проекта, може да добавя за демо, да се инициализират и 2 монитора от data.sql файла, но по принцип не му харесва на Hibernate след това. Сменяме от never на always, добавяме си 2 мониторa, a след това задаваме 'never' веднага преди ново пускане на системата
+* Client-side rendering using Rest and @RestController and JS - the case when we have a form with POST http request and when we need to facilitate the CSRF in order such operation to be possible when Spring security with csrf enabled
+
+
+* Initialization from data.sql file - possible, but Hibernate do not like it (special hibernate_sequences should be set in order to work)
   sql:
   init:
   mode: never
 
 
-* Можем да добавим и още артикули, и става сравнително лесно
-Клавиатури и мишки
-Хард диск / Hardisk / SSD disk
-Видео карта/ Video card
-Процесор / Processor
-Дъно / Motherboard
-Рам / Ram
+* We can add more types of tiems, and it becomes easy
+Keyboard and mice
+Hard disk / SSD disk
+Video card
+Processor
+Motherboard 
+Ram
 
 
-* Подобие на чат (ако остане време)
+* A chat feature
 
 
-* Pageable and sorted on the client-side rendering via JS:
-  - При client-side rendering трябва чрез JS да ги вземаме нещата.
+* Possibility for non-logged user to add products in his/her basket. But in order to final-order them, he/she must log in – after a registration and a logging, the user basket should be preserved.
+* For non-logged users - a scheduler for deleting/resetting on each 5 minutes baskets with status OPEN generated more than 20 minutes ago - when resetting the basket we return the item quantities back to the available store stock.
 
 
-* Възможност за нелогнат потребител да си добавя продукти в кошница. За да ги поръча обаче трябва да се логне – след регистрация и логване, кошницата дали ще може да се запази.
-* За нелогнати потребители - не е готово - периодично минаване (на всеки 60 минути) за изтриване на кошници със статус OPEN (направени преди повече от 30 минути и все още незатворени) - при изтриване връщаме количеството на всеки Item обратно към наличното в магазина.
-
-
-* При 20 000 артикула, то допълнителната информация може да я слагаме във вложени JSON-и
+* If we have let's say 20 000 types of items and due to the limitation of our database for number of columns per table, then the extra info we can store as a nested JSONs

@@ -12,35 +12,57 @@
 
 <main>
     <div class="container-fluid">
-        <h2 class="text-center text-white">Search for offers</h2>
-        <!--        <form-->
-        <!--                th:method="POST"-->
-        <!--                th:action="@{/offers/search}"-->
-        <!--                th:object="${searchOfferModel}"-->
-        <!--                class="form-inline"-->
-        <!--                style="justify-content: center; margin-top: 50px;"-->
-        <!--        >-->
-        <!--            <div style="position: relative">-->
-        <!--                <input-->
-        <!--                        th:field="*{query}"-->
-        <!--                        th:errorclass="is-invalid"-->
-        <!--                        class="form-control mr-sm-2"-->
-        <!--                        style="width: 280px;"-->
-        <!--                        type="search"-->
-        <!--                        placeholder="Search by offer model name..."-->
-        <!--                        aria-label="Search"-->
-        <!--                        id="searchOffer"-->
-        <!--                />-->
-        <!--                <small-->
-        <!--                        id="searchOfferHelpInline"-->
-        <!--                        class="bg-danger text-light rounded invalid-feedback"-->
-        <!--                        style="width: 97%; position: absolute; padding: 3px 15px; text-align: center;"-->
-        <!--                >-->
-        <!--                    Try writing something this time.-->
-        <!--                </small>-->
-        <!--            </div>-->
-        <!--            <button class="btn btn-outline-info my-2 my-sm-0" type="submit">Search</button>-->
-        <!--        </form>-->
+        <div class="container">
+            <h2 class="text-center text-white">Search for offers</h2>
+            <form
+                    th:method="GET"
+                    th:action="@{/items/all/computer}"
+                    th:object="${searchProductItemDTO}"
+                    class="form-inline"
+                    style="justify-content: center; margin-top: 50px;"
+            >
+                <div style="position: relative">
+                    <input
+                            th:field="*{model}"
+                            th:errorclass="is-invalid"
+                            class="form-control mr-sm-2"
+                            style="width: 280px;"
+                            type="search"
+                            placeholder="Model name..."
+                            aria-label="Search"
+                            id="model"
+                    />
+                    <input
+                            th:field="*{minPrice}"
+                            th:errorclass="is-invalid"
+                            class="form-control mr-sm-2"
+                            style="width: 280px;"
+                            type="search"
+                            placeholder="Min price..."
+                            aria-label="Search"
+                            id="minPrice"
+                    />
+                    <input
+                            th:field="*{maxPrice}"
+                            th:errorclass="is-invalid"
+                            class="form-control mr-sm-2"
+                            style="width: 280px;"
+                            type="search"
+                            placeholder="Max price..."
+                            aria-label="Search"
+                            id="maxPrice"
+                    />
+<!--                    <small-->
+<!--                            id="searchOfferHelpInline"-->
+<!--                            class="bg-danger text-light rounded invalid-feedback"-->
+<!--                            style="width: 97%; position: absolute; padding: 3px 15px; text-align: center;"-->
+<!--                    >-->
+<!--                        Try writing something this time.-->
+<!--                    </small>-->
+                </div>
+                <button class="btn btn-outline-info my-2 my-sm-0" type="submit">Search</button>
+            </form>
+        </div>
 
         <h2 class="text-center text-white mt-5 greybg" th:text="#{view_all_computers}">.........All
             Computers.......</h2>
