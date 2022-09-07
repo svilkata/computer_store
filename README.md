@@ -6,54 +6,70 @@
 * Initialization of the initial data - via InitialazbleService interfaces according to the  Open-Close SOLID principle - at init/AppInit.java class in @PostConstruct annotated method.
 * Initialization from data.sql - see the end of this Readme file
 
-### ADMIN панел функционалност - **само от ADMIN**
-* Служител е user с роля/роли EMPLOYEE_PURCHASES или EMPLOYEE_SALES
-* ADMIN може да добавя нов служител EMPLOYEE_PURCHASES или EMPLOYEE_SALES
-* Сменяне на ролите нa потребителите EMPLOYEE_PURCHASES и EMPLOYEE_SALES
-* Може да има само един ADMIN, и той има всичките четири роли
-* Функционалност за смяна кой служител да е единствения ADMIN - при успешна смяна на admin, то системата се logout-ва автоматично и е нужен нов login
-* Всеки служител (купувач, продавач) трябва да има поне 2 роли - обикновено CUSTOMER + EMPLOYEE_PURCHASES/EMPLOYEE_SALES
-* Възможност за статистика:
-  * за брой направени поръчки, брой артикули, на каква обща стойност, и колко печалба.
-  * за брой http заявки на анонимен и на логнат потребител.
+### Test credentials for user customer
+* username: customer
+* password: 11111
 
-### Settings панел функционалност - **All users**
-* Функционалност всеки потребител да си сменя паролата
-* при ADMIN се достъпва от ADMIN панела
-* при успешна смяна, то системата се logout-ва автоматично, и е нужен нов login
+### Customer functionality - **only for users who have a role CUSTOMER**
+* Every person who visits the website can register and login in the website
+* The register process sets this new user as a customer only - only role CUSTOMER 
+* Customers can add products in the basket, and make final orders
 
-### Качване на оферти за компютри в сайта - **само от ADMIN и от EMPLOYEE_PURCHASES**
-* Възможност за добавяне, редактиране и изтриване на компютърни компоненти.
-* Ограничения: 
-  * пазим уникален model на всеки item
-  * при добавяне на нов item, ако моделът му съществува, то уведомяваме потребителя, че той може да зареди формата за Update/Едит и само да го update-не артикула с нови данни.
-  * приемаме, че при update/edit реално ако залагаме нови покупни и продажни цени, то тези цени са за всички бройки артикули от този модел. Променяме (добавяме) главно количество, но не само.
+### ADMIN panel functionality - **only for ADMIN**
+* Employee of the store is any user with a role either EMPLOYEE_PURCHASES and/or EMPLOYEE_SALES
+* User with ADMIN role can only add a new employee - EMPLOYEE_PURCHASES and/or EMPLOYEE_SALES
+* Possibility the ADMIN to change the roles of employees (EMPLOYEE_PURCHASES and EMPLOYEE_SALES)
+* There could be only 1 user with a role ADMIN, and he/she has all the 4 roles - ADMIN, EMPLOYEE_PURCHASES, EMPLOYEE_SALES, CUSTOMER
+* Functionality for changing which user/employee to be the new and only ADMIN user - when the new ADMIN user is successfully set, the system automatically logouts and a new login is required.
+* Every employee (seller, buyer) should have at least 2 roles (and max 3 roles) - any combination of CUSTOMER and EMPLOYEE_PURCHASES and EMPLOYEE_SALES
+* Statistics feature:
+  * for total number of orders, count of products sold, total revenue and total profit.
+  * for count of total http requests by anonymous user and by a logged user.
+
+### Settings panel functionality - **for all users**
+* Feature each user to be able to change his/her own password
+* When the user is the ADMIN, it can be accessed from the admin panel
+* When a successfull password change operation,  the system automatically logouts and a new login is required.
+
+### Buyer functionality of the store - uploading computer products in the website - **only by ADMIN or EMPLOYEE_PURCHASES**
+* Option for adding, editing and deleting computer elements - I use the site www.ardes.bg as information when creating new items with photos
+* Specificities/limitations/restrictions of the project: 
+  * we keep always the model of each product item to be unique
+  * the model of the product always contains in its beginning the brand of the product - for example brand Lenovo, model Lenovo ThinkCentre Neo 50s SFF - 11SX002VBL
+  * when we add a new item, if the model already exists, then we inform the user(the ADMIN or the EMPLOYEE_PURCHASES) that this model already exists and that he/she can only loads the page/the form for updating/editing and we can update that product item with new data.
+  * we accept that when update/edit if we set new buyingPrice and sellingPrice, then these prices will be valid for all the quantity of that model. Usually we can better change other fields and of course we can add new quantity that the store bought.
   * once a customer puts an item in his/her basket, it is not possible to delete the item from the database
-  * Може да има и редакция на снимка. Всяка качена снимка изтрива предишната снимка в Cloudinary, но Update-ва реда от PictireEntity (таблицата pictures) с новия public_id и url.
+  * we can also change the photo of each item product. Each uploaded photo deletes automatically the previous uploaded photo for that computer item.
 
-### Избор на продукти в Basket кошницата - само за логнати клиенти - **всеки потребител, който има и роля CUSTOMER**
-* Всяка кошница има статус или CLOSED или OPEN
-* Всеки регистриран потребител има само една единствена кошница под един и същи номер - при регистрация, то се добавя кошницата автоматично
-* Възможност за поръчване и слагане в кошница/страница на продукти.
-* При слагане на продукт от даден вид в кошница, то залагаме първоначална 1 бройка количество от този item
-* При добавяне на количество продукти в кошницата, намаляме реалното налично количество продукти
-* Възможност за изтриване на част от продуктите от кошницата - връщаме съответното количество обратно към наличното
-* Потвърждаване на продуктите в кошницата - изтриване на кошницата и помощните таблици за тази кошница и създаваме на реална поръчката.
-* Даване на номер реалната поръчка - чрез UUID генератора
-* Scheduled event - за логнати потребители - периодично минаване (на всеки 5 минути) за изтриване на кошници със статус OPEN (направени преди повече от 20 минути и все още незатворени) - при изтриване връщаме количеството на всеки Item обратно към наличното в магазина.
+### Choosing products in the Basket - only for logged customers - the user should have for sure a role CUSTOMER
+* Each basket has status - either CLOSED or OPEN
+* Every registered user has only 1 basket with one and the same number in the database - upon new user customer registration, the corresponding basket is created automatically
+* Option for putting product items in the basket.
+* When putting/adding a product in the basket we set 1 piece of that product item
+* While putting/adding products in the basket, we deduct the available store stock quantity from that product
+* The customer can also change the quantity he/she wants to buy - for each product in the basket 
+* The basket with the added products can be accessed via the basket panel
+* The customer can also remove products off the basket - in such case we return the relevant quantity back to the available store stock quantity
+* No matter which user and level of authorization - a basket can be seen only by its owner!
+* Confirming the products and their quantity in the basket - we reset the basket and set its status to CLOSED, and also we delete rows in the help tables for quantities - but only after the system confirms the final order is created.
+* Scheduled event - for logged users - on every 5 minutes a scheduler makes a check if there are OPEN baskets with products generated more than 20 minutes ago and reset them automatically and set their status to CLOSED - when resetting any basket teh system returns the quantity of each basket product back to the available store stock quantity
 
-### Реалната поръчка
-* При реална поръчка, клиента въвежда данни за **адрес на доставка**, **телефонен номер** и **бележки** - отделна таблица client_orders_extra_info, която е свързана и с таблица orders и с таблица users!
-* Визуализиране на поръчките (сортирани по датачас - последна поръчка стои най-отгоре в списъка) - всички за даден user или абсолютно всички поръчки за user-и, които имат SALES и ADMIN роли
-* Промяна на статус поръчка:
-  * След като клиент потвърди поръчка, то тя се записва в базата данни на статус CONFIRMED_BY_CUSTOMER.
-  * Продавача проверява физически дали ги има артикулите, пакетира доставката, сменя статуса на поръчката на CONFIRMED_BY_STORE, вика куриер – само от EMPLOYEE_SALES и от ADMIN.
-  * След като пратката/поръчката е получена от клиента, продавача получава известие от куриера и променя ръчно статуса на поръчката на DELIVERED – само от EMPLOYEE_SALES и от ADMIN.
-* Статус поръчка – проверка дали дадена поръчка е на статус CONFIRMED_BY_CUSTOMER, CONFIRMED_BY_STORE, DELIVERED. – от CUSTOMER, EMPLOYEE_SALES, ADMIN - за момента само за логнати потребители спрямо тяхното ниво на достъп.
+### The real final order
+* Before the final order is confirmed, on a new page the customer enters also **delivery adddress**, **mobile number** and **notes**
+* When the customer clicks the final confirmation button, then the system generates the final order which has now a number (generated by the UUID generator)
+* Displaying the final orders (sorted by datetime DESCENDING - the most recent order stays on the top of the list)
+* The system displays all orders that only that specific customer user has created, or the systems displays all orders for users with roles EMPLOYEE_SALES and/or ADMIN
 
-### Проследимост на общия брой поръчки
-* В горния ляв ъгъл се показва общия брой поръчки до момента
-* Demo using Spring event when an order is created - we catch the Spring custom event by Event listener - we increase the total numbers of orders. We also prepare for sending e-mail to the user and for adding bonus points to the user.
+### Selling functionality of the store **only by employees of the store with role EMPLOYEE_SALES or the ADMIN**
+* Changing the status of an order:
+  * After a customer confirms an order, this order is processed into the database with status CONFIRMED_BY_CUSTOMER.
+  * The seller checks physically if the products are present in the store, package the products, call the courier Speedy or Econt and also changes the status of the order manually to CONFIRMED_BY_STORE.
+  * After the customer receives the goods from the order, the seller employee (EMPLOYEE_SALES or/and ADMIN) receives a notification by the courier for successfull delivery and then changes the order status manually to DELIVERED.
+* Status order - only for logged users - each user can see an order status - CONFIRMED_BY_CUSTOMER, CONFIRMED_BY_STORE or DELIVERED - but depending on the level of authorization - as we said users with roles EMPLOYEE_SALES and/or ADMIN can see all orders for all customers, but a user with role CUSTOMER can see only his/her own orders if any.
+
+### Tracing the count of total orders done
+* In the upper left corner of the webpage we can see the total number of orders done so far
+* Demo using Spring event when an order is created - we catch the Spring custom event by Event listener - we increase the total numbers of orders in this upper left corner. We also prepare for sending e-mail to the user and for adding bonus points to the user.
 
 ### Search
 * Implemented client-side search for displaying/finding orders by order number via REST and Fetch API - it works only for logged-in users and the authorization is as follows:
@@ -88,16 +104,18 @@ It works sorted by default (by created datetime DESCENDING) and the last added o
 * using MySQL
 * implemented Single Table inheritance for all the products
 * all tables interconnected one another relationally
-* userId is in our project in realoty always basketId  (userId === basketId in our project)
-* at the moment the arranged relational connection between BasketOrderEntity and UserEntity is that each user is able to have more than one basket, but in our project we use in reality only one single basket per user (maybe in the future we may need more than 1 basket per user) 
+* userId in our project is in reality always the  basketId  (userId === basketId in our project)
+* at the moment the arranged relational connection between BasketOrderEntity and UserEntity is that each user is able to have more than one basket, but in our project we use in reality only one single basket per user (maybe in the future we may need more than 1 basket per user)
+* Before the final order is confirmed, on a new page the customer enters also **delivery adddress**, **mobile number** and **notes** - this is a separate table client_orders_extra_info that is relationally connected with table orders and table users!
 * Special feature for basket and order - we have a circle of 4 tables interconnected relationally and we can approach in both directions for anything we may need
 ![img_1.png](img_1.png)
 
 ### Cloudinary
 * For uploading or for changing the picture of each product
+* Each uploaded photo deletes automatically the previous uploaded photo - operations both in Cloudinary (the photo there is deleted) and in table pictures PictureEntity (we update here the row with the newly created photo in Cloudinary public_id and url).
 
 ### Interceptors
-* report for http request from anonymous and authenticated user
+* Report for http request from anonymous users and authenticated users
 * I18N – change language - just a demo for the header part and some title/paragraphs of pages - from English to Bulgarian and vice versa
 * //ТODO  How many active users there are at the moment - we can display it on commons.html (NOOO!!! - how many people visited the website)
 
@@ -116,10 +134,10 @@ It works sorted by default (by created datetime DESCENDING) and the last added o
 * secured adding new employee of Computer store
 * secured (MVC @Controller secured and also @RestController JSON secured - both via @AuthenticationPrincipal) - adding/removing items or changing quantities of the basket or just viewing the basket, confirming basket into the final order, final order details, view final orders and change status of a final order.
 
-### Error Handling 
+### Error Handling
 1. Spring security default re-direct to login page for not allowed operations/wrong urls - from anonymous users
 2. Adding a custom ComputerStoreErrorHandler
-* disabling the default Spring whitelable error.html page
+* disabling the default Spring whitelabel error.html page
 * adding a custom ComputerStoreErrorHandler implementing the markup interface ErrorController - custom error pages for 404 Not Found, 403 Forbidden and 500 Internal Server Error.
 * when wrong url error-404.html displayed; when correct url but not authorized error-403.html displayed
 * picture for the error pages 404, 403 and 500
