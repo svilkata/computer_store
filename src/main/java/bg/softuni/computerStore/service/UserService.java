@@ -21,10 +21,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -36,6 +33,46 @@ public class UserService implements InitializableUserService {
     private final String adminPass;
     private final ModelMapper modelMapper;
     private final BasketService basketService;
+
+    public String createCustomerFromFacebookIfNotExist(String username, String email){
+        Optional<UserEntity> optUserByUsername = this.userRepository.findByUsername(username);
+        Optional<UserEntity> optUserByEmail = this.userRepository.findByEmail(email);
+        if (optUserByUsername.isPresent() && optUserByEmail.isPresent()) {
+            if (optUserByUsername.get().getId() == optUserByEmail.get().getId()) {
+                return "user exists in the database";
+            } else {
+                return "username and email do not match";
+            }
+        }
+
+        if (optUserByUsername.isPresent() && optUserByEmail.isEmpty()) {
+            return "username";
+        }
+
+        if (optUserByEmail.isPresent() && optUserByUsername.isEmpty()) {
+            return "email";
+        }
+
+
+        if (optUserByUsername.isEmpty() && optUserByEmail.isEmpty()) {
+            var newCustomer = new UserEntity()
+                    .setUserRoles(Set.of(userRoleRepository.findByUserRole(UserRoleEnum.CUSTOMER).get()))
+                    .setUsername(username)
+                    .setEmail(email)
+                    .setPassword("")
+                    .setFirstName(null)
+                    .setLastName(null);
+
+            UserEntity savedUser = userRepository.save(newCustomer);
+
+            //Creating here the relevant basket
+            this.basketService.addBasketForRegisteredUser(savedUser);
+
+            return "saved new customer in the database";
+        }
+
+        return "unreachable";
+    }
 
     public UserService(
             UserRepository userRepository, UserRoleRepository userRoleRepository,
@@ -75,9 +112,9 @@ public class UserService implements InitializableUserService {
     private void initAdmin(Set<UserRoleEntity> roles) {
         UserEntity admin = new UserEntity()
                 .setUserRoles(roles)
-                .setFirstName("Svilen")
-                .setLastName("Velikov")
-                .setEmail("svilkata_sh@abv.bg")
+                .setFirstName("Svi")
+                .setLastName("Veli")
+                .setEmail("svilk_sh@abv.bg")
                 .setUsername("admin")
                 .setPassword(passwordEncoder.encode(adminPass));
 
@@ -141,8 +178,14 @@ public class UserService implements InitializableUserService {
         this.basketService.addBasketForRegisteredUser(savedUser);
 
         //this is the Spring representation of a User - after register, we AUTO log-in the users directly = THE LOGIN PROCESS
+        login(newCustomer.getUsername());
+
+        return savedUser.getId();
+    }
+
+    public void login(String username) {
         UserDetails userDetails =
-                appUserDetailsService.loadUserByUsername(newCustomer.getUsername());
+                appUserDetailsService.loadUserByUsername(username);
 
 
         Authentication authentication =
@@ -155,8 +198,6 @@ public class UserService implements InitializableUserService {
         SecurityContextHolder.
                 getContext().
                 setAuthentication(authentication);
-
-        return savedUser.getId();
     }
 
     public List<UserViewModel> getEmployeeUsers() {

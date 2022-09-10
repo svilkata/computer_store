@@ -3,12 +3,11 @@ package bg.softuni.computerStore.config;
 import bg.softuni.computerStore.model.enums.UserRoleEnum;
 import bg.softuni.computerStore.repository.users.UserRepository;
 import bg.softuni.computerStore.service.AppUserDetailsService;
+import bg.softuni.computerStore.service.oauth2.OAuthSuccessHandler;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
@@ -32,7 +31,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http, OAuthSuccessHandler oAuthSuccessHandler) throws Exception {
 
         http.
                 // define which requests are allowed and which not
@@ -68,15 +67,20 @@ public class SecurityConfig {
                         defaultSuccessUrl("/").
                 // where to go in case that the login failed
                         failureForwardUrl("/users/login-error").
-        and().
+                and().
                 // configure logout
                         logout().
                 // which is the logout url
                         logoutUrl("/users/logout").
+                logoutSuccessUrl("/").
                 // invalidate the session and delete the cookies
                         invalidateHttpSession(true).
-                deleteCookies("JSESSIONID")
-                .logoutSuccessUrl("/");
+                deleteCookies("JSESSIONID").
+                and().
+                //allow oauth2 login
+                oauth2Login().
+                loginPage("/login").
+                successHandler(oAuthSuccessHandler);
 
         http.csrf().csrfTokenRepository(csrfTokenRepository());
 

@@ -21,7 +21,13 @@ spring:
   sql:
     init:
       mode: never
-
+  security:
+    oauth2:
+      client:
+        registration:
+          facebook:
+            client-id: 1277767399626116
+            client-secret: ${FACEBOOK_LOGIN_SECRET}
 
 server:
   error:
@@ -40,3 +46,8 @@ cloudinary:
   api_key: "218356847735493"
   api_secret: ${CLOUDINARY_SECRET}
 
+#logging:
+#  level:
+#    org.springframework: DEBUG   #debugging while logging more info
+#    org.hibernate.SQL: DEBUG
+#    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
