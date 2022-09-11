@@ -31,6 +31,4 @@ public interface AllItemsRepository
     Optional<ItemEntity> findItemEntityByTypeAndItemId(String type, Long itemId);
 
     Page<ItemEntity> findAllByType(String type, Pageable pageable);
-
-//    Page<ItemEntity> findAllByTypeAndSearch(String type, Pageable pageable, SearchProductItemDTO searchProductItemDTO);
 }

@@ -14,7 +14,8 @@
 * Every person who visits the website can register and login in the website
 * The register process sets this new user as a customer only - only role CUSTOMER 
 * Customers can add products in the basket, and make final orders
-
+* Facebook social login feature implemented for customers only - not cleared out yet if it is a normal behaviour if facebook user already exists in the database only by username or only by email (the facebook user should exists in the database both with username and email     or     should both username and email should not exist in the database???)
+ 
 ### ADMIN panel functionality - **only for ADMIN**
 * Employee of the store is any user with a role either EMPLOYEE_PURCHASES and/or EMPLOYEE_SALES
 * User with ADMIN role can only add a new employee - EMPLOYEE_PURCHASES and/or EMPLOYEE_SALES
@@ -175,9 +176,9 @@ It works sorted by default (by created datetime DESCENDING) and the last added o
     - in the method viewOrderWithItemsAndAddAddressConfirm from the class BasketAndOrderController.java, at the last but one row and after the final order is finally created, we set a new value (already increased with 1)  on the attribute "totalOrdersCount" of JSESSIONID part of  http cookie session.
 
 ### Search
-* Searching of orders at the client-side and default sorted according to the user roles - via Rest and @RestController and Fetch Api (jQuery and JS)
+* DONE! - Searching orders at the client-side and default sorted according to the user roles - via Rest and @RestController and Fetch Api (jQuery and JS)
 * //TODO: We can make the search feature at the client-side rendering with Pagination functionality for the final orders - we should use JS via the rest and make all the logic for pageable in JS.
-* //TODO:!!Not completely working yet !! Searching computers at the server-side and integrated with Pagination and default sorted - via Thymeleaf and @Controller - combined search criteria by model name (brand name is always a part of the model name) and by minSellingPrice and maxSellingPrice using CriteriaBuilder
+* DONE! - Searching computers at the server-side with combined search criteria and integrated with Pagination and default sorted - via Thymeleaf and @Controller - combined search criteria by model name (brand name is always a part of the model name) and by minSellingPrice and maxSellingPrice using Specification and CriteriaBuilder
 * //TODO: We can make a search feature at the server-side also for other items or we can make it a global search for all or specific types of product items
 
 ### Advice (AOP)

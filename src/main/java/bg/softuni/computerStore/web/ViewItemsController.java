@@ -16,6 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -43,6 +44,7 @@ public class ViewItemsController {
         return "/viewItems/one-computer-details";
     }
 
+    //The initial 2 use scenarios of @GetMapping("/items/all/computer")
     /*
     @GetMapping("/computer")
     public String viewAllComputers(Model model,
@@ -66,20 +68,18 @@ public class ViewItemsController {
                                    @PageableDefault(page = 0,
                                            size = 3,
                                            sort = "sellingPrice",
-                                           direction = Sort.Direction.ASC) Pageable pageable) {
+                                           direction = Sort.Direction.ASC) Pageable pageable,
+                                   RedirectAttributes redirectAttributes) {
 
         if (!model.containsAttribute("searchProductItemDTO")) {
             model.addAttribute("searchProductItemDTO", searchProductItemDTO);
         }
 
-        //in all cases, we set the attribute computers
-        if (searchProductItemDTO.isEmpty()) {
-            Page<ComputerViewGeneralModel> computers = this.computerService.getAllComputersPageable(pageable);
-            model.addAttribute("computers", computers);
-        } else {
-            Page<ComputerViewGeneralModel> computers = this.computerService.getAllComputersPageableAndSearched(pageable, searchProductItemDTO);
-            model.addAttribute("computers", computers);
-        }
+        Page<ComputerViewGeneralModel> computers = this.computerService
+                .getAllComputersPageableAndSearched(pageable, searchProductItemDTO, "computer");
+        model.addAttribute("computers", computers);
+
+        redirectAttributes.addFlashAttribute("searchProductItemDTO", searchProductItemDTO);
 
         return "/viewItems/all-computers";
     }

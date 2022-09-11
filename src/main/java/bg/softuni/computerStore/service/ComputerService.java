@@ -119,6 +119,7 @@ public class ComputerService implements InitializableProductService {
         return computerViewGeneralModel;
     }
 
+    //we do not use this method now, but it is included in the tests
     public List<ComputerViewGeneralModel> findAllComputers() {
         List<ItemEntity> allComputers = this.allItemsRepository.findAllItemsByType("computer");
         if (allComputers.isEmpty()) {
@@ -134,6 +135,7 @@ public class ComputerService implements InitializableProductService {
         return allComputersView;
     }
 
+    //Simpler option for pagination only
     public Page<ComputerViewGeneralModel> getAllComputersPageable(Pageable pageable) {
         Page<ComputerViewGeneralModel> allComputers = this.allItemsRepository
                 .findAllByType("computer", pageable)
@@ -144,16 +146,14 @@ public class ComputerService implements InitializableProductService {
     }
 
 
+    //Complicated use
     public Page<ComputerViewGeneralModel> getAllComputersPageableAndSearched(
-            Pageable pageable, SearchProductItemDTO searchProductItemDTO) {
+            Pageable pageable, SearchProductItemDTO searchProductItemDTO, String type) {
 
         Page<ComputerViewGeneralModel> allComputers = this.allItemsRepository
-                .findAll(new ProductItemSpecification(searchProductItemDTO), pageable)
-//                .findAllByTypeAndSearch("computer", pageable, new ProductItemSpecification(searchProductItemDTO))
-//                .findAllByType("computer", pageable)
+                .findAll(new ProductItemSpecification(searchProductItemDTO, type), pageable)
                 .map(comp -> this.structMapper
                         .computerEntityToComputerSalesViewGeneralModel((ComputerEntity) comp));
-
 
         return allComputers;
     }

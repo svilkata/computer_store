@@ -4,16 +4,15 @@ import bg.softuni.computerStore.model.binding.product.SearchProductItemDTO;
 import bg.softuni.computerStore.model.entity.products.ItemEntity;
 import org.springframework.data.jpa.domain.Specification;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 
 public class ProductItemSpecification implements Specification<ItemEntity> {
     private final SearchProductItemDTO searchProductItemDTO;
+    private final String type;
 
-    public ProductItemSpecification(SearchProductItemDTO searchProductItemDTO) {
+    public ProductItemSpecification(SearchProductItemDTO searchProductItemDTO, String type) {
         this.searchProductItemDTO = searchProductItemDTO;
+        this.type = type;
     }
 
     @Override
@@ -22,13 +21,16 @@ public class ProductItemSpecification implements Specification<ItemEntity> {
                                  CriteriaBuilder cb) {
         Predicate predicate = cb.conjunction();
 
+        predicate.getExpressions().add(cb.equal(root.get("type"), type));
+
         if (searchProductItemDTO.getModel() != null && !searchProductItemDTO.getModel().isBlank()) {
+            Path<Object> model = root.get("model");
             predicate.getExpressions().add(
                     //!!!!! when we have two relationally connected tables
 //                    cb.and(cb.equal(root.join("model").get("name"), searchProductItemDTO.getModel()));
 
-                    //when all fields are from the same table ItemEntity
-                    cb.and(cb.equal(root.get("model"), searchProductItemDTO.getModel()))
+                    //when all fields are from the same table ItemEntity:::: the like works case insensitive
+                    cb.and(cb.like(root.get("model").as(String.class), "%" + searchProductItemDTO.getModel() + "%"))
             );
         }
 

@@ -28,7 +28,7 @@
                             class="form-control mr-sm-2"
                             style="width: 280px;"
                             type="search"
-                            placeholder="Model name..."
+                            placeholder="Model name case Insensitive..."
                             aria-label="Search"
                             id="model"
                     />
@@ -122,7 +122,7 @@
                     <li class="page-item" th:classappend="${computers.isFirst()} ? 'disabled' : ''">
                         <a th:unless="${computers.isFirst()}"
                            class="page-link"
-                           th:href="@{/items/all/computer(size=${computers.getSize()},page=0)}">First</a>
+                           th:href="@{/items/all/computer(size=${computers.getSize()},page=0,model=${searchProductItemDTO.getModel()}, minPrice=${searchProductItemDTO.getMinPrice()},maxPrice=${searchProductItemDTO.getMaxPrice()})}">First</a>
                     </li>
                 </ul>
             </nav>
@@ -131,7 +131,7 @@
                     <li class="page-item" th:classappend="${computers.hasPrevious() ? '' : 'disabled'}">
                         <a th:if="${computers.hasPrevious()}"
                            class="page-link"
-                           th:href="@{/items/all/computer(size=${computers.getSize()},page=${computers.getNumber() - 1})}">Previous</a>
+                           th:href="@{/items/all/computer(size=${computers.getSize()},page=${computers.getNumber() - 1},model=${searchProductItemDTO.getModel()}, minPrice=${searchProductItemDTO.getMinPrice()},maxPrice=${searchProductItemDTO.getMaxPrice()})}">Previous</a>
                     </li>
                 </ul>
             </nav>
@@ -140,7 +140,7 @@
                     <li class="page-item" th:classappend="${computers.hasNext() ? '' : 'disabled'}">
                         <a th:if="${computers.hasNext()}"
                            class="page-link"
-                           th:href="@{/items/all/computer(size=${computers.getSize()},page=${computers.getNumber() + 1})}">Next</a>
+                           th:href="@{/items/all/computer(size=${computers.getSize()},page=${computers.getNumber() + 1},model=${searchProductItemDTO.getModel()}, minPrice=${searchProductItemDTO.getMinPrice()},maxPrice=${searchProductItemDTO.getMaxPrice()})}">Next</a>
                     </li>
                 </ul>
             </nav>
@@ -149,7 +149,7 @@
                     <li class="page-item" th:classappend="${computers.isLast()} ? 'disabled' : ''">
                         <a th:unless="${computers.isLast()}"
                            class="page-link"
-                           th:href="@{/items/all/computer(size=${computers.getSize()},page=${computers.getTotalPages()-1})}">Last</a>
+                           th:href="@{/items/all/computer(size=${computers.getSize()},page=${computers.getTotalPages()-1},model=${searchProductItemDTO.getModel()},minPrice=${searchProductItemDTO.getMinPrice()},maxPrice=${searchProductItemDTO.getMaxPrice()})}">Last</a>
                     </li>
                 </ul>
             </nav>

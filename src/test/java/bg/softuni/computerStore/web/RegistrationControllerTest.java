@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -69,7 +70,8 @@ class RegistrationControllerTest {
                         .param("lastName", "Peshovich")
                         .param("password", "123456")
                         .param("confirmPassword", "123456")
-                        .with(csrf())).
+                        .with(csrf())
+                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)).
                 andExpect(status().is3xxRedirection());
     }
 
