@@ -7,7 +7,8 @@
 * Initialization from data.sql - see the end of this Readme file
 
 ### Test credentials for the different users
-* !!!!! **Please, do not delete the already created items/do not upload new photo for the already created items !!!!!!**
+* **!!!!! Please, do not delete the already defaultly created items/do not upload new photo for the already defaultly created items !!!!!!**
+* Link to the website **https://computerstoreproject.herokuapp.com**
 * username: admin  password: 11111
 * username: customer  password: 11111
 * username: sales  password: 11111
@@ -204,7 +205,9 @@ It works sorted by default (by created datetime DESCENDING) and the last added o
 * Default sorting by sellingPrice ascending
 
 ### Host the application in a cloud environment
-* //TODO:
+* Deployed project via GitHub and manual deployment of only the current brach state
+* Link to the website **https://computerstoreproject.herokuapp.com**
+*  **!!!!! Please, do not delete the already defaultly created items/do not upload new photo for the already defaultly created items !!!!!!**
 
 
 
