@@ -81,7 +81,7 @@
 Each user with roles either ADMIN and/or EMPLOYEE_SALES has access to change the order status - for all existing orders possible.
 Each user with role CUSTOMER or with rolse EMPLOYEE_PURCHASES & CUSTOMER  has only the standard access - i.e. only access to his/her own orders, and not access to any / all orders.
 It works sorted by default (by created datetime DESCENDING) and the last added order appears first in the result list. 
-* Implemented server-side combined search for finding computers and integrated with Pagination and default sorted by price ASCENDING - the combined search criteria is by model name (brand name is always a part of the model name) and by minSellingPrice and maxSellingPrice
+* Implemented server-side combined search for finding computers and integrated with Pagination and default sorted by price ASCENDING - the combined search criteria is by model name CASE SENSITIVE for now (brand name is always a part of the model name) and by minSellingPrice and maxSellingPrice
 
 
 
@@ -182,7 +182,7 @@ It works sorted by default (by created datetime DESCENDING) and the last added o
 ### Search
 * DONE! - Searching orders at the client-side and default sorted according to the user roles - via Rest and @RestController and Fetch Api (jQuery and JS)
 * //TODO: We can make the search feature at the client-side rendering with Pagination functionality for the final orders - we should use JS via the rest and make all the logic for pageable in JS.
-* DONE! - Searching computers at the server-side with combined search criteria and integrated with Pagination and default sorted - via Thymeleaf and @Controller - combined search criteria by model name (brand name is always a part of the model name) and by minSellingPrice and maxSellingPrice using Specification and CriteriaBuilder
+* DONE! - Searching computers at the server-side with combined search criteria and integrated with Pagination and default sorted - via Thymeleaf and @Controller - combined search criteria by model name CASE SENSITIVE for now (brand name is always a part of the model name) and by minSellingPrice and maxSellingPrice using Specification and CriteriaBuilder
 * //TODO: We can make a search feature at the server-side also for other items or we can make it a global search for all or specific types of product items
 
 ### Advice (AOP)

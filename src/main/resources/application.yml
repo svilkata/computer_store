@@ -5,10 +5,10 @@ spring:
     #    username: root
     #    password:
 
-    #    driverClassName: org.postgresql.Driver
-    #    url: jdbc:postgresql://localhost:5432/postgres?allowPublicKeyRetrieval=true&useSSL=false&createDatabaseIfNotExist=true&serverTimezone=UTC
-    #    username: postgres
-    #    password: 1
+#        driverClassName: org.postgresql.Driver
+#        url: jdbc:postgresql://localhost:5432/postgres?allowPublicKeyRetrieval=true&useSSL=false&createDatabaseIfNotExist=true&serverTimezone=UTC
+#        username: postgres
+#        password: 1
 
     driverClassName: org.postgresql.Driver
     url: ${JDBC_DATABASE_URL:}
@@ -17,6 +17,7 @@ spring:
     hikari:
       connection-timeout: 30000
       maximum-pool-size: 10
+
   mvc:
     hiddenmethod:
       filter:
