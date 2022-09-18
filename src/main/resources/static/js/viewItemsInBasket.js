@@ -1,7 +1,9 @@
 const container = $('#displayBasket');
 const basketId = $("#basketId").attr('value');
 
-fetch('http://localhost:8080/users/basket/viewitems/' + basketId)
+var portURL = 'https://computerstoreproject.herokuapp.com';
+
+fetch(portURL + '/users/basket/viewitems/' + basketId)
     .then((response) => response.json())
     .then((result) => displayBasket(result));
 
@@ -95,13 +97,13 @@ function displayBasket(result) {
 
     const div = $('<div>').addClass('button-holder d-flex');
     const submitButton = $('<a>').addClass('btn btn-info btn-lg').text('Continue to Order')
-        .attr('href', 'http://localhost:8080/users/order/' + basketId);
+        .attr('href', portURL + '/users/order/' + basketId);
     div.append(submitButton);
     divUpper.append(div);
 }
 
 function onChangeQuantity(itemId, newQuantity) {
-    fetch('http://localhost:8080/users/basket/changeOneItemQuantityInBasket/' + basketId + '?itemId=' + itemId + '&newQuantity=' + newQuantity)
+    fetch(portURL + '/users/basket/changeOneItemQuantityInBasket/' + basketId + '?itemId=' + itemId + '&newQuantity=' + newQuantity)
         .then((response) => {
             if (response.status == 200) {
                 alert('Quantity changed successfully');
@@ -118,7 +120,7 @@ function onChangeQuantity(itemId, newQuantity) {
 }
 
 function onRemoveItemFromBasket(itemId) {
-    fetch('http://localhost:8080/users/basket/removeOneItemFromBasket/' + basketId + '?itemId=' + itemId)
+    fetch(portURL + '/users/basket/removeOneItemFromBasket/' + basketId + '?itemId=' + itemId)
         .then((response) => {
             return response.json();
 

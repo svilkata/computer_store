@@ -1,6 +1,8 @@
 const maincontainer = $('#displayOrders');
 const roleValueCustomerOnly = maincontainer.attr('value');
 
+var portURL = 'https://computerstoreproject.herokuapp.com';
+
 //With query selector it only works!!! -  ***цензура*** jQuery не ми работи с preventDefault() !!!
 const searchOrdersForm = document.querySelector("#searchOrdersForm");
 searchOrdersForm.addEventListener("submit", onSearch);
@@ -11,13 +13,13 @@ function onSearch(event) {
     event.preventDefault();
     const searchField = new FormData(event.target).get('search')
 
-    fetch('http://localhost:8080/users/order/searchorders?search=' + searchField)
+    fetch(portURL + '/users/order/searchorders?search=' + searchField)
         .then((response) => response.json())
         .then((result) => displayOrders(result));
 }
 
 //initial load of page
-fetch('http://localhost:8080/users/order/viewordersrest')
+fetch(portURL + '/users/order/viewordersrest')
     .then((response) => response.json())
     .then((result) => displayOrders(result));
 
@@ -143,51 +145,7 @@ function changeOrderStatus(event, orderNumber, orderStatus) {
     let searchContent = searchOrdersForm.querySelector('input').value;
 
     //Normal all offers we show - no search is selected
-    fetch('http://localhost:8080/users/order/changestatus/' + orderNumber + '?orderStatus=' + orderStatus + '&search=' + searchContent)
+    fetch(portURL + '/users/order/changestatus/' + orderNumber + '?orderStatus=' + orderStatus + '&search=' + searchContent)
         .then((response) => response.json())
         .then((result) => displayOrders(result));
 }
-
-
-/*
-<th:block th:if="${orders.size() == 0}">
-    <h4 className="text-center text-white mt-5 greybg">.....No orders available.....</h4>
-</th:block>
-
-<th:block th:if="${orders.size() != 0}">
-    <div>
-        <div className="container" th:each="o : ${orders}" th:object="${o}">
-            <div className="float-left">
-                <div className="row justify-content-md-center" style="min-height: 38px">
-                    <div className="col-md-auto text-dark bg-white" style="min-height: 38px"><span
-                        th:text="'Client username: ' + *{username}">Client username:</span></div>
-                    <div className="col-md-auto text-dark bg-white" style="min-height: 38px"><span
-                        th:text="'Order number: ' + *{orderNumber}">Order number:</span>
-                    </div>
-                    <div className="col-md-auto text-dark bg-white" style="min-height: 38px"><span
-                        th:text="'Total items: ' + *{totalItemsInOrder}">Total items:</span>
-                    </div>
-                    <div className="col-md-auto text-dark bg-white" style="min-height: 38px"><span
-                        th:text="'Total value: '+ *{totalValue} + 'BGN'">Total value:</span>
-                    </div>
-                    <div className="w-100"></div>
-                    <div className="col-md-auto text-dark bg-white" style="min-height: 38px"><span
-                        th:text="'Created at: ' + *{createdAt}">Order created at:</span>
-                    </div>
-                    <div className="col-md-auto text-dark bg-white" style="min-height: 38px"><span
-                        th:text="'Order status: '+ *{orderStatus}">Order status:</span>
-                    </div>
-                    <a className="col-md-auto btn btn-info"
-                       th:href="@{/users/vieworders/{orderNumber}/details (orderNumber=*{orderNumber})}">Details</a>
-
-                    <a sec:authorize="hasRole('EMPLOYEE_SALES')" className="col-md-auto btn btn-info"
-                       th:href="@{/users/changeorderstatus/{orderNumber} (orderNumber=*{orderNumber})}">Change
-                        status</a>
-                </div>
-            </div>
-            <br>
-        </div>
-        <br>
-    </div>
-</th:block>
-*/

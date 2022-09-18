@@ -25,6 +25,7 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addInterceptor(localeChangeInterceptor);
     }
 
+    //For displaying the html pages in a Heroku deployed project
     @Bean
     public ClassLoaderTemplateResolver myTemplateResolver(){
         ClassLoaderTemplateResolver configurer = new ClassLoaderTemplateResolver();

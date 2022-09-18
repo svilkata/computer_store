@@ -2,8 +2,10 @@ const addAnItemToBasket = $('#additemtobasket');
 
 addAnItemToBasket.on('click', buttonClicked);
 
+var portURL = 'https://computerstoreproject.herokuapp.com';
+
 function buttonClicked() {
-    fetch('http://localhost:8080/users/basket/additemtobasket/' + addAnItemToBasket.attr('value'))
+    fetch(portURL + '/users/basket/additemtobasket/' + addAnItemToBasket.attr('value'))
         .then((response) => {
             console.log(response);
 

@@ -8,7 +8,7 @@
 
 ### Test credentials for the different users
 * **!!!!! Please, do not delete the already defaultly created items/do not upload new photo for the already defaultly created items !!!!!!**
-* Link to the website **https://computerstoreproject.herokuapp.com**
+* Link to the website **https://computerstoreproject.herokuapp.com/**
 * username: admin  password: 11111
 * username: customer  password: 11111
 * username: sales  password: 11111
@@ -205,9 +205,10 @@ It works sorted by default (by created datetime DESCENDING) and the last added o
 * Default sorting by sellingPrice ascending
 
 ### Host the application in a cloud environment
-* Deployed project via GitHub and manual deployment of only the current brach state
-* Link to the website **https://computerstoreproject.herokuapp.com**
-*  **!!!!! Please, do not delete the already defaultly created items/do not upload new photo for the already defaultly created items !!!!!!**
+* Deployed project via GitHub and manual deployment of only the current "main" branch state
+* Link to the website **https://computerstoreproject.herokuapp.com/**
+* **!!!!! Please, do not delete the already defaultly created items/do not upload new photo for the already defaultly created items !!!!!!**
+* Important: For re-deploying the project again, we should keep temporary somewhere the tests folders. We should delete the test folders from the github repo branch "main", then start the deployment, and after a successfull manual deployment of the current branch "main" state, we can add afterwards the tests again in the github repo
 
 
 
