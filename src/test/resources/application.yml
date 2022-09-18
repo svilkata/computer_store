@@ -1,0 +1,33 @@
+spring:
+  jpa:
+    defer-datasource-initialization: true
+    hibernate:
+      properties:
+        dialect: org.hibernate.dialect.H2Dialect
+      ddl-auto: create-drop
+#    dialect: org.hibernate.dialect.HSQLDialect
+  sql:
+    init:
+      mode: never
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+#  mvc:
+#    hiddenmethod:
+#      filter:
+#        enabled: true
+
+
+##Cloudinary properties
+cloudinary:
+  cloud_name: "dtfd8gw16"
+  api_key: "218356847735493"
+  api_secret:
+#  ${CLOUDINARY_SECRET}
+
+app:
+  default:
+    admin:
+      password: 11111
