@@ -1,0 +1,1 @@
+web: java -jar target/computer_store-2.6.7.jar

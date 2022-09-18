@@ -6,9 +6,12 @@
 * Initialization of the initial data - via InitialazbleService interfaces according to the  Open-Close SOLID principle - at init/AppInit.java class in @PostConstruct annotated method.
 * Initialization from data.sql - see the end of this Readme file
 
-### Test credentials for user customer
-* username: customer
-* password: 11111
+### Test credentials for the different users
+* !!!!! **Please, do not delete the already created items/do not upload new photo for the already created items !!!!!!**
+* username: admin  password: 11111
+* username: customer  password: 11111
+* username: sales  password: 11111
+* username: purchase  password: 11111
 
 ### Customer functionality - **only for users who have a role CUSTOMER**
 * Every person who visits the website can register and login in the website
@@ -102,7 +105,7 @@ It works sorted by default (by created datetime DESCENDING) and the last added o
 * whether the buyingPrice and sellingPrice are valid whole or fractional number and not a text - when adding new products/amending existing products in the store
 
 ### Spring data, Hibernate and database
-* using MySQL
+* using MySQL (implemente/working also with PostgreSQL)
 * implemented Single Table inheritance for all the products
 * all tables interconnected one another relationally
 * userId in our project is in reality always the  basketId  (userId === basketId in our project)
