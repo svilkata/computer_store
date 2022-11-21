@@ -211,7 +211,8 @@ It works sorted by default (by created datetime DESCENDING) and the last added o
 * Important: For re-deploying the project again, we should keep temporary somewhere the tests folders. We should delete the test folders from the github repo branch "main", then start the deployment, and after a successfull manual deployment of the current branch "main" state, we can add afterwards the tests again in the github repo
 
 
-
+### Demo with MailHog and javamail with Spring
+* When user register, an automatic e-mail is sent to MailHog (Attention - it works only locally and is not deployed at Heroku)
 
 
 ## III. General MORE TODOs

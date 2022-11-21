@@ -33,6 +33,7 @@ public class UserService implements InitializableUserService {
     private final String adminPass;
     private final ModelMapper modelMapper;
     private final BasketService basketService;
+    private final DemoEmailService demoEmailService;
 
     public String createCustomerFromFacebookIfNotExist(String username, String email){
         Optional<UserEntity> optUserByUsername = this.userRepository.findByUsername(username);
@@ -78,7 +79,8 @@ public class UserService implements InitializableUserService {
             UserRepository userRepository, UserRoleRepository userRoleRepository,
             PasswordEncoder passwordEncoder,
             UserDetailsService appUserDetailsService,
-            @Value("${app.default.admin.password}") String adminPass, ModelMapper modelMapper, BasketService basketService) {
+            @Value("${app.default.admin.password}") String adminPass, ModelMapper modelMapper, BasketService basketService,
+            DemoEmailService demoEmailService) {
         this.userRepository = userRepository;
         this.userRoleRepository = userRoleRepository;
         this.passwordEncoder = passwordEncoder;
@@ -86,6 +88,7 @@ public class UserService implements InitializableUserService {
         this.adminPass = adminPass;
         this.modelMapper = modelMapper;
         this.basketService = basketService;
+        this.demoEmailService = demoEmailService;
     }
 
     @Override
@@ -179,6 +182,8 @@ public class UserService implements InitializableUserService {
 
         //this is the Spring representation of a User - after register, we AUTO log-in the users directly = THE LOGIN PROCESS
         login(newCustomer.getUsername());
+
+        demoEmailService.sendRegistrationEmail(savedUser.getEmail(), savedUser.getUsername());
 
         return savedUser.getId();
     }

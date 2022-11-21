@@ -67,3 +67,9 @@ cloudinary:
 #    org.springframework: DEBUG   #debugging while logging more info
 #    org.hibernate.SQL: DEBUG
 #    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+
+mail:
+  host: "localhost"
+  port: 1025
+  username: "computer@store.com"
+  password: ""
