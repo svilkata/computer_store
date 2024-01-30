@@ -12,7 +12,7 @@ import javax.persistence.Table;
 @Table(name = "baskets_item_quantity")
 public class ItemQuantityInBasketEntity extends BaseEntity {
     @ManyToOne
-    private BasketOrderEntity basket;
+    private BasketEntity basket;
 
     @ManyToOne
     private ItemEntity item;
@@ -23,11 +23,11 @@ public class ItemQuantityInBasketEntity extends BaseEntity {
     public ItemQuantityInBasketEntity() {
     }
 
-    public BasketOrderEntity getBasket() {
+    public BasketEntity getBasket() {
         return basket;
     }
 
-    public ItemQuantityInBasketEntity setBasket(BasketOrderEntity basket) {
+    public ItemQuantityInBasketEntity setBasket(BasketEntity basket) {
         this.basket = basket;
         return this;
     }

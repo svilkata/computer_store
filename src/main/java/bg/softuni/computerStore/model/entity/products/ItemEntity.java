@@ -35,7 +35,6 @@ public abstract class ItemEntity {
 //    @Column(name = "more_info", columnDefinition = "TEXT")
     @Column(name = "more_info")
     private String moreInfo;
-//    private String photoUrl;
     @OneToOne
     private PictureEntity photo;
 

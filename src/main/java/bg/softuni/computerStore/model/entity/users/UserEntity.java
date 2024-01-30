@@ -1,11 +1,10 @@
 package bg.softuni.computerStore.model.entity.users;
 
 import bg.softuni.computerStore.model.entity.BaseEntity;
-import bg.softuni.computerStore.model.entity.orders.BasketOrderEntity;
+import bg.softuni.computerStore.model.entity.orders.BasketEntity;
 import bg.softuni.computerStore.model.entity.orders.FinalOrderEntity;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -39,7 +38,7 @@ public class UserEntity extends BaseEntity {
     private Set<UserRoleEntity> userRoles = new HashSet<>();
 
     @OneToMany(mappedBy = "user")
-    private List<BasketOrderEntity> basketsOfUser;
+    private List<BasketEntity> basketsOfUser;
 
     @OneToMany(mappedBy = "user")
     private List<FinalOrderEntity> userOrders;
@@ -121,11 +120,11 @@ public class UserEntity extends BaseEntity {
         return this;
     }
 
-    public List<BasketOrderEntity> getBasketsOfUser() {
+    public List<BasketEntity> getBasketsOfUser() {
         return basketsOfUser;
     }
 
-    public UserEntity setBasketsOfUser(List<BasketOrderEntity> basketsOfUser) {
+    public UserEntity setBasketsOfUser(List<BasketEntity> basketsOfUser) {
         this.basketsOfUser = basketsOfUser;
         return this;
     }

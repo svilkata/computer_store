@@ -42,8 +42,7 @@ public class AddNewItemController {
 //    @PreAuthorize("hasRole('ROLE_ADMIN') || hasRole('ROLE_EMPLOYEE_PURCHASES')")
     public String addNewItemTypeConfirm(
             @Valid ProductItemTypeBindingDTO productItemTypeBindingDTO,
-            BindingResult bindingResult,
-            RedirectAttributes redirectAttributes) {
+            BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         Long itemModelIdPresent = -1L;
         if (!productItemTypeBindingDTO.getModel().isBlank()) {
             itemModelIdPresent = this.allItemsService.isItemModelPresent(productItemTypeBindingDTO.getModel());

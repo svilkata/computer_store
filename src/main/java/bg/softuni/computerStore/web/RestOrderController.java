@@ -1,7 +1,6 @@
 package bg.softuni.computerStore.web;
 
 import bg.softuni.computerStore.exception.OrderForbiddenException;
-import bg.softuni.computerStore.exception.OrderNotFoundException;
 import bg.softuni.computerStore.model.entity.orders.FinalOrderEntity;
 import bg.softuni.computerStore.model.view.order.OneOrderInManyOrdersViewModel;
 import bg.softuni.computerStore.service.FinalOrderService;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -67,7 +65,7 @@ public class RestOrderController {
             this.finalOrderService.markOrderAsDelivered(orderNumber);
         }
 
-        if (searchByOrderNumber.equals("")) {
+        if (searchByOrderNumber.isEmpty()) {
             ordersViewModels = getRespectiveOrders(roles, ordersViewModels, userId);
         } else {
             ordersViewModels = getRespectiveOrdersAndSearchCriteriaIncluded(searchByOrderNumber, roles, userId, ordersViewModels);

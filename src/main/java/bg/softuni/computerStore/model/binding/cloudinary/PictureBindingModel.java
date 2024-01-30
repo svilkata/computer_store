@@ -6,7 +6,7 @@ import javax.validation.constraints.NotNull;
 
 public class PictureBindingModel {
     @NotNull
-    private MultipartFile picture; //for uploading files - from Spring framework
+    private MultipartFile picture;
 
     public PictureBindingModel() {
     }

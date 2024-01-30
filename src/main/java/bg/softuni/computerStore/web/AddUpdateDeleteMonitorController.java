@@ -1,7 +1,6 @@
 package bg.softuni.computerStore.web;
 
 import bg.softuni.computerStore.model.binding.product.AddUpdateMonitorBindingDTO;
-import bg.softuni.computerStore.service.ComputerService;
 import bg.softuni.computerStore.service.MonitorService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,7 +20,7 @@ public class AddUpdateDeleteMonitorController {
     }
 
     @GetMapping("/items/add/monitor/{modelName}")
-//    @PreAuthorize("hasRole('ROLE_ADMIN') || hasRole('ROLE_EMPLOYEE_PURCHASES')") //тези май не вършат работа
+//    @PreAuthorize("hasRole('ROLE_ADMIN') || hasRole('ROLE_EMPLOYEE_PURCHASES')")
     public String addNewMonitor(Model model, @PathVariable String modelName) {
 
         if (!model.containsAttribute("addMonitorBindingDTO")) {
@@ -34,7 +33,7 @@ public class AddUpdateDeleteMonitorController {
     }
 
     @PostMapping("/items/add/monitor/**")
-//    @PreAuthorize("hasRole('ROLE_ADMIN') || hasRole('ROLE_EMPLOYEE_PURCHASES')") //тези май не вършат работа
+//    @PreAuthorize("hasRole('ROLE_ADMIN') || hasRole('ROLE_EMPLOYEE_PURCHASES')")
     public String addNewMonitorConfirm(
             @Valid AddUpdateMonitorBindingDTO addUpdateMonitorBindingDTO,
             BindingResult bindingResult,
@@ -53,7 +52,7 @@ public class AddUpdateDeleteMonitorController {
     }
 
     //IMPORTANT - once a customer puts an item in his/her basket, it is not possible to delete the item
-    //We better delete in the beginning before ordering - in case we have done a mistake
+    //We better delete in the beginning before ordering - in case we have made a mistake
     @DeleteMapping("/monitors/delete/{id}")
     public String deleteMonitor(@PathVariable String id) {
         this.monitorService.deleteMonitorAndQuantity(id);

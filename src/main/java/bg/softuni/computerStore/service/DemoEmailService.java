@@ -28,6 +28,7 @@ public class DemoEmailService {
             mimeMessageHelper.setTo(userEmail);
             mimeMessageHelper.setSubject("Welcome to ComputerStore");
             mimeMessageHelper.setText(userName, true);
+//            mimeMessageHelper.setText(generateMessageContent(userName), true);
 
             javaMailSender.send(mimeMessageHelper.getMimeMessage());
         } catch (MessagingException e) {
@@ -36,6 +37,7 @@ public class DemoEmailService {
 
     }
 
+    // TODO: with TemplateEngine
     private String generateMessageContent(String userName){
         Context ctx = new Context();  //org.thymeleaf.context;
         ctx.setVariable("userRegistrationModel.username", userName);

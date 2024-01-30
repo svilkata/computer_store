@@ -13,8 +13,7 @@ import java.util.Locale;
 public class ComputerEntity extends ItemEntity {
     private static final String ITEM_TYPE = TypesOfProducts.COMPUTER.toString().toLowerCase(Locale.ROOT);
 
-    // how to adjust nullable = false and if null given somehow, some default value to be set for empty data
-    @Column(nullable = true)
+    @Column()
     private String processor;
     @Column(name = "video_card", nullable = true)
     private String videoCard;

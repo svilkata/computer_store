@@ -26,7 +26,6 @@ public class GlobalExceptionHandler {
         return modelAndView;
     }
 
-//    @ExceptionHandler(value = ItemIdNotANumberException.class)
     @ExceptionHandler(value = ObjectIdNotANumberException.class)
     public ModelAndView handleDbExceptions(ObjectIdNotANumberException e) {
         ModelAndView modelAndView = new ModelAndView("errors/item-not-found");

@@ -13,7 +13,7 @@ import java.time.format.DateTimeFormatter;
 @Aspect
 @Component
 public class TrackLatencyAspect {
-    @Around(value = "@annotation(TrackLatency)") //around - и преди и след изпълението на метода
+    @Around(value = "@annotation(TrackLatency)") //around - before and after execution of the methods annotated
     public Object trackLatency(ProceedingJoinPoint pjp, TrackLatency TrackLatency) throws Throwable {
         String latencyId = TrackLatency.latency();
         DateTimeFormatter formatterToString = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");

@@ -1,8 +1,6 @@
 package bg.softuni.computerStore.model.view.order;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.List;
 
 public class OneOrderInManyOrdersViewModel {
     private String username;

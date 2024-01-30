@@ -1,6 +1,6 @@
 package bg.softuni.computerStore.schedule;
 
-import bg.softuni.computerStore.model.entity.orders.BasketOrderEntity;
+import bg.softuni.computerStore.model.entity.orders.BasketEntity;
 import bg.softuni.computerStore.service.BasketService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,9 +25,9 @@ public class BasketDatabaseClearDataScheduler {
     @Scheduled(fixedRate  = 300000, initialDelay = 60000)
     public void resetBaskets(){
         LOGGER.info("Baskets resetting/clearing operation started at {}", LocalDateTime.now());
-        List<BasketOrderEntity> basketsCreatedMoreThan20MinutesAgo = this.basketService.getAllBasketsCreatedMoreThan20MinutesAgo();
+        List<BasketEntity> basketsCreatedMoreThan20MinutesAgo = this.basketService.getAllBasketsCreatedMoreThan20MinutesAgo();
 
-        for (BasketOrderEntity basket : basketsCreatedMoreThan20MinutesAgo) {
+        for (BasketEntity basket : basketsCreatedMoreThan20MinutesAgo) {
             this.basketService.resetOneBasketWhen20MinutesPassed(basket.getId());
         }
 

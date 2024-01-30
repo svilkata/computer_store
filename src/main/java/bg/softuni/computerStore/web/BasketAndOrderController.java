@@ -45,9 +45,7 @@ public class BasketAndOrderController {
 
     //userId == uId
     @GetMapping("/users/basket/{uId}")
-    public String viewBasketWithItems(Model model,
-                                      @PathVariable String uId,
-                                      @AuthenticationPrincipal AppUser user) {
+    public String viewBasketWithItems(Model model, @PathVariable String uId, @AuthenticationPrincipal AppUser user) {
         final Long userId = isObjectIdANumber(uId, "userId");
 
         if (userId <= 0 || userId > userService.getCountOfRegisteredUsers()) {
@@ -68,9 +66,7 @@ public class BasketAndOrderController {
 
     //basketId == bId
     @GetMapping("/users/order/{bId}")
-    public String viewOrderWithItemsAndAddAddress(Model model,
-                                                  @PathVariable String bId,
-                                                  @AuthenticationPrincipal AppUser user) {
+    public String viewOrderWithItemsAndAddAddress(Model model, @PathVariable String bId, @AuthenticationPrincipal AppUser user) {
         final Long basketId = isObjectIdANumber(bId, "basketId");
         Long userId = this.basketService.getUserIdByBasketId(basketId);
 
@@ -127,10 +123,10 @@ public class BasketAndOrderController {
             return "redirect:/users/order/" + basketId;
         }
 
-        //Creation order is successfull, we start creating the order
+        //Creation order is successful, we start creating the order
         String orderNumber = this.finalOrderService.processOrder(basketId, clientExtraOrderInfo, basket.getTotalValue());
 
-        //При успешно потвърждаване на поръчка, то чак тогава да сменим http cookie-то стойността
+        // Only when a successful confirmation of order, then we change the http cookie session value
         httpSession.setAttribute("totalOrdersCount", GlobalVariablesEventServices.totalNumberOfOrders);
 
         return "redirect:/users/order/" + orderNumber + "/details";
@@ -189,7 +185,7 @@ public class BasketAndOrderController {
         return "/customer/OneOrder-details";
     }
 
-    //One page where the orders of a client will be loaded or all orders if SALES or ADMIN user
+    //One page where the orders of a client will be loaded   or  if SALES or ADMIN user then all orders will be loaded
     @GetMapping("/users/order/vieworders")
     public String viewOrders(Model model, @AuthenticationPrincipal AppUser user) {
         Long userId = user.getId();

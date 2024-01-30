@@ -1,11 +1,10 @@
 package bg.softuni.computerStore.service;
 
 import bg.softuni.computerStore.event.OrderCreatedEvent;
-import bg.softuni.computerStore.exception.OrderForbiddenException;
 import bg.softuni.computerStore.exception.OrderNotFoundException;
 import bg.softuni.computerStore.initSeed.InitializableFinalOrderService;
 import bg.softuni.computerStore.model.binding.order.ClientOrderExtraInfoGetViewModel;
-import bg.softuni.computerStore.model.entity.orders.BasketOrderEntity;
+import bg.softuni.computerStore.model.entity.orders.BasketEntity;
 import bg.softuni.computerStore.model.entity.orders.FinalOrderEntity;
 import bg.softuni.computerStore.model.entity.orders.ItemQuantityInBasketEntity;
 import bg.softuni.computerStore.model.entity.orders.ItemQuantityInOrderEntity;
@@ -68,7 +67,7 @@ public class FinalOrderService implements InitializableFinalOrderService {
                                BigDecimal totalTotal) {
         LOGGER.info("Starting creating order from basket with id: {}", basketId);
 
-        BasketOrderEntity basketOrder = this.basketService.readOneBasket(basketId);
+        BasketEntity basketOrder = this.basketService.readOneBasket(basketId);
         ClientOrderExtraInfoEntity clientOrderExtraInfoEntity = new ClientOrderExtraInfoEntity()
                 .setDeliveryAddress(clientOrderExtraInfoGetViewModel.getDeliveryAddress())
                 .setPhoneNumber(clientOrderExtraInfoGetViewModel.getPhoneNumber())
@@ -175,7 +174,7 @@ public class FinalOrderService implements InitializableFinalOrderService {
         return this.finalOrderRepository.findAllOrdersLazy();
     }
 
-    //iqo name comes from ItemQuantityInOrderEntity
+    //`iqo` abbreviation comes from ItemQuantityInOrderEntity
     // uuid here is order.getId()
     public List<ItemQuantityInOrderEntity> findIQOUUIDPrimary(UUID uuid) {
         List<ItemQuantityInOrderEntity> allByUUIDPrimary = this.quantitiesItemsInOrderRepository.findAllByUUIDPrimary(uuid);

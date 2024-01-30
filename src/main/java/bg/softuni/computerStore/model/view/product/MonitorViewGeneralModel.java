@@ -1,6 +1,5 @@
 package bg.softuni.computerStore.model.view.product;
 
-import javax.persistence.Column;
 import java.math.BigDecimal;
 
 public class MonitorViewGeneralModel {

@@ -21,19 +21,18 @@ public class RegistrationController {
     }
 
     @ModelAttribute("userRegistrationModel")
-    public void initUserRegistrationModel(Model model){ //изпълнява се в рамките на текущия контролер само!!!
+    public void initUserRegistrationModel(Model model){ // in the current controller only!
         model.addAttribute("userRegistrationModel", new UserRegisterBindingDTO());
     }
 
     @GetMapping("/users/register")
     public String register() {
-        // когато зареждаме за първи път страницата, то автомиатично ще влезе към модела атрибут userRegistrationModel == празен new UserRegisterBindingDto()
+        // when loading the page for the first time, we automatically will enter into userRegistrationModel == new UserRegisterBindingDto()
         return "/user/auth-registerUser";
     }
 
     @PostMapping("/users/register")
-    public String registerConfirm(@Valid UserRegisterBindingDTO userRegisterBindingDto,
-                           BindingResult bindingResult,
+    public String registerConfirm(@Valid UserRegisterBindingDTO userRegisterBindingDto, BindingResult bindingResult,
                            RedirectAttributes redirectAttributes) {
 
         if (bindingResult.hasErrors()) {

@@ -20,27 +20,27 @@ public class FieldMatchValidator implements ConstraintValidator<FieldMatch, Obje
 
     @Override
     public boolean isValid(Object value, ConstraintValidatorContext context) {
-        //В случая Object value ще е целия модел UserRegisterDTO
+        //In our case Object value will be the UserRegisterDTO
         BeanWrapper beanWrapper = PropertyAccessorFactory.forBeanPropertyAccess(value);
         Object firstValue = beanWrapper.getPropertyValue(this.first);
         Object secondValue = beanWrapper.getPropertyValue(this.second);
 
         boolean valid;
 
-        if (firstValue == null) { //ако password от html формуляра е null
-            //ако първото е null и второто е null, то не хвърляй грешка
-            //ако първото е null а второто има стойност, то хвърли грешка
+        if (firstValue == null) { //if password from html form is null
+            //if first is null and second(confirmPassword) is null, then do NOT throw exception
+            //if first is null and second is NOT null, then DO throw exception
             valid = secondValue == null;
-        } else { //има въведен password от html формуляра
-            valid = firstValue.equals(secondValue);  //еднакви ли са password и confirmPassword от html формуляра
+        } else {
+            valid = firstValue.equals(secondValue);  //if password and confirmPassword are equal
         }
 
-        if (!valid) {  //ако не са еднакви паролите, върни errorHandling message
+        if (!valid) {  //when passwords are not the same, return errorHandling message
             context
-                    .buildConstraintViolationWithTemplate(message)  //errorHandling message-а от клас Анотацията @FieldMatch на UserRegisterDto
-                    .addPropertyNode(this.second) //задай грешката на второто поле от класа UserRegisterDto
+                    .buildConstraintViolationWithTemplate(message)  //the errorHandling message from @FieldMatch used on UserRegisterDto
+                    .addPropertyNode(this.second) //set the error message on the secondValue from UserRegisterDto
                     .addConstraintViolation()
-                    .disableDefaultConstraintViolation();  //без dafault message при грешка
+                    .disableDefaultConstraintViolation();  // without default message when error
         }
 
         return valid;

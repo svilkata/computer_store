@@ -2,8 +2,7 @@ package bg.softuni.computerStore.model.view.user;
 
 public class UserViewModel {
     private String username;
-//    private String imageUrl;
-
+    //TODO: add photo of user
 
     public UserViewModel() {
     }

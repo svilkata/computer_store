@@ -17,7 +17,5 @@ public class HomeController {
         return "index";
     }
 
-    //Само за заявка потвърждаване на поръчка да сменяме стойността на атрибута totalOrdersCount на http cookie session-a
-
-
+    // We change/update the attribute totalOrdersCount of the http cookie session only when a successful order
 }

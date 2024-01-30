@@ -1,6 +1,6 @@
 package bg.softuni.computerStore.repository.orders;
 
-import bg.softuni.computerStore.model.entity.orders.BasketOrderEntity;
+import bg.softuni.computerStore.model.entity.orders.BasketEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -9,21 +9,21 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface BasketRepository extends JpaRepository<BasketOrderEntity, Long> {
-    @Query("SELECT b FROM BasketOrderEntity b JOIN FETCH b.products WHERE b.id= :id")
-    Optional<BasketOrderEntity> findBasketByIdEager(Long id);
+public interface BasketRepository extends JpaRepository<BasketEntity, Long> {
+    @Query("SELECT b FROM BasketEntity b JOIN FETCH b.products WHERE b.id= :id")
+    Optional<BasketEntity> findBasketByIdEager(Long id);
 
-    Optional<BasketOrderEntity> findBasketOrderEntitiesById(Long id);
+    Optional<BasketEntity> findBasketOrderEntitiesById(Long id);
 
-    @Query("SELECT b FROM BasketOrderEntity b WHERE b.id= :id")
-    Optional<BasketOrderEntity> findBasketByIdLazy(Long id);
+    @Query("SELECT b FROM BasketEntity b WHERE b.id= :id")
+    Optional<BasketEntity> findBasketByIdLazy(Long id);
 
-    @Query("SELECT b.id FROM BasketOrderEntity b WHERE b.user.id= :userId")
+    @Query("SELECT b.id FROM BasketEntity b WHERE b.user.id= :userId")
     Long findBasketIdByUserId(Long userId);
 
-    @Query("SELECT b.user.id FROM BasketOrderEntity b WHERE b.id= :basketId")
+    @Query("SELECT b.user.id FROM BasketEntity b WHERE b.id= :basketId")
     Long findUserIdByBasketId(Long basketId);
 
-    @Query("SELECT b FROM BasketOrderEntity b WHERE b.basketStatus = 'OPEN'")
-    List<BasketOrderEntity> findAllBasketsLazyWithStatusOpen();
+    @Query("SELECT b FROM BasketEntity b WHERE b.basketStatus = 'OPEN'")
+    List<BasketEntity> findAllBasketsLazyWithStatusOpen();
 }

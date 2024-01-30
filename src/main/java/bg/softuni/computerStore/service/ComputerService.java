@@ -1,9 +1,9 @@
 package bg.softuni.computerStore.service;
 
 import bg.softuni.computerStore.config.mapper.StructMapper;
-import bg.softuni.computerStore.exception.ObjectIdNotANumberException;
 import bg.softuni.computerStore.exception.ItemNotFoundException;
 import bg.softuni.computerStore.exception.ItemsWithTypeNotFoundException;
+import bg.softuni.computerStore.exception.ObjectIdNotANumberException;
 import bg.softuni.computerStore.initSeed.InitializableProductService;
 import bg.softuni.computerStore.model.binding.product.AddUpdateComputerBindingDTO;
 import bg.softuni.computerStore.model.binding.product.SearchProductItemDTO;
@@ -11,7 +11,6 @@ import bg.softuni.computerStore.model.entity.picture.PictureEntity;
 import bg.softuni.computerStore.model.entity.products.ComputerEntity;
 import bg.softuni.computerStore.model.entity.products.ItemEntity;
 import bg.softuni.computerStore.model.view.product.ComputerViewGeneralModel;
-import bg.softuni.computerStore.repository.cloudinary.PictureRepository;
 import bg.softuni.computerStore.repository.products.AllItemsRepository;
 import bg.softuni.computerStore.repository.products.ProductItemSpecification;
 import bg.softuni.computerStore.service.picturesServices.PictureService;
@@ -25,7 +24,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
 
 import static bg.softuni.computerStore.constants.Constants.*;
 
@@ -35,7 +33,7 @@ public class ComputerService implements InitializableProductService {
     private final StructMapper structMapper;
     private final PictureService pictureService;
 
-    public ComputerService(AllItemsRepository allItemsRepository, StructMapper structMapper, PictureRepository pictureRepository, PictureService pictureService) {
+    public ComputerService(AllItemsRepository allItemsRepository, StructMapper structMapper, PictureService pictureService) {
         this.allItemsRepository = allItemsRepository;
         this.structMapper = structMapper;
         this.pictureService = pictureService;
@@ -43,7 +41,7 @@ public class ComputerService implements InitializableProductService {
 
     @Override
     public void init() {
-        if (allItemsRepository.findCounItemsByType("computer") < 1) {
+        if (allItemsRepository.findCountItemsByType("computer") < 1) {
             initOneComputer("Dell", "Dell Vostro 3681 SFF", 1000, 1150, 5,
                     "Intel Core i3-10100 (3.6/4.3GHz, 6M)", "Intel UHD Graphics 630",
                     "8 GB DDR4 2666 MHz", "1TB 7200rpm", "256 GB SSD M.2 NVMe",
@@ -113,10 +111,7 @@ public class ComputerService implements InitializableProductService {
         ItemEntity oneComputerById = this.allItemsRepository.findItemEntityByTypeAndItemId("computer", id)
                 .orElseThrow(() -> new ItemNotFoundException(String.format("No computer item with id %d to be viewed!", id), id));
 
-        ComputerViewGeneralModel computerViewGeneralModel =
-                this.structMapper.computerEntityToComputerSalesViewGeneralModel((ComputerEntity) oneComputerById);
-
-        return computerViewGeneralModel;
+        return this.structMapper.computerEntityToComputerSalesViewGeneralModel((ComputerEntity) oneComputerById);
     }
 
     //we do not use this method now, but it is included in the tests
@@ -137,12 +132,11 @@ public class ComputerService implements InitializableProductService {
 
     //Simpler option for pagination only
     public Page<ComputerViewGeneralModel> getAllComputersPageable(Pageable pageable) {
-        Page<ComputerViewGeneralModel> allComputers = this.allItemsRepository
+
+        return this.allItemsRepository
                 .findAllByType("computer", pageable)
                 .map(comp -> this.structMapper
                         .computerEntityToComputerSalesViewGeneralModel((ComputerEntity) comp));
-
-        return allComputers;
     }
 
 
@@ -150,12 +144,10 @@ public class ComputerService implements InitializableProductService {
     public Page<ComputerViewGeneralModel> getAllComputersPageableAndSearched(
             Pageable pageable, SearchProductItemDTO searchProductItemDTO, String type) {
 
-        Page<ComputerViewGeneralModel> allComputers = this.allItemsRepository
+        return this.allItemsRepository
                 .findAll(new ProductItemSpecification(searchProductItemDTO, type), pageable)
                 .map(comp -> this.structMapper
                         .computerEntityToComputerSalesViewGeneralModel((ComputerEntity) comp));
-
-        return allComputers;
     }
 
     public Long saveNewComputer(AddUpdateComputerBindingDTO addUpdateComputerBindingDTO) {
@@ -181,7 +173,7 @@ public class ComputerService implements InitializableProductService {
     public void deleteComputerAndQuantity(String itemId) {
         final Long id = isItemIdANumber(itemId);
 
-        //Изтриване на снимка от PictureRepositoty при изтриване на самия Item
+        //Deleting a photo image from PictureRepository when deleting the Item itself
         ItemEntity itemEntityToDelete = this.allItemsRepository.findItemEntityByTypeAndItemId("computer", id)
                 .orElseThrow(() -> new ItemNotFoundException(String.format("No computer with id %d to be deleted!", id), id));
 
@@ -258,7 +250,7 @@ public class ComputerService implements InitializableProductService {
     }
 
     private Long isItemIdANumber(String itemId) {
-        final Long itemLongId;
+        final long itemLongId;
         try {
             itemLongId = Long.parseLong(itemId);
         } catch (Exception e) {

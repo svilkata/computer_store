@@ -52,7 +52,7 @@ public class AddUpdateDeleteComputerController {
     }
 
     //IMPORTANT - once a customer puts an item in his/her basket, it is not possible to delete the item
-    //We better delete in the beginning before ordering - in case we have done a mistake
+    //We better delete in the beginning before ordering - in case we have made a mistake
     //Otherwise, we may only update the item
     @DeleteMapping("/computers/delete/{id}")
     public String deleteComputer(@PathVariable String id) {

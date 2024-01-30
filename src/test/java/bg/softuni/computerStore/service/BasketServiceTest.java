@@ -1,6 +1,6 @@
 package bg.softuni.computerStore.service;
 
-import bg.softuni.computerStore.model.entity.orders.BasketOrderEntity;
+import bg.softuni.computerStore.model.entity.orders.BasketEntity;
 import bg.softuni.computerStore.model.entity.users.UserEntity;
 import bg.softuni.computerStore.repository.orders.BasketRepository;
 import bg.softuni.computerStore.repository.users.UserRepository;
@@ -10,8 +10,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -20,8 +18,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.transaction.annotation.Transactional;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @AutoConfigureTestDatabase
@@ -168,14 +164,14 @@ class BasketServiceTest {
 
     @Test
     void readOneBasket() {
-        BasketOrderEntity basketOrder = this.basketService.readOneBasket(1L);
+        BasketEntity basketOrder = this.basketService.readOneBasket(1L);
         Assertions.assertEquals(basketOrder.getId(), 1L);
     }
 
     @Test
     @Transactional
     void getOneBasketTest() {
-        BasketOrderEntity basketOrder = this.basketService.getOneBasket(1L);
+        BasketEntity basketOrder = this.basketService.getOneBasket(1L);
         Assertions.assertEquals(basketOrder.getId(), 1L);
     }
 

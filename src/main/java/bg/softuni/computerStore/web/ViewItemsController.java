@@ -44,30 +44,9 @@ public class ViewItemsController {
         return "/viewItems/one-computer-details";
     }
 
-    //The initial 2 use scenarios of @GetMapping("/items/all/computer")
-    /*
     @GetMapping("/computer")
-    public String viewAllComputers(Model model,
-                                   @PageableDefault(page = 0,
-                                           size = 3,
-                                           sort = "sellingPrice",
-                                           direction = Sort.Direction.ASC) Pageable pageable) {
-        if (!model.containsAttribute("computers")) {
-//            List<ComputerViewGeneralModel> computers = this.computerService.findAllComputers();
-            Page<ComputerViewGeneralModel> computers = this.computerService.getAllComputersPageable(pageable);
-            model.addAttribute("computers", computers);
-        }
-
-        return "/viewItems/all-computers";
-    }
-     */
-
-    @GetMapping("/computer")
-    public String viewAllComputers(Model model,
-                                   @Valid SearchProductItemDTO searchProductItemDTO,
-                                   @PageableDefault(page = 0,
-                                           size = 3,
-                                           sort = "sellingPrice",
+    public String viewAllComputers(Model model, @Valid SearchProductItemDTO searchProductItemDTO,
+                                   @PageableDefault(page = 0, size = 3, sort = "sellingPrice",
                                            direction = Sort.Direction.ASC) Pageable pageable,
                                    RedirectAttributes redirectAttributes) {
 
@@ -75,6 +54,7 @@ public class ViewItemsController {
             model.addAttribute("searchProductItemDTO", searchProductItemDTO);
         }
 
+//      List<ComputerViewGeneralModel> computers = this.computerService.findAllComputers();
         Page<ComputerViewGeneralModel> computers = this.computerService
                 .getAllComputersPageableAndSearched(pageable, searchProductItemDTO, "computer");
         model.addAttribute("computers", computers);

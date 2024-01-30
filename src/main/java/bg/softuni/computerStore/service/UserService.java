@@ -35,7 +35,7 @@ public class UserService implements InitializableUserService {
     private final BasketService basketService;
     private final DemoEmailService demoEmailService;
 
-    public String createCustomerFromFacebookIfNotExist(String username, String email){
+    public String createCustomerFromFacebookIfNotExist(String username, String email) {
         Optional<UserEntity> optUserByUsername = this.userRepository.findByUsername(username);
         Optional<UserEntity> optUserByEmail = this.userRepository.findByEmail(email);
         if (optUserByUsername.isPresent() && optUserByEmail.isPresent()) {
@@ -46,33 +46,28 @@ public class UserService implements InitializableUserService {
             }
         }
 
-        if (optUserByUsername.isPresent() && optUserByEmail.isEmpty()) {
+        if (optUserByUsername.isPresent()) {
             return "username";
         }
 
-        if (optUserByEmail.isPresent() && optUserByUsername.isEmpty()) {
+        if (optUserByEmail.isPresent()) {
             return "email";
         }
 
+        var newCustomer = new UserEntity()
+                .setUserRoles(Set.of(userRoleRepository.findByUserRole(UserRoleEnum.CUSTOMER).get()))
+                .setUsername(username)
+                .setEmail(email)
+                .setPassword("")
+                .setFirstName(null)
+                .setLastName(null);
 
-        if (optUserByUsername.isEmpty() && optUserByEmail.isEmpty()) {
-            var newCustomer = new UserEntity()
-                    .setUserRoles(Set.of(userRoleRepository.findByUserRole(UserRoleEnum.CUSTOMER).get()))
-                    .setUsername(username)
-                    .setEmail(email)
-                    .setPassword("")
-                    .setFirstName(null)
-                    .setLastName(null);
+        UserEntity savedUser = userRepository.save(newCustomer);
 
-            UserEntity savedUser = userRepository.save(newCustomer);
+        //Creating here the relevant basket
+        this.basketService.addBasketForRegisteredUser(savedUser);
 
-            //Creating here the relevant basket
-            this.basketService.addBasketForRegisteredUser(savedUser);
-
-            return "saved new customer in the database";
-        }
-
-        return "unreachable";
+        return "saved new customer in the database";
     }
 
     public UserService(
@@ -210,12 +205,10 @@ public class UserService implements InitializableUserService {
         List<UserEntity> employees = userRepository.findAllEmployeeUsers(); //more than 1 role
         UserRoleEntity userRoleEntityAdmin = userRoleRepository.getById(1L);
 
-        List<UserViewModel> result = employees.stream()
+        return employees.stream()
                 .filter(u -> !u.getUserRoles().contains(userRoleEntityAdmin))
                 .map(u -> modelMapper.map(u, UserViewModel.class))
                 .collect(Collectors.toList());
-
-        return result;
     }
 
     public void setEmployeeRoles(UserRolesBindingDTO userRolesBindingDTO) {
@@ -288,7 +281,7 @@ public class UserService implements InitializableUserService {
         userRepository.save(userEntity);
     }
 
-    public int getCountOfRegisteredUsers(){
+    public int getCountOfRegisteredUsers() {
         return this.userRepository.findAll().size();
     }
 }

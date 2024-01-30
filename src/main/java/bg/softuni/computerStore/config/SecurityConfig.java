@@ -38,7 +38,7 @@ public class SecurityConfig {
                         authorizeRequests().
                 // everyone can download static resources (css, js, images)
                         requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll().
-                // everyone can login and register
+                // everyone can log in and register
                         antMatchers("/", "/items/all/**", "/countorders/**").permitAll().
                 antMatchers("/users/login", "/users/register").anonymous().
                 antMatchers("/users/changepassword").authenticated().

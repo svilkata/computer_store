@@ -1,16 +1,11 @@
 package bg.softuni.computerStore.web;
 
 import bg.softuni.computerStore.model.binding.cloudinary.PictureBindingModel;
-import bg.softuni.computerStore.model.entity.picture.PictureEntity;
-import bg.softuni.computerStore.model.entity.picture.CloudinaryImage;
 import bg.softuni.computerStore.service.picturesServices.PictureService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
 
 @Controller
 @RequestMapping("/pages/purchases")

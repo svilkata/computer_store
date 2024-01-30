@@ -3,10 +3,8 @@ package bg.softuni.computerStore.repository.products;
 import bg.softuni.computerStore.model.binding.product.SearchProductItemDTO;
 import bg.softuni.computerStore.model.entity.products.ItemEntity;
 import org.springframework.data.jpa.domain.Specification;
-import reactor.core.publisher.Mono;
 
 import javax.persistence.criteria.*;
-import java.util.Locale;
 
 public class ProductItemSpecification implements Specification<ItemEntity> {
     private final SearchProductItemDTO searchProductItemDTO;
@@ -18,9 +16,7 @@ public class ProductItemSpecification implements Specification<ItemEntity> {
     }
 
     @Override
-    public Predicate toPredicate(Root<ItemEntity> root,
-                                 CriteriaQuery<?> query,
-                                 CriteriaBuilder cb) {
+    public Predicate toPredicate(Root<ItemEntity> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
         Predicate predicate = cb.conjunction();
 
         predicate.getExpressions().add(cb.equal(root.get("type"), type));
@@ -32,7 +28,7 @@ public class ProductItemSpecification implements Specification<ItemEntity> {
                     //!!!!! when we have two relationally connected tables
 //                    cb.and(cb.equal(root.join("model").get("name"), searchProductItemDTO.getModel()));
 
-                    //when all fields are from the same table ItemEntity:::: the like works case insensitive
+                    //when all fields are from the same table ItemEntity:::: the like works `case insensitive`
                     cb.and(cb.like(model, "%" + searchProductItemDTO.getModel() + "%"))
             );
         }

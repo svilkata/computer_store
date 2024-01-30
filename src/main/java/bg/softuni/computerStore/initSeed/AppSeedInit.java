@@ -7,11 +7,10 @@ import java.util.List;
 
 @Component
 public class AppSeedInit {
-    //Всички service класове, които сме имплементирали с InitializableService interface,
-    // тук ни се зареждат автоматично - Open-Close principle
+    // All service classes that implement the InitializableService interface are loaded here - Open-Close principle
     private final InitializableUserService userServices;
     private final InitializablePictureService pictureService;
-    private final List<InitializableProductService> allProductServices;
+    private final List<InitializableProductService> allProductServices; //loads ComputerService, MonitorService and LaptopService
     private final InitializableBasketService basketServices;
     private final InitializableFinalOrderService finalOrderService;
 
@@ -29,7 +28,7 @@ public class AppSeedInit {
     public void beginInit() {
         this.userServices.init();  //1 initSeed method
         this.pictureService.init();  //1 initSeed method
-        this.allProductServices.forEach(srvc -> srvc.init()); //many independent not in any order inits methods of eacg product
+        this.allProductServices.forEach(srvc -> srvc.init()); //Independent not in any order init methods of ComputerService, MonitorService and LaptopService
         this.basketServices.init();  //1 initSeed method
         this.finalOrderService.init(); //1 initSeed method
     }

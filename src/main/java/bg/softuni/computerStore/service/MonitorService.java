@@ -37,7 +37,7 @@ public class MonitorService implements InitializableProductService {
 
     @Override
     public void init() {
-        if (allItemsRepository.findCounItemsByType("monitor") < 1) {
+        if (allItemsRepository.findCountItemsByType("monitor") < 1) {
             initOneMonitor("LG", "LG 29WP500-B - 29 LG 29WP500-B", 430.87, 521.69, 7,
                     "29\" (73.66 cm)", "2560 x 1080", "IPS", "178/178",
                     "75 Hz", "250 cd/m2",
@@ -85,10 +85,7 @@ public class MonitorService implements InitializableProductService {
         ItemEntity oneMonitorById = this.allItemsRepository.findItemEntityByTypeAndItemId("monitor", id)
                 .orElseThrow(() -> new ItemNotFoundException(String.format("No monitor item with id %d to be viewed!", id), id));
 
-        MonitorViewGeneralModel monitorViewGeneralModel =
-                this.structMapper.monitorEntityToMonitorViewGeneralModel((MonitorEntity) oneMonitorById);
-
-        return monitorViewGeneralModel;
+        return this.structMapper.monitorEntityToMonitorViewGeneralModel((MonitorEntity) oneMonitorById);
     }
 
     public List<MonitorViewGeneralModel> findAllMonitors() {
@@ -130,7 +127,7 @@ public class MonitorService implements InitializableProductService {
     public void deleteMonitorAndQuantity(String itemId) {
         final Long id = isItemIdANumber(itemId);
 
-        //Изтриване на снимка от PictureRepositoty при изтриване на самия Item
+        //Deleting a photo image from PictureRepository when deleting the Item itself
         ItemEntity itemEntityToDelete = this.allItemsRepository.findItemEntityByTypeAndItemId("monitor", id)
                 .orElseThrow(() -> new ItemNotFoundException(String.format("No monitor item with this %d to be deleted!", id), id));
 
@@ -209,7 +206,7 @@ public class MonitorService implements InitializableProductService {
     }
 
     private Long isItemIdANumber(String itemId) {
-        final Long itemLongId;
+        final long itemLongId;
         try {
             itemLongId = Long.parseLong(itemId);
         } catch (Exception e) {

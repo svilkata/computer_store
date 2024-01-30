@@ -3,7 +3,6 @@ package bg.softuni.computerStore.web;
 import bg.softuni.computerStore.aop.TrackLatency;
 import bg.softuni.computerStore.model.binding.user.EmployeeRegisterBindingDTO;
 import bg.softuni.computerStore.model.binding.user.UserRolesBindingDTO;
-import bg.softuni.computerStore.model.view.stats.StatsViewModelReportSales;
 import bg.softuni.computerStore.service.StatsService;
 import bg.softuni.computerStore.service.UserService;
 import org.springframework.stereotype.Controller;

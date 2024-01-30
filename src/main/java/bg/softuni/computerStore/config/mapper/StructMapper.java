@@ -10,15 +10,15 @@ import bg.softuni.computerStore.model.view.product.MonitorViewGeneralModel;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "spring")  //може да бъде expose-вано като Spring bean
+@Mapper(componentModel = "spring")  //could be exposed as Spring bean
 public interface StructMapper {
-    @Mapping(source = "photo", target = "photoUrl")
+    @Mapping(target = "photoUrl", source = "photo")
     ComputerViewGeneralModel computerEntityToComputerSalesViewGeneralModel(ComputerEntity computerEntity);
 
-    @Mapping(source = "photo", target = "photoUrl")
+    @Mapping(target = "photoUrl", source = "photo")
     MonitorViewGeneralModel monitorEntityToMonitorViewGeneralModel(MonitorEntity monitorEntity);
 
-    @Mapping(source = "photo", target = "photoUrl")
+    @Mapping(target = "photoUrl", source = "photo")
     LaptopViewGeneralModel laptopEntityToLaptopViewGeneralModel(LaptopEntity laptopEntity);
 
     //using default mapper method

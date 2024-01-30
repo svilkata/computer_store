@@ -39,7 +39,7 @@ public class AppUser implements UserDetails {
             fullName.append(getLastName());
         }
 
-        //The case when we login with facebook account
+        //The case when we log in with facebook account
         if (getFirstName() == null && getLastName() == null) {
             fullName.append(getUsername());
         }
