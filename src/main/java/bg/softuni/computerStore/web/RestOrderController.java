@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@CrossOrigin("*")
+@CrossOrigin()
 @RestController
 public class RestOrderController {
     private final FinalOrderService finalOrderService;

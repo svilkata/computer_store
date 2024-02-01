@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Objects;
 
-@CrossOrigin("*")
+@CrossOrigin()
 @RestController
 public class RestBasketController {
     private final BasketService basketService;
