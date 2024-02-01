@@ -94,7 +94,7 @@ public class UserService implements InitializableUserService {
             UserRoleEntity salesRole = new UserRoleEntity().setUserRole(UserRoleEnum.EMPLOYEE_SALES);
             UserRoleEntity customerRole = new UserRoleEntity().setUserRole(UserRoleEnum.CUSTOMER);
 
-            //тук SQL базата му слага пореден ID номер
+            //here the SQL database is saving with consecutive ID number
             adminRole = userRoleRepository.save(adminRole);
             purchaseRole = userRoleRepository.save(purchaseRole);
             salesRole = userRoleRepository.save(salesRole);

@@ -12,6 +12,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Objects;
 
 @Component
 public class OAuthSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {
@@ -25,20 +26,20 @@ public class OAuthSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
     }
 
     @Override
-    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
-                                        Authentication authentication) throws IOException, ServletException {
+    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication)
+            throws IOException, ServletException {
         if (authentication instanceof OAuth2AuthenticationToken oAuth2AuthenticationToken) {
             OAuth2User principal = oAuth2AuthenticationToken.getPrincipal();
-            var username = principal.getAttribute("name").toString();
+            var username = Objects.requireNonNull(principal.getAttribute("name")).toString();
             var email = principal.getAttribute("email").toString();
 
             //if true, then either the email or the username exists
             String customerFromFacebookIfNotExist = this.userService.createCustomerFromFacebookIfNotExist(username, email);
             if (customerFromFacebookIfNotExist.equals("username")) {
-                //Login with correct username only  TODO: it is not completely ok like that
+                //Login with correct username only
                 this.userService.login(username);
             } else if (customerFromFacebookIfNotExist.equals("email")) {
-                //Login with correct email only    TODO: it is not completely ok like that
+                //Login with correct email only
                 this.userService.login(this.userRepository.findByEmail(email).get().getUsername());
             } else if (customerFromFacebookIfNotExist.equals("saved new customer in the database") ||
                     customerFromFacebookIfNotExist.equals("user exists in the database")) {
