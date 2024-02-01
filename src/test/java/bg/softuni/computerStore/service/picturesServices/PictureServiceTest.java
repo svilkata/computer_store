@@ -22,11 +22,9 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Map;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -38,7 +36,7 @@ public class PictureServiceTest {
 
     private PictureEntity testPictureEntity1, testPictureEntity2;
     private ItemEntity testItemEntity;
-    private String testPhotoPublicId = "abcd";
+    private final String testPhotoPublicId = "abcd";
 
     //Mocked objects
     @Mock
@@ -89,8 +87,7 @@ public class PictureServiceTest {
                 "Hello World".getBytes());
 
         //Act
-        PictureEntity createdPictureEntity =
-                this.pictureService.createPictureEntity(mockedMultipartFile, 8L);
+        PictureEntity createdPictureEntity = this.pictureService.createPictureEntity(mockedMultipartFile, 8L);
 
         //Assert
         assertEquals(createdPictureEntity.getItemId(), 8L);
@@ -159,8 +156,7 @@ public class PictureServiceTest {
                 .setSellingPrice(BigDecimal.valueOf(18))
                 .setCreationDateTime(LocalDateTime.now());
 
-        when(mockedAllItemsRepository.findById(2L))
-                .thenReturn(Optional.ofNullable(testItemEntity));
+        when(mockedAllItemsRepository.findById(2L)).thenReturn(Optional.ofNullable(testItemEntity));
 //        doReturn(Optional.of(testItemEntity)).when(mockedAllItemsRepository).findById(1L);
 
         this.pictureService.savePhoto(testPictureEntity2);

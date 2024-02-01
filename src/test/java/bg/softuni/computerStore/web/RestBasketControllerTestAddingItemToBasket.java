@@ -1,7 +1,5 @@
 package bg.softuni.computerStore.web;
 
-import bg.softuni.computerStore.model.entity.users.UserEntity;
-import bg.softuni.computerStore.repository.users.UserRepository;
 import bg.softuni.computerStore.service.*;
 import bg.softuni.computerStore.service.picturesServices.PictureService;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,12 +16,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.Optional;
-
-import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -47,8 +41,6 @@ class RestBasketControllerTestAddingItemToBasket {
     private UserDetailsService appUserDetailsService;
     @Autowired
     private UserService userService;
-    @Autowired
-    private UserRepository userRepository;
 
     @Autowired
     private BasketService basketService;

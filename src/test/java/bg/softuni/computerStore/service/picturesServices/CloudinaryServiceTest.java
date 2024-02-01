@@ -16,8 +16,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
@@ -28,7 +27,7 @@ class CloudinaryServiceTest {
     private Cloudinary cloudinary;
 
     @Test
-    public void upload_must_return_correct_cloudirary_image() throws IOException {
+    public void uploadMustReturnCorrectCloudinaryImage() throws IOException {
         // Arrange
         Uploader mockUploader = Mockito.mock(Uploader.class);
         when(cloudinary.uploader()).thenReturn(mockUploader);
@@ -45,12 +44,11 @@ class CloudinaryServiceTest {
     }
 
     @Test
-    public void upload_must_throw_exception_when() throws IOException {
+    public void uploadMustThrowException() throws IOException {
         // arrange
         Uploader mockUploader = Mockito.mock(Uploader.class);
         when(cloudinary.uploader()).thenReturn(mockUploader);
-        when(mockUploader.upload(any(File.class), any(Map.class)))
-                .thenThrow(new IOException());
+        when(mockUploader.upload(any(File.class), any(Map.class))).thenThrow(new IOException());
         CloudinaryService service = new CloudinaryService(cloudinary);
 
         // act & assert
@@ -72,7 +70,7 @@ class CloudinaryServiceTest {
         boolean isDeleted = service.deleteFromCloudinary("1");
 
         // Assert
-        assertEquals(true, isDeleted);
+        assertTrue(isDeleted);
     }
 
     @Test

@@ -8,17 +8,18 @@
 
 ### Test credentials for the different users
 * **!!!!! Please, do not delete the already defaultly created items/do not upload new photo for the already defaultly created items !!!!!!**
+* **!!!!! You can create your own new Computer / Monitor that can edit and delete !!!!!!**
 * Link to the website **https://computerstoreproject.herokuapp.com/**
-* username: admin  password: 11111
+* username: admin  password: 11111 - please do not delete the default items/please do not upload new photo for the default items
 * username: customer  password: 11111
-* username: sales  password: 11111
+* username: sales  password: 11111 - please do not delete the default items/please do not upload new photo for the default items
 * username: purchase  password: 11111
 
 ### Customer functionality - **only for users who have a role CUSTOMER**
 * Every person who visits the website can register and login in the website
 * The register process sets this new user as a customer only - only role CUSTOMER 
 * Customers can add products in the basket, and make final orders
-* Facebook social login feature implemented for customers only - not cleared out yet if it is a normal behaviour if facebook user already exists in the database only by username or only by email (the facebook user should exists in the database both with username and email     or     should both username and email should not exist in the database???)
+* Facebook social login feature implemented for customers only - not cleared out yet if it is a normal behaviour if facebook user already exists in the database only by username or only by email (the facebook user should exist in the database both with username and email     or     should both username and email should not exist in the database???)
  
 ### ADMIN panel functionality - **only for ADMIN**
 * Employee of the store is any user with a role either EMPLOYEE_PURCHASES and/or EMPLOYEE_SALES
@@ -87,7 +88,7 @@ It works sorted by default (by created datetime DESCENDING) and the last added o
 
 
 ## II. SoftUni Requirements done
-### Used data srtuctures
+### Used data structures
 * Sets - for the user roles
 * Lists - and we also return Unmodifiable when needed
 
@@ -106,14 +107,14 @@ It works sorted by default (by created datetime DESCENDING) and the last added o
 * whether the buyingPrice and sellingPrice are valid whole or fractional number and not a text - when adding new products/amending existing products in the store
 
 ### Spring data, Hibernate and database
-* using MySQL (implemente/working also with PostgreSQL)
+* using MySQL (implement/working also with PostgreSQL)
 * implemented Single Table inheritance for all the products
 * all tables interconnected one another relationally
 * userId in our project is in reality always the  basketId  (userId === basketId in our project)
 * at the moment the arranged relational connection between BasketOrderEntity and UserEntity is that each user is able to have more than one basket, but in our project we use in reality only one single basket per user (maybe in the future we may need more than 1 basket per user)
 * Before the final order is confirmed, on a new page the customer enters also **delivery adddress**, **mobile number** and **notes** - this is a separate table client_orders_extra_info that is relationally connected with table orders and table users!
 * Special feature for basket and order - we have a circle of 4 tables interconnected relationally and we can approach in both directions for anything we may need
-![img_1.png](img_1.png)
+![databaseSchema.png](readme_media/databaseSchema.png)
 
 ### Cloudinary
 * For uploading or for changing the picture of each product
@@ -122,7 +123,7 @@ It works sorted by default (by created datetime DESCENDING) and the last added o
 ### Interceptors
 * Report for http request from anonymous users and authenticated users
 * I18N – change language - just a demo for the header part and some title/paragraphs of pages - from English to Bulgarian and vice versa
-* //ТODO  How many active users there are at the moment - we can display it on commons.html (NOOO!!! - how many people visited the website)
+* //ТODO  How many active users there are at the moment - we can display it on commons.html (or how many people visited the website)
 
 ### Generating HTML
 * with Thymeleaf engine secured 
@@ -132,14 +133,19 @@ It works sorted by default (by created datetime DESCENDING) and the last added o
 * using Bootstrap
 
 ### Spring security
-* only via the security chain! - not using @PreAuthorize on method level
+* via the security chain - not using @PreAuthorize on method level
+* in thymeleaf html - hasRole(), isAuthenticated()
+* via @AuthenticationPrincipal - secured MVC @Controller and @RestController JSON on method level:
+  * adding/removing items or changing quantities of the basket or just viewing the basket
+  * confirming basket into the final order
+  * final order details
+  * view final orders and change status of a final order.
 * secured user role management
 * secured password change
 * secured admin user change
 * secured adding new employee of Computer store
-* secured (MVC @Controller secured and also @RestController JSON secured - both via @AuthenticationPrincipal) - adding/removing items or changing quantities of the basket or just viewing the basket, confirming basket into the final order, final order details, view final orders and change status of a final order.
 
-### Error Handling
+### Error Handling and security
 1. Spring security default re-direct to login page for not allowed operations/wrong urls - from anonymous users
 2. Adding a custom ComputerStoreErrorHandler
 * disabling the default Spring whitelabel error.html page
@@ -148,7 +154,7 @@ It works sorted by default (by created datetime DESCENDING) and the last added o
 * picture for the error pages 404, 403 and 500
 3. More customs error handling experience with @ControllerAdvice
 * using global application exception handling with @ControllerAdvice on all GET operations - connected with items, baskets, orders
-* Exceptions for @ControllerAdvice for POST, PATCH, DELETE operations not needed as they are secured by the Spring security and CSFR (but I included them also for extra security)
+* Exceptions for @ControllerAdvice for POST, PATCH, DELETE operations not needed as they are secured by the Spring security and CSRF (but I included them also for extra security)
 4. Nobody can see other baskets and/or the page confirming the basket into a final order - except his/her own basket.
 5. Only users who have roles EMPLOYEE_SALES and ADMIN can see all the final orders. EMPLOYEE_PURCHASES and CUSTOMER can see only their own orders.
 
@@ -167,8 +173,8 @@ It works sorted by default (by created datetime DESCENDING) and the last added o
 
 ###	Scheduling jobs and Spring events
 * Schedule a job - for logged users - periodically, on every 5 minutes passed, resetting the baskets that became on status OPEN and with products in them  more than 20 minutes ago andnot yet CLOSED - after resetting the user basket, then we return the items quantities back to the available store stock quantity.
-* Using Spring event when an order is created - we catch the Spring custom event by Event listener - we increase the total numbers of orders. We also prepare for sending e-mail to the user and for adding bonus points to the user.
-* Specificity for displaying the total number of orders at the upper left corner of the webpage:
+* Publish and Subscribe mechanism - using Spring event when an order is created - we catch the Spring custom event by Event listener - we increase the total numbers of orders. We also prepare for sending e-mail to the user and for adding bonus points to the user.
+* Specificity for displaying the total number of orders in the upper left corner of the webpage:
     - in commons.html we use the following Thymeleaf phrase:  ${#session.getAttribute('totalOrdersCount')
     - when we initially start/run our whole application, the initial automatically created orders do not catch the Spring event - I do not publish these events, so our custom event listener can not catch them. (in fact our event listener is registered quite later and for sure after the @PostConstruct annotated method is first executed. We can re-arrange the event listener to be registered earlier when the application starts, but the efforts showed that the @PostConstruct is again first executed) 
     - we set a global variable for keeping the total number of orders - as we take the initial number of orders from the database
@@ -186,12 +192,12 @@ It works sorted by default (by created datetime DESCENDING) and the last added o
 * //TODO: We can make a search feature at the server-side also for other items or we can make it a global search for all or specific types of product items
 
 ### Advice (AOP)
-* Implemented Around Advice for tracking the latency of a few operations - adding an item to the basket, creating the fina order, get sales statistics
+* Implemented Around Advice for tracking the latency of a few operations - adding an item to the basket, creating the final order, get sales statistics
 * The latency info is saved in logs/logfile.log
 
 ### Unit and integration testing
 ### Coverage so far - service logic 751 lines (98%), web layer controllers 462 lines (96%). Global lines coverage - 1317 lines (61%)
-![img_2.png](img_2.png)
+![testCoverage.png](readme_media/testCoverage.png)
 * Integration testing in the web controllers and in the services - with in-memory database HyperSQL database and/or H2 database
 * Important notes before starting testing:
   - first, disable in the class AppSeedInit.java  the @PostConstrict annotated method beginInit()
@@ -208,7 +214,7 @@ It works sorted by default (by created datetime DESCENDING) and the last added o
 * Deployed project via GitHub and manual deployment of only the current "main" branch state
 * Link to the website **https://computerstoreproject.herokuapp.com/**
 * **!!!!! Please, do not delete the already defaultly created items/do not upload new photo for the already defaultly created items !!!!!!**
-* Important: For re-deploying the project again, we should keep temporary somewhere the tests folders. We should delete the test folders from the github repo branch "main", then start the deployment, and after a successfull manual deployment of the current branch "main" state, we can add afterwards the tests again in the github repo
+* Important: For re-deploying the project again, we should keep temporary somewhere the tests folders. We should delete the test folders from the github repo branch "main", then start the deployment, and after a successfull manual deployment of the current branch "main" state, we can add afterward the tests again in the github repo
 
 
 ### Demo with MailHog and javamail with Spring
@@ -219,7 +225,7 @@ It works sorted by default (by created datetime DESCENDING) and the last added o
 * Client-side rendering using Rest and @RestController and JS - the case when we have a form with POST http request and when we need to facilitate the CSRF in order such operation to be possible when Spring security with csrf enabled
 
 
-* Initialization from data.sql file - possible, but Hibernate do not like it (special hibernate_sequences should be set in order to work)
+* Initialization from data.sql file - possible
   sql:
   init:
   mode: never

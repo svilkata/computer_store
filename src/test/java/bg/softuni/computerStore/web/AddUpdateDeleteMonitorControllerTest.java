@@ -50,8 +50,7 @@ class AddUpdateDeleteMonitorControllerTest {
 
     private void loginUser(String username) {
         //The login process of user with username "admin"  doing it below
-        UserDetails userDetails =
-                appUserDetailsService.loadUserByUsername(username);
+        UserDetails userDetails = appUserDetailsService.loadUserByUsername(username);
 
         Authentication authentication =
                 new UsernamePasswordAuthenticationToken(
@@ -91,8 +90,7 @@ class AddUpdateDeleteMonitorControllerTest {
                 .setViewAngle("170 degress")
                 .setRefreshRate("60Hz");
 
-        mockMvc.perform(MockMvcRequestBuilders.post(ADD_NEW_MONITOR_PREFIX + "**")
-                        .with(csrf())
+        mockMvc.perform(MockMvcRequestBuilders.post(ADD_NEW_MONITOR_PREFIX + "**").with(csrf())
                         .param("type", "monitor")
                         .param("brand", addUpdateMonitorBindingDTO.getBrand())
                         .param("model", addUpdateMonitorBindingDTO.getModel())

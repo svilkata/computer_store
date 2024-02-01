@@ -15,7 +15,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
@@ -44,8 +43,7 @@ class AdminControllerTest {
 
     private void loginUser(String username) {
         //The login process of user with username "admin"  doing it below
-        UserDetails userDetails =
-                appUserDetailsService.loadUserByUsername(username);
+        UserDetails userDetails = appUserDetailsService.loadUserByUsername(username);
 
         Authentication authentication =
                 new UsernamePasswordAuthenticationToken(
@@ -117,8 +115,7 @@ class AdminControllerTest {
     @WithMockUser(username = "admin", roles = {"ADMIN"})
     void addUserRoleConfirmTestWhenEmployeeNotSelected() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.post(ADMIN_CONTROLLER_PREFIX + "/set-user-role")
-                        .param("username", "")
-                        .with(csrf()))
+                        .param("username", "").with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/pages/admins/set-user-role"))
                 .andExpect(flash().attribute("employeeNotSelected", true));
@@ -129,8 +126,7 @@ class AdminControllerTest {
     @Order(6)
     @WithMockUser(username = "admin", roles = {"ADMIN"})
     void statisticsHttpRequestsTest() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get(
-                                ADMIN_CONTROLLER_PREFIX + "/statshttprequests")
+        mockMvc.perform(MockMvcRequestBuilders.get(ADMIN_CONTROLLER_PREFIX + "/statshttprequests")
                         .with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(view().name("/stats/stats-httprequests"))

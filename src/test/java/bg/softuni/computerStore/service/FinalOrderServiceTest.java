@@ -2,7 +2,6 @@ package bg.softuni.computerStore.service;
 
 import bg.softuni.computerStore.exception.OrderNotFoundException;
 import bg.softuni.computerStore.model.entity.orders.FinalOrderEntity;
-import bg.softuni.computerStore.repository.users.UserRepository;
 import bg.softuni.computerStore.service.picturesServices.PictureService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,7 +17,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 @AutoConfigureTestDatabase
@@ -37,8 +36,6 @@ class FinalOrderServiceTest {
     private UserDetailsService appUserDetailsService;
     @Autowired
     private UserService userService;
-    @Autowired
-    private UserRepository userRepository;
 
     @Autowired
     private BasketService basketService;

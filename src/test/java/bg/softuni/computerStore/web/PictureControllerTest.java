@@ -1,6 +1,5 @@
 package bg.softuni.computerStore.web;
 
-import bg.softuni.computerStore.exception.MyFileUploadException;
 import bg.softuni.computerStore.model.binding.cloudinary.PictureBindingModel;
 import bg.softuni.computerStore.model.entity.picture.PictureEntity;
 import bg.softuni.computerStore.service.UserService;
@@ -24,9 +23,11 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doReturn;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureTestDatabase
@@ -56,8 +57,8 @@ public class PictureControllerTest {
         loginUser("purchase");
 
         //Arrange more
-        //Залагаме име на файла името на полето "picture" от PictureBindingModel -
-        // за да може reflection-а да си го вземе multipart обекта правилно. Яко.
+        //We set the filename to be the name of the field "picture" from PictureBindingModel -
+        // so that the reflection to take it from the multipart object correctly. Cool
         mockedMultipartFile = new MockMultipartFile(
                 "picture",
                 "hello.txt",

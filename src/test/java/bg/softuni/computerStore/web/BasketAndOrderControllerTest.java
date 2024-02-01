@@ -1,8 +1,6 @@
 package bg.softuni.computerStore.web;
 
-import bg.softuni.computerStore.exception.ObjectIdNotANumberException;
 import bg.softuni.computerStore.model.binding.order.ClientOrderExtraInfoGetViewModel;
-import bg.softuni.computerStore.model.entity.orders.ClientOrderExtraInfoEntity;
 import bg.softuni.computerStore.model.entity.orders.FinalOrderEntity;
 import bg.softuni.computerStore.model.entity.users.UserEntity;
 import bg.softuni.computerStore.repository.users.UserRepository;
@@ -22,14 +20,12 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -76,8 +72,7 @@ class BasketAndOrderControllerTest {
 
     private void loginUser(String username) {
         //The login process of user with username "admin"  doing it below
-        UserDetails userDetails =
-                appUserDetailsService.loadUserByUsername(username);
+        UserDetails userDetails = appUserDetailsService.loadUserByUsername(username);
 
         Authentication authentication =
                 new UsernamePasswordAuthenticationToken(
@@ -149,7 +144,7 @@ class BasketAndOrderControllerTest {
     void viewOrderWithItemsAndAddAddressTestSuccessfull() throws Exception {
         loginUser("customer");
         Optional<UserEntity> customer = this.userRepository.findByUsername("customer");
-        //userId е реално винаги и basketId
+        //userId is now always also a basketId
 
         //   /users/order/basketId
         mockMvc.perform(MockMvcRequestBuilders
@@ -213,7 +208,7 @@ class BasketAndOrderControllerTest {
                 .setPhoneNumber("08999888777666")
                 .setExtraNotes("bla bla bla");
 
-        //userId е реално винаги и basketId
+        //userId is now always also a basketId
         String pathVariableBasketId = String.valueOf(customer.get().getId());
 
         mockMvc.perform(MockMvcRequestBuilders.post("/users/order/{bId}", pathVariableBasketId)
@@ -237,7 +232,7 @@ class BasketAndOrderControllerTest {
                 .setPhoneNumber("08999888777666")
                 .setExtraNotes("bla bla bla");
 
-        //userId е реално винаги и basketId
+        //userId is now always also a basketId
         String pathVariableBasketId = String.valueOf(customer.get().getId());
 
         mockMvc.perform(MockMvcRequestBuilders.post("/users/order/{bId}", pathVariableBasketId)
@@ -263,7 +258,7 @@ class BasketAndOrderControllerTest {
                 .setPhoneNumber("08999888777666")
                 .setExtraNotes("bla bla bla");
 
-        //userId е реално винаги и basketId
+        //userId is now always also a basketId
         String pathVariableBasketId = String.valueOf(customer.get().getId());
 
         mockMvc.perform(MockMvcRequestBuilders.post("/users/order/{bId}", -5 + "")
@@ -288,7 +283,7 @@ class BasketAndOrderControllerTest {
                 .setPhoneNumber("08999888777666")
                 .setExtraNotes("bla bla bla");
 
-        //userId е реално винаги и basketId
+        //userId is now always also a basketId
         String pathVariableBasketId = String.valueOf(customer.get().getId());
         // customerId = 4, and we test with 2
 
@@ -329,9 +324,6 @@ class BasketAndOrderControllerTest {
     void viewOrderDetailsTestWhenOrderDoesNotExist() throws Exception {
         loginUser("sales");
 
-        Optional<UserEntity> sales = this.userRepository.findByUsername("sales");
-
-
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/users/order/{orderNumber}/details", "feqwffqfq")
                         .with(csrf()))
@@ -345,7 +337,6 @@ class BasketAndOrderControllerTest {
     void viewOrderDetailsTestOrderForbiddenException() throws Exception {
         loginUser("purchase");
 
-        Optional<UserEntity> purchase = this.userRepository.findByUsername("purchase");
         Map<Long, String> ordersTemp = new HashMap<>();
 
         List<FinalOrderEntity> allOrdersEager = this.finalOrderService.getAllOrdersEager();

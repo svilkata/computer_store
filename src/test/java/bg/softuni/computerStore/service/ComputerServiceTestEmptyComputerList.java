@@ -1,8 +1,6 @@
 package bg.softuni.computerStore.service;
 
 import bg.softuni.computerStore.exception.ItemsWithTypeNotFoundException;
-import bg.softuni.computerStore.repository.products.AllItemsRepository;
-import bg.softuni.computerStore.service.picturesServices.PictureService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

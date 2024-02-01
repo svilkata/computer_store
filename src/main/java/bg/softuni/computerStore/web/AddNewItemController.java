@@ -40,8 +40,7 @@ public class AddNewItemController {
 
     @PostMapping("/items/add")
 //    @PreAuthorize("hasRole('ROLE_ADMIN') || hasRole('ROLE_EMPLOYEE_PURCHASES')")
-    public String addNewItemTypeConfirm(
-            @Valid ProductItemTypeBindingDTO productItemTypeBindingDTO,
+    public String addNewItemTypeConfirm(@Valid ProductItemTypeBindingDTO productItemTypeBindingDTO,
             BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         Long itemModelIdPresent = -1L;
         if (!productItemTypeBindingDTO.getModel().isBlank()) {

@@ -1,7 +1,5 @@
 package bg.softuni.computerStore.service;
 
-import bg.softuni.computerStore.repository.orders.BasketRepository;
-import bg.softuni.computerStore.repository.users.UserRepository;
 import bg.softuni.computerStore.service.picturesServices.PictureService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -9,9 +7,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.core.userdetails.UserDetailsService;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @AutoConfigureTestDatabase

@@ -1,9 +1,6 @@
 package bg.softuni.computerStore.web;
 
 import bg.softuni.computerStore.model.entity.users.UserEntity;
-import bg.softuni.computerStore.repository.orders.BasketRepository;
-import bg.softuni.computerStore.repository.orders.QuantitiesItemsInBasketRepository;
-import bg.softuni.computerStore.repository.products.AllItemsRepository;
 import bg.softuni.computerStore.repository.users.UserRepository;
 import bg.softuni.computerStore.service.*;
 import bg.softuni.computerStore.service.picturesServices.PictureService;
@@ -20,7 +17,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.Optional;
 
@@ -28,7 +24,8 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureTestDatabase

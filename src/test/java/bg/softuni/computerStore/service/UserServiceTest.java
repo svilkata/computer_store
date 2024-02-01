@@ -73,8 +73,6 @@ class UserServiceTest {
 
     @Test
     void getEmployeeUsersTest() {
-        List<UserViewModel> employeeUsers = this.userService.getEmployeeUsers();
-
         List<UserViewModel> actual = this.userService.getEmployeeUsers();
 
         List<UserEntity> employees = userRepository.findAllEmployeeUsers(); //more than 1 role

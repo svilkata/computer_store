@@ -57,8 +57,8 @@ public class PictureControllerTestFailedUploadDeletePhoto {
         loginUser("purchase");
 
         //Arrange more
-        //Залагаме име на файла името на полето "picture" от PictureBindingModel -
-        // за да може reflection-а да си го вземе multipart обекта правилно. Яко.
+        //We set the filename to be the name of the field "picture" from PictureBindingModel -
+        // so that the reflection to take it from the multipart object correctly. Cool
         mockedMultipartFile = new MockMultipartFile(
                 "picture",
                 "hello.txt",

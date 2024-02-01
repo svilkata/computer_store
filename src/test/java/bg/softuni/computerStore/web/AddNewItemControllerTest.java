@@ -16,11 +16,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -53,8 +51,7 @@ class AddNewItemControllerTest {
 
     private void loginUser(String username) {
         //The login process of user with username "admin"  doing it below
-        UserDetails userDetails =
-                appUserDetailsService.loadUserByUsername(username);
+        UserDetails userDetails = appUserDetailsService.loadUserByUsername(username);
 
         Authentication authentication =
                 new UsernamePasswordAuthenticationToken(
@@ -70,8 +67,7 @@ class AddNewItemControllerTest {
 
     @Test
     void addNewItemType() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get(ADD_NEW_ITEM_PREFIX)
-                        .with(csrf()))
+        mockMvc.perform(MockMvcRequestBuilders.get(ADD_NEW_ITEM_PREFIX).with(csrf()))
                 .andExpect(view().name("/purchaseDepartment/addNewItem-choose-type-and-model"))
                 .andExpect(status().isOk());
     }
@@ -142,8 +138,7 @@ class AddNewItemControllerTest {
                 .setType("computer")
                 .setModel("My new unique computer model");
 
-        mockMvc.perform(MockMvcRequestBuilders.post(ADD_NEW_ITEM_PREFIX)
-                        .with(csrf())
+        mockMvc.perform(MockMvcRequestBuilders.post(ADD_NEW_ITEM_PREFIX).with(csrf())
                         .param("type", productItemTypeBindingDTO.getType())
                         .param("model", productItemTypeBindingDTO.getModel())
                 )

@@ -23,7 +23,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @AutoConfigureTestDatabase
-//@ExtendWith(MockitoExtension.class)
 class ComputerStoreErrorHandlerControllerTest {
     @Autowired
     private MockMvc mockMvc;

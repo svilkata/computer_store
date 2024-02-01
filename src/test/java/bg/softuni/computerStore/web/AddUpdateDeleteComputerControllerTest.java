@@ -1,11 +1,6 @@
 package bg.softuni.computerStore.web;
 
 import bg.softuni.computerStore.model.binding.product.AddUpdateComputerBindingDTO;
-import bg.softuni.computerStore.model.binding.product.ProductItemTypeBindingDTO;
-import bg.softuni.computerStore.model.entity.products.ComputerEntity;
-import bg.softuni.computerStore.model.entity.products.ItemEntity;
-import bg.softuni.computerStore.model.view.product.ComputerViewGeneralModel;
-import bg.softuni.computerStore.repository.products.AllItemsRepository;
 import bg.softuni.computerStore.service.ComputerService;
 import bg.softuni.computerStore.service.UserService;
 import bg.softuni.computerStore.service.picturesServices.PictureService;
@@ -24,9 +19,6 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 

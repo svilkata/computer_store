@@ -2,7 +2,6 @@ package bg.softuni.computerStore.web;
 
 import bg.softuni.computerStore.model.entity.orders.FinalOrderEntity;
 import bg.softuni.computerStore.model.entity.users.UserEntity;
-import bg.softuni.computerStore.repository.products.AllItemsRepository;
 import bg.softuni.computerStore.repository.users.UserRepository;
 import bg.softuni.computerStore.service.*;
 import bg.softuni.computerStore.service.picturesServices.PictureService;
@@ -26,12 +25,9 @@ import java.util.Map;
 import java.util.Optional;
 
 import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 
 @SpringBootTest
 @AutoConfigureTestDatabase
@@ -55,8 +51,6 @@ class RestOrderControllerTest {
     private UserService userService;
     @Autowired
     private UserRepository userRepository;
-    @Autowired
-    private AllItemsRepository allItemsRepository;
 
     @Autowired
     private BasketService basketService;
