@@ -178,7 +178,8 @@ public class UserService implements InitializableUserService {
         //this is the Spring representation of a User - after register, we AUTO log-in the users directly = THE LOGIN PROCESS
         login(newCustomer.getUsername());
 
-        demoEmailService.sendRegistrationEmail(savedUser.getEmail(), savedUser.getUsername());
+        //DISABLED temporary sending e-mails
+//        demoEmailService.sendRegistrationEmail(savedUser.getEmail(), savedUser.getUsername());
 
         return savedUser.getId();
     }

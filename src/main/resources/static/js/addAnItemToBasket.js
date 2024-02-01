@@ -2,6 +2,7 @@ const addAnItemToBasket = $('#additemtobasket');
 
 addAnItemToBasket.on('click', buttonClicked);
 
+// var portURL = 'http://localhost:8080';
 var portURL = 'https://computerstoreproject.herokuapp.com';
 
 function buttonClicked() {

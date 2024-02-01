@@ -1,6 +1,7 @@
 const maincontainer = $('#displayOrders');
 const roleValueCustomerOnly = maincontainer.attr('value');
 
+// var portURL = 'http://localhost:8080';
 var portURL = 'https://computerstoreproject.herokuapp.com';
 
 //With query selector it only works!!! -  ***цензура*** jQuery не ми работи с preventDefault() !!!
@@ -90,10 +91,10 @@ function displayOrders(result) {
             .text('Details');
         divBody.append(anchorDetails);
 
-        if (roleValueCustomerOnly == "true") {
+        if (roleValueCustomerOnly === "true") {
             const formChangeStatus = $('<form>').attr('method', 'GET').addClass('col-md-auto btn btn-info');
             const formLabel = $('<label>').addClass('text-white').text('Change status ');
-            if (order.orderStatus == 'DELIVERED') {
+            if (order.orderStatus === 'DELIVERED') {
                 formLabel.text('Final status ');
             }
             formChangeStatus.append(formLabel);
@@ -103,20 +104,20 @@ function displayOrders(result) {
             let option1Form = null;
             let option2Form = null;
             let option3Form = null;
-            if (order.orderStatus == 'DELIVERED') {
+            if (order.orderStatus === 'DELIVERED') {
                 option3Form = $('<option>').val('DELIVERED').text('DELIVERED');
-                option3Form.attr('selected', option3Form.val() == order.orderStatus);
+                option3Form.attr('selected', option3Form.val() === order.orderStatus);
                 formSelect.append(option3Form);
-            } else if (order.orderStatus == 'CONFIRMED_BY_STORE') {
+            } else if (order.orderStatus === 'CONFIRMED_BY_STORE') {
                 option2Form = $('<option>').val('CONFIRMED_BY_STORE').text('CONFIRMED_BY_STORE');
-                option2Form.attr('selected', option2Form.val() == order.orderStatus);
+                option2Form.attr('selected', option2Form.val() === order.orderStatus);
                 formSelect.append(option2Form);
 
                 option3Form = $('<option>').val('DELIVERED').text('DELIVERED');
                 formSelect.append(option3Form);
-            } else if (order.orderStatus == 'CONFIRMED_BY_CUSTOMER') {
+            } else if (order.orderStatus === 'CONFIRMED_BY_CUSTOMER') {
                 option1Form = $('<option>').val('CONFIRMED_BY_CUSTOMER').text('CONFIRMED_BY_CUSTOMER');
-                option1Form.attr('selected', option1Form.val() == order.orderStatus);
+                option1Form.attr('selected', option1Form.val() === order.orderStatus);
                 formSelect.append(option1Form);
 
                 option2Form = $('<option>').val('CONFIRMED_BY_STORE').text('CONFIRMED_BY_STORE');
@@ -130,8 +131,7 @@ function displayOrders(result) {
                 changeOrderStatus(event, order.orderNumber, order.orderStatus));
             formSelect.on('change', () => {
                 // console.log('We changed the select');
-                var selectVal = $('option:selected', formSelect).val(); //we get here the selected option from the <select> of the current form
-                order.orderStatus = selectVal;
+                order.orderStatus = $('option:selected', formSelect).val(); //we get here the selected option from the <select> of the current form
                 formChangeStatus.submit();
             });
         }//end of if

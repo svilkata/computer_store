@@ -22,3 +22,6 @@
 10-09-2022 23:12:44 The latency for create order is: 70ms
 10-09-2022 23:20:58 The latency for adding item to basket is: 45ms
 10-09-2022 23:21:06 The latency for create order is: 64ms
+01-02-2024 16:52:06 The latency for adding item to basket is: 40ms
+01-02-2024 17:09:34 The latency for adding item to basket is: 150ms
+01-02-2024 17:10:03 The latency for create order is: 117ms
