@@ -1,10 +1,10 @@
+import {portURL, options} from "./options.js";
+
 const container = $('#displayBasket');
 const basketId = $("#basketId").attr('value');
 
-// var portURL = 'http://localhost:8080';
-var portURL = 'https://computerstoreproject.herokuapp.com';
 
-fetch(portURL + '/users/basket/viewitems/' + basketId)
+fetch(portURL + '/users/basket/viewitems/' + basketId, options)
     .then((response) => response.json())
     .then((result) => displayBasket(result));
 
@@ -104,7 +104,7 @@ function displayBasket(result) {
 }
 
 function onChangeQuantity(itemId, newQuantity) {
-    fetch(portURL + '/users/basket/changeOneItemQuantityInBasket/' + basketId + '?itemId=' + itemId + '&newQuantity=' + newQuantity)
+    fetch(portURL + '/users/basket/changeOneItemQuantityInBasket/' + basketId + '?itemId=' + itemId + '&newQuantity=' + newQuantity, options)
         .then((response) => {
             if (response.status === 200) {
                 alert('Quantity changed successfully');
@@ -121,7 +121,7 @@ function onChangeQuantity(itemId, newQuantity) {
 }
 
 function onRemoveItemFromBasket(itemId) {
-    fetch(portURL + '/users/basket/removeOneItemFromBasket/' + basketId + '?itemId=' + itemId)
+    fetch(portURL + '/users/basket/removeOneItemFromBasket/' + basketId + '?itemId=' + itemId, options)
         .then((response) => {
             return response.json();
 

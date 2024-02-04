@@ -1,10 +1,10 @@
+import {portURL, options} from "./options.js";
+
 const maincontainer = $('#displayOrders');
 const roleValueCustomerOnly = maincontainer.attr('value');
 
-// var portURL = 'http://localhost:8080';
-var portURL = 'https://computerstoreproject.herokuapp.com';
 
-//With query selector it only works!!! -  ***цензура*** jQuery не ми работи с preventDefault() !!!
+//With query selector it only works!!! - jQuery somehow does not work when using preventDefault() !!!
 const searchOrdersForm = document.querySelector("#searchOrdersForm");
 searchOrdersForm.addEventListener("submit", onSearch);
 
@@ -14,13 +14,13 @@ function onSearch(event) {
     event.preventDefault();
     const searchField = new FormData(event.target).get('search')
 
-    fetch(portURL + '/users/order/searchorders?search=' + searchField)
+    fetch(portURL + '/users/order/searchorders?search=' + searchField, options)
         .then((response) => response.json())
         .then((result) => displayOrders(result));
 }
 
 //initial load of page
-fetch(portURL + '/users/order/viewordersrest')
+fetch(portURL + '/users/order/viewordersrest', options)
     .then((response) => response.json())
     .then((result) => displayOrders(result));
 
@@ -145,7 +145,7 @@ function changeOrderStatus(event, orderNumber, orderStatus) {
     let searchContent = searchOrdersForm.querySelector('input').value;
 
     //Normal all offers we show - no search is selected
-    fetch(portURL + '/users/order/changestatus/' + orderNumber + '?orderStatus=' + orderStatus + '&search=' + searchContent)
+    fetch(portURL + '/users/order/changestatus/' + orderNumber + '?orderStatus=' + orderStatus + '&search=' + searchContent, options)
         .then((response) => response.json())
         .then((result) => displayOrders(result));
 }

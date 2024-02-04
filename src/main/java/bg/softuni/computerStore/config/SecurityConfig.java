@@ -83,6 +83,7 @@ public class SecurityConfig {
                 successHandler(oAuthSuccessHandler);
 
         http.csrf().csrfTokenRepository(csrfTokenRepository());
+//        http.cors(cors -> cors.disable());
 
         return http.build();
     }
