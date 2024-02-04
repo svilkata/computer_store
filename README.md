@@ -17,9 +17,15 @@
 
 ### Customer functionality - **only for users who have a role CUSTOMER**
 * Every person who visits the website can register and login in the website
-* The register process sets this new user as a customer only - only role CUSTOMER 
+
+![login.png](readme_media/login.png)
+
+* The register process sets this new user as a customer only - only role CUSTOMER
+
+![register.png](readme_media/register.png)
+
 * Customers can add products in the basket, and make final orders
-* Facebook social login feature implemented for customers only - not cleared out yet if it is a normal behaviour if facebook user already exists in the database only by username or only by email (the facebook user should exist in the database both with username and email     or     should both username and email should not exist in the database???)
+* Facebook social login feature implemented for customers only - in order this feature to work, it is necessary a business meta facebook account to be created.
  
 ### ADMIN panel functionality - **only for ADMIN**
 * Employee of the store is any user with a role either EMPLOYEE_PURCHASES and/or EMPLOYEE_SALES
@@ -57,8 +63,18 @@
 * The basket with the added products can be accessed via the basket panel
 * The customer can also remove products off the basket - in such case we return the relevant quantity back to the available store stock quantity
 * No matter which user and level of authorization - a basket can be seen only by its owner!
+
+![403 forbidden area.png](readme_media%2F403%20forbidden%20area.png)
+
+* Instead of 404
+
+![404 substitute.png](readme_media/404 substitute.png)
+
 * Confirming the products and their quantity in the basket - we reset the basket and set its status to CLOSED, and also we delete rows in the help tables for quantities - but only after the system confirms the final order is created.
 * Scheduled event - for logged users - on every 5 minutes a scheduler makes a check if there are OPEN baskets with products generated more than 20 minutes ago and reset them automatically and set their status to CLOSED - when resetting any basket teh system returns the quantity of each basket product back to the available store stock quantity
+
+![baskets reseted.png](readme_media%2Fbaskets%20reseted.png)
+
 
 ### The real final order
 * Before the final order is confirmed, on a new page the customer enters also **delivery adddress**, **mobile number** and **notes**
@@ -114,6 +130,7 @@ It works sorted by default (by created datetime DESCENDING) and the last added o
 * at the moment the arranged relational connection between BasketOrderEntity and UserEntity is that each user is able to have more than one basket, but in our project we use in reality only one single basket per user (maybe in the future we may need more than 1 basket per user)
 * Before the final order is confirmed, on a new page the customer enters also **delivery adddress**, **mobile number** and **notes** - this is a separate table client_orders_extra_info that is relationally connected with table orders and table users!
 * Special feature for basket and order - we have a circle of 4 tables interconnected relationally and we can approach in both directions for anything we may need
+
 ![databaseSchema.png](readme_media/databaseSchema.png)
 
 ### Cloudinary
@@ -152,6 +169,17 @@ It works sorted by default (by created datetime DESCENDING) and the last added o
 * adding a custom ComputerStoreErrorHandler implementing the markup interface ErrorController - custom error pages for 404 Not Found, 403 Forbidden and 500 Internal Server Error.
 * when wrong url error-404.html displayed; when correct url but not authorized error-403.html displayed
 * picture for the error pages 404, 403 and 500
+
+![500 internal server error.png](readme_media%2F500%20internal%20server%20error.png)
+
+* Handled instead of 404
+
+![404 pre-handled - no computer to be viewed.png](readme_media%2F404%20pre-handled%20-%20no%20computer%20to%20be%20viewed.png)
+
+* Gif animated 404 page
+
+![404 Not found animated.png](readme_media%2F404%20Not%20found%20animated.png)
+
 3. More customs error handling experience with @ControllerAdvice
 * using global application exception handling with @ControllerAdvice on all GET operations - connected with items, baskets, orders
 * Exceptions for @ControllerAdvice for POST, PATCH, DELETE operations not needed as they are secured by the Spring security and CSRF (but I included them also for extra security)
@@ -186,9 +214,9 @@ It works sorted by default (by created datetime DESCENDING) and the last added o
     - in the method viewOrderWithItemsAndAddAddressConfirm from the class BasketAndOrderController.java, at the last but one row and after the final order is finally created, we set a new value (already increased with 1)  on the attribute "totalOrdersCount" of JSESSIONID part of  http cookie session.
 
 ### Search
-* DONE! - Searching orders at the client-side and default sorted according to the user roles - via Rest and @RestController and Fetch Api (jQuery and JS)
+* Searching orders at the client-side and default sorted according to the user roles - via Rest and @RestController and Fetch Api (jQuery and JS)
 * //TODO: We can make the search feature at the client-side rendering with Pagination functionality for the final orders - we should use JS via the rest and make all the logic for pageable in JS.
-* DONE! - Searching computers at the server-side with combined search criteria and integrated with Pagination and default sorted - via Thymeleaf and @Controller - combined search criteria by model name CASE SENSITIVE for now (brand name is always a part of the model name) and by minSellingPrice and maxSellingPrice using Specification and CriteriaBuilder
+* Searching computers at the server-side with combined search criteria and integrated with Pagination and default sorted - via Thymeleaf and @Controller - combined search criteria by model name CASE SENSITIVE for now (brand name is always a part of the model name) and by minSellingPrice and maxSellingPrice using Specification and CriteriaBuilder
 * //TODO: We can make a search feature at the server-side also for other items or we can make it a global search for all or specific types of product items
 
 ### Advice (AOP)
@@ -211,14 +239,14 @@ It works sorted by default (by created datetime DESCENDING) and the last added o
 * Default sorting by sellingPrice ascending
 
 ### Host the application in a cloud environment
-* Deployed project via GitHub and manual deployment of only the current "main" branch state
+* Deployed project via GitHub and manual deployment of only the current "main" branch
 * Link to the website **https://computerstoreproject.herokuapp.com/**
 * **!!!!! Please, do not delete the already defaultly created items/do not upload new photo for the already defaultly created items !!!!!!**
-* Important: For re-deploying the project again, we should keep temporary somewhere the tests folders. We should delete the test folders from the github repo branch "main", then start the deployment, and after a successfull manual deployment of the current branch "main" state, we can add afterward the tests again in the github repo
+* **Important:** For re-deploying the project again, we should keep temporary somewhere the tests folders. We should delete the test folders from the github repo branch "main", then start the deployment, and after a successfull manual deployment of the current branch "main" state, we can add afterward the tests again in the github repo
 
 
 ### Demo with MailHog and javamail with Spring
-* When user register, an automatic e-mail is sent to MailHog (Attention - it works only locally and is not deployed at Heroku)
+* When user register, an automatic e-mail is sent to MailHog (Attention - disabled in the deployed version)
 
 
 ## III. General MORE TODOs
