@@ -68,7 +68,7 @@
 
 * Instead of 404
 
-![404 substitute.png](readme_media/404 substitute.png)
+![404 substitute.png](readme_media%2F404%20substitute.png)
 
 * Confirming the products and their quantity in the basket - we reset the basket and set its status to CLOSED, and also we delete rows in the help tables for quantities - but only after the system confirms the final order is created.
 * Scheduled event - for logged users - on every 5 minutes a scheduler makes a check if there are OPEN baskets with products generated more than 20 minutes ago and reset them automatically and set their status to CLOSED - when resetting any basket teh system returns the quantity of each basket product back to the available store stock quantity
