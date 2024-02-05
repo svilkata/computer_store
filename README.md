@@ -6,14 +6,20 @@
 * Initialization of the initial data - via InitialazbleService interfaces according to the  Open-Close SOLID principle - at init/AppInit.java class in @PostConstruct annotated method.
 * Initialization from data.sql - see the end of this Readme file
 
+
+
+
 ### Test credentials for the different users
 * **!!!!! Please, do not delete the already defaultly created items/do not upload new photo for the already defaultly created items !!!!!!**
-* **!!!!! You can create your own new Computer / Monitor that can edit and delete !!!!!!**
+* **!!!!! You can create your own new Computer or Monitor that can edit and delete and upload photos to - when you log with user with role EMPLOYEE_PURCHASES - quickest way is to use username: purchase!!!!!!**
 * Link to the website **https://computerstoreproject.herokuapp.com/**
 * username: admin  password: 11111 - please do not delete the default items/please do not upload new photo for the default items
 * username: customer  password: 11111
-* username: sales  password: 11111 - please do not delete the default items/please do not upload new photo for the default items
-* username: purchase  password: 11111
+* username: sales  password: 11111 
+* username: purchase  password: 11111 - please do not delete the default items/please do not upload new photo for the default items
+
+
+
 
 ### Customer functionality - **only for users who have a role CUSTOMER**
 * Every person who visits the website can register and login in the website
@@ -25,25 +31,109 @@
 ![register.png](readme_media/register.png)
 
 * Customers can add products in the basket, and make final orders
-* Facebook social login feature implemented for customers only - in order this feature to work, it is necessary a business meta facebook account to be created.
- 
-### ADMIN panel functionality - **only for ADMIN**
-* Employee of the store is any user with a role either EMPLOYEE_PURCHASES and/or EMPLOYEE_SALES
-* User with ADMIN role can only add a new employee - EMPLOYEE_PURCHASES and/or EMPLOYEE_SALES
-* Possibility the ADMIN to change the roles of employees (EMPLOYEE_PURCHASES and EMPLOYEE_SALES)
-* There could be only 1 user with a role ADMIN, and he/she has all the 4 roles - ADMIN, EMPLOYEE_PURCHASES, EMPLOYEE_SALES, CUSTOMER
-* Functionality for changing which user/employee to be the new and only ADMIN user - when the new ADMIN user is successfully set, the system automatically logouts and a new login is required.
-* Every employee (seller, buyer) should have at least 2 roles (and max 3 roles) - any combination of CUSTOMER and EMPLOYEE_PURCHASES and EMPLOYEE_SALES
-* Statistics feature:
-  * for total number of orders, count of products sold, total revenue and total profit.
-  * for count of total http requests by anonymous user and by a logged user.
+
+![add item to basket.png](readme_media%2Fadd%20item%20to%20basket.png)
+
+* Facebook social login feature implemented for customers only - in order this feature to work, it is necessary a Facebook Login for Business and advanced access to public_profile - i.e. business meta facebook account to be created and verified.
+* When user is registered, we send a Welcome registration e-mail to the user - disabled in the deployed version of the project as currently sending to local MailHog email client.
+
+
+
+
+### Choosing products in the Basket - only for logged customers - the user should have for sure a role CUSTOMER
+* The basket with the added products can be accessed via the basket panel
+* Each basket has status - either CLOSED or OPEN
+* Every registered user has only 1 basket with one and the same number in the database - upon new user customer registration, the corresponding basket is created automatically
+* Option for putting product items in the basket.
+* When putting/adding a product in the basket we set by default 1 piece of that product item
+* While putting/adding products in the basket, we deduct the available store stock quantity from that product
+* The customer can also change the quantity he/she wants to buy - for each product in the basket
+
+![quantity in basket changed 1.png](readme_media%2Fquantity%20in%20basket%20changed%201.png)
+
+![quantity in basket changed 2.png](readme_media%2Fquantity%20in%20basket%20changed%202.png)
+
+* The customer can also remove the whole product item off the basket - in such case we return the relevant quantity back to the available store stock quantity
+
+![quantity in basket changed 3.png](readme_media%2Fquantity%20in%20basket%20changed%203.png)
+
+* No matter which user and level of authorization - a basket can be seen only by its owner! So admin user also does not have access!
+
+![403 forbidden area.png](readme_media%2F403%20forbidden%20area.png)
+
+* Instead of 404
+
+![404 substitute.png](readme_media%2F404%20substitute.png)
+
+* Confirming the products in the basket - by continuing with the order finalization
+* Scheduled event - for logged users - on every 5 minutes a scheduler makes a check if there are OPEN baskets with products generated more than 20 minutes ago and reset them automatically and set their status to CLOSED - when resetting any basket the system returns the quantity of each basket product back to the available store stock quantity
+
+![baskets reseted.png](readme_media%2Fbaskets%20reseted.png)
+
+
+
+
+### The real final order
+* Before the final order is confirmed, on a new page the customer enters also **delivery adddress**, **mobile number** and **notes**
+
+![confirm order.png](readme_media%2Fconfirm%20order.png)
+
+* When the customer clicks the final confirmation button, then the system generates the final order which has now a number (generated by the UUID generator) - quantities are deducted now  off the system store stock.
+
+![order details.png](readme_media%2Forder%20details.png)
+
+* Displaying my final orders (that specific customer user has created) - sorted by datetime DESCENDING - the most recent order stays on the top of the list
+
+![my orders.png](readme_media%2Fmy%20orders.png)
+
+* Or the systems displays all orders (for roles EMPLOYEE_SALES and/or ADMIN) of users capable to make orders
+
+![all orders.png](readme_media%2Fall%20orders.png)
+
+* When final order created, we increase the total numbers of orders - left upper corner. We also prepare (for now only logs) for sending order confirmation e-mail to the user and for adding bonus points to the user.
+
+
+
 
 ### Settings panel functionality - **for all users**
 * Feature each user to be able to change his/her own password
+
+![change password.png](readme_media%2Fchange%20password.png)
+
+![change password 2.png](readme_media%2Fchange%20password%202.png)
+
 * When the user is the ADMIN, it can be accessed from the admin panel
 * When a successfull password change operation,  the system automatically logouts and a new login is required.
 
-### Buyer functionality of the store - uploading computer products in the website - **only by ADMIN or EMPLOYEE_PURCHASES**
+
+
+
+### ADMIN panel functionality - **only for role ADMIN**
+* Employee of the store is any user with a role either EMPLOYEE_PURCHASES and/or EMPLOYEE_SALES
+* Only user with ADMIN role can add a new employee - EMPLOYEE_PURCHASES and/or EMPLOYEE_SALES
+
+![register employee.png](readme_media%2Fregister%20employee.png)
+
+* Every employee (seller, buyer) should have at least 2 roles (and max 3 roles) - any combination of CUSTOMER and EMPLOYEE_PURCHASES and EMPLOYEE_SALES
+* Only user with ADMIN role can change the roles of employees (EMPLOYEE_PURCHASES and EMPLOYEE_SALES)
+
+![set employee roles.png](readme_media%2Fset%20employee%20roles.png)
+
+* There could be only 1 user with a role ADMIN, and he/she has all the 4 roles - ADMIN, EMPLOYEE_PURCHASES, EMPLOYEE_SALES, CUSTOMER
+* Functionality for changing which user/employee to be the new and only ADMIN user - when the new ADMIN user is successfully set, the system automatically logouts and a new login is required.
+
+![change admin user.png](readme_media%2Fchange%20admin%20user.png)
+
+* Statistics feature:
+  * for count of total http requests by anonymous user and by a logged user.
+  * for total number of orders, count of products sold, total revenue and total profit.
+
+![statistics sales.png](readme_media%2Fstatistics%20sales.png)
+
+
+
+
+### Buyer functionality of the store - uploading computer products and update quantities - **only by role ADMIN or EMPLOYEE_PURCHASES**
 * Option for adding, editing and deleting computer elements - I use the site www.ardes.bg as information when creating new items with photos
 * Specificities/limitations/restrictions of the project: 
   * we keep always the model of each product item to be unique
@@ -53,52 +143,39 @@
   * once a customer puts an item in his/her basket, it is not possible to delete the item from the database
   * we can also change the photo of each item product. Each uploaded photo deletes automatically the previous uploaded photo for that computer item.
 
-### Choosing products in the Basket - only for logged customers - the user should have for sure a role CUSTOMER
-* Each basket has status - either CLOSED or OPEN
-* Every registered user has only 1 basket with one and the same number in the database - upon new user customer registration, the corresponding basket is created automatically
-* Option for putting product items in the basket.
-* When putting/adding a product in the basket we set 1 piece of that product item
-* While putting/adding products in the basket, we deduct the available store stock quantity from that product
-* The customer can also change the quantity he/she wants to buy - for each product in the basket 
-* The basket with the added products can be accessed via the basket panel
-* The customer can also remove products off the basket - in such case we return the relevant quantity back to the available store stock quantity
-* No matter which user and level of authorization - a basket can be seen only by its owner!
-
-![403 forbidden area.png](readme_media%2F403%20forbidden%20area.png)
-
-* Instead of 404
-
-![404 substitute.png](readme_media%2F404%20substitute.png)
-
-* Confirming the products and their quantity in the basket - we reset the basket and set its status to CLOSED, and also we delete rows in the help tables for quantities - but only after the system confirms the final order is created.
-* Scheduled event - for logged users - on every 5 minutes a scheduler makes a check if there are OPEN baskets with products generated more than 20 minutes ago and reset them automatically and set their status to CLOSED - when resetting any basket teh system returns the quantity of each basket product back to the available store stock quantity
-
-![baskets reseted.png](readme_media%2Fbaskets%20reseted.png)
 
 
-### The real final order
-* Before the final order is confirmed, on a new page the customer enters also **delivery adddress**, **mobile number** and **notes**
-* When the customer clicks the final confirmation button, then the system generates the final order which has now a number (generated by the UUID generator)
-* Displaying the final orders (sorted by datetime DESCENDING - the most recent order stays on the top of the list)
-* The system displays all orders that only that specific customer user has created, or the systems displays all orders for users with roles EMPLOYEE_SALES and/or ADMIN
 
 ### Selling functionality of the store **only by employees of the store with role EMPLOYEE_SALES or the ADMIN**
 * Changing the status of an order:
   * After a customer confirms an order, this order is processed into the database with status CONFIRMED_BY_CUSTOMER.
   * The seller checks physically if the products are present in the store, package the products, call the courier Speedy or Econt and also changes the status of the order manually to CONFIRMED_BY_STORE.
   * After the customer receives the goods from the order, the seller employee (EMPLOYEE_SALES or/and ADMIN) receives a notification by the courier for successfull delivery and then changes the order status manually to DELIVERED.
-* Status order - only for logged users - each user can see an order status - CONFIRMED_BY_CUSTOMER, CONFIRMED_BY_STORE or DELIVERED - but depending on the level of authorization - as we said users with roles EMPLOYEE_SALES and/or ADMIN can see all orders for all customers, but a user with role CUSTOMER can see only his/her own orders if any.
+* Status order - only for logged users - each user can see an order status - CONFIRMED_BY_CUSTOMER, CONFIRMED_BY_STORE or DELIVERED - but depending on the level of authorization - as we said users with roles EMPLOYEE_SALES and/or ADMIN can see all orders for all customers, but a user with role CUSTOMER can see only his/her own orders (if any).
+
+
+
 
 ### Tracing the count of total orders done
 * In the upper left corner of the webpage we can see the total number of orders done so far
-* Demo using Spring event when an order is created - we catch the Spring custom event by Event listener - we increase the total numbers of orders in this upper left corner. We also prepare for sending e-mail to the user and for adding bonus points to the user.
+
+![total orders count.png](readme_media%2Ftotal%20orders%20count.png)
+
+
+
 
 ### Search
-* Implemented client-side search for displaying/finding orders by order number via REST and Fetch API - it works only for logged-in users and the authorization is as follows:
-Each user with roles either ADMIN and/or EMPLOYEE_SALES has access to change the order status - for all existing orders possible.
-Each user with role CUSTOMER or with rolse EMPLOYEE_PURCHASES & CUSTOMER  has only the standard access - i.e. only access to his/her own orders, and not access to any / all orders.
-It works sorted by default (by created datetime DESCENDING) and the last added order appears first in the result list. 
+* Implemented client-side search for displaying/finding orders by order number via REST and Fetch API - for logged-in users:
+  * Each user with roles either ADMIN and/or EMPLOYEE_SALES has access to change the order status - for all existing orders possible.
+  * Each user with role CUSTOMER or with role EMPLOYEE_PURCHASES & CUSTOMER  has only the standard access - i.e. only access to his/her own orders, and not access to all orders.
+  * It works sorted by default (by created datetime DESCENDING) and the last added order appears first in the result list.
+
+![search orders.png](readme_media%2Fsearch%20orders.png)
+
+
 * Implemented server-side combined search for finding computers and integrated with Pagination and default sorted by price ASCENDING - the combined search criteria is by model name CASE SENSITIVE for now (brand name is always a part of the model name) and by minSellingPrice and maxSellingPrice
+
+![combined search computers.png](readme_media%2Fcombined%20search%20computers.png)
 
 
 
@@ -201,7 +278,7 @@ It works sorted by default (by created datetime DESCENDING) and the last added o
 
 ###	Scheduling jobs and Spring events
 * Schedule a job - for logged users - periodically, on every 5 minutes passed, resetting the baskets that became on status OPEN and with products in them  more than 20 minutes ago andnot yet CLOSED - after resetting the user basket, then we return the items quantities back to the available store stock quantity.
-* Publish and Subscribe mechanism - using Spring event when an order is created - we catch the Spring custom event by Event listener - we increase the total numbers of orders. We also prepare for sending e-mail to the user and for adding bonus points to the user.
+* Publish and Subscribe mechanism - using Spring event when an order is created - we catch the Spring custom event by Event listener - we increase the total numbers of orders. We also prepare (for now only logs) for sending e-mail to the user and for adding bonus points to the user.
 * Specificity for displaying the total number of orders in the upper left corner of the webpage:
     - in commons.html we use the following Thymeleaf phrase:  ${#session.getAttribute('totalOrdersCount')
     - when we initially start/run our whole application, the initial automatically created orders do not catch the Spring event - I do not publish these events, so our custom event listener can not catch them. (in fact our event listener is registered quite later and for sure after the @PostConstruct annotated method is first executed. We can re-arrange the event listener to be registered earlier when the application starts, but the efforts showed that the @PostConstruct is again first executed) 
@@ -247,6 +324,10 @@ It works sorted by default (by created datetime DESCENDING) and the last added o
 
 ### Demo with MailHog and javamail with Spring
 * When user register, an automatic e-mail is sent to MailHog (Attention - disabled in the deployed version)
+
+
+
+
 
 
 ## III. General MORE TODOs
