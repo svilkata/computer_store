@@ -133,20 +133,38 @@
 
 
 
-### Buyer functionality of the store - uploading computer products and update quantities - **only by role ADMIN or EMPLOYEE_PURCHASES**
+### PURCHASE functionality of the store - uploading computer products and update quantities - **only by role ADMIN or EMPLOYEE_PURCHASES**
 * Option for adding, editing and deleting computer elements - I use the site www.ardes.bg as information when creating new items with photos
 * Specificities/limitations/restrictions of the project: 
   * we keep always the model of each product item to be unique
+  * the details view for ADMIN or EMPLOYEE_PURCHASES roles shows also `Current Quantity:`, `Update`, `Delete` and `Upload new photo` (as `Current Quantity:` is displayed also for EMPLOYEE_SALES role):
+
+  ![computer details for purchase.png](readme_media%2Fcomputer%20details%20for%20purchase.png)
+
   * the model of the product always contains in its beginning the brand of the product - for example brand Lenovo, model Lenovo ThinkCentre Neo 50s SFF - 11SX002VBL
-  * when we add a new item, if the model already exists, then we inform the user(the ADMIN or the EMPLOYEE_PURCHASES) that this model already exists and that he/she can only loads the page/the form for updating/editing and we can update that product item with new data.
-  * we accept that when update/edit if we set new buyingPrice and sellingPrice, then these prices will be valid for all the quantity of that model. Usually we can better change other fields and of course we can add new quantity that the store bought.
-  * once a customer puts an item in his/her basket, it is not possible to delete the item from the database
-  * we can also change the photo of each item product. Each uploaded photo deletes automatically the previous uploaded photo for that computer item.
+  * so, adding new item be like (beware of special characters in the model name!)
+
+  ![Add new item 2.png](readme_media%2FAdd%20new%20item%202.png)
+
+  ![Add new item 3.png](readme_media%2FAdd%20new%20item%203.png)
+
+  * when we add a new item, if the model already exists, then we inform the user(the ADMIN or the EMPLOYEE_PURCHASES) that this model already exists and that he/she can only loads the page/the form for updating/editing and update item.
+
+  ![Add new item  1.png](readme_media%2FAdd%20new%20item%20%201.png)
+
+  * when clicking on the Update, the update item view appears - we accept that new buyingPrice and new sellingPrice will be valid for all the quantity of that model - sold or not yet. Usually we can better change other fields and of course we can add new quantity that the store bought.
+
+  ![update computer.png](readme_media%2Fupdate%20computer.png)
+  
+  * when item is present in basket, this item cannot be deleted off the database
+
+  * upload/change the photo of each item product. Each uploaded photo deletes automatically (also in the Cloudinary system) the previous uploaded photo for that computer item
+  
+  ![upload photo of item 1.png](readme_media%2Fupload%20photo%20of%20item%201.png)
+  
 
 
-
-
-### Selling functionality of the store **only by employees of the store with role EMPLOYEE_SALES or the ADMIN**
+### SALES functionality of the store **only by employees of the store with role EMPLOYEE_SALES or the ADMIN**
 * Changing the status of an order:
   * After a customer confirms an order, this order is processed into the database with status CONFIRMED_BY_CUSTOMER.
   * The seller checks physically if the products are present in the store, package the products, call the courier Speedy or Econt and also changes the status of the order manually to CONFIRMED_BY_STORE.
