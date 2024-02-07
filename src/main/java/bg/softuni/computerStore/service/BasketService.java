@@ -13,6 +13,9 @@ import bg.softuni.computerStore.repository.orders.BasketRepository;
 import bg.softuni.computerStore.repository.orders.QuantitiesItemsInBasketRepository;
 import bg.softuni.computerStore.repository.products.AllItemsRepository;
 import bg.softuni.computerStore.repository.users.UserRepository;
+import bg.softuni.computerStore.schedule.BasketDatabaseClearDataScheduler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,6 +33,7 @@ public class BasketService implements InitializableBasketService {
     private final UserRepository userRepository;
     private final AllItemsRepository allItemsRepository;
     private final QuantitiesItemsInBasketRepository quantitiesItemsInBasketRepository;
+    private static final Logger LOGGER = LoggerFactory.getLogger(BasketService.class);
 
     public BasketService(BasketRepository basketRepository, UserRepository userRepository, AllItemsRepository allItemsRepository, QuantitiesItemsInBasketRepository quantitiesItemsInBasketRepository) {
         this.basketRepository = basketRepository;
@@ -138,8 +142,8 @@ public class BasketService implements InitializableBasketService {
     }
 
 
-    @Transactional
-    @Modifying
+//    @Transactional
+//    @Modifying
     public void resetOneBasketWhenFinalOrderConfirmed(Long basketId) {
         this.quantitiesItemsInBasketRepository.deleteAllByBasket_Id(basketId);
         BasketEntity basketToReset = this.basketRepository.findBasketByIdEager(basketId).orElseThrow();
@@ -352,12 +356,15 @@ public class BasketService implements InitializableBasketService {
 
         this.quantitiesItemsInBasketRepository.deleteAllByBasket_Id(basketId);
 
-
-        BasketEntity basketToReset = this.basketRepository.findBasketByIdEager(basketId).orElseThrow();
-        basketToReset.setProducts(new ArrayList<ItemEntity>());
-        basketToReset.setBasketStatus(BasketStatus.CLOSED);
-        basketToReset.setCreationDateTime(null);
-        this.basketRepository.save(basketToReset);
+        try {
+            BasketEntity basketToReset = this.basketRepository.findBasketByIdEager(basketId).orElseThrow();
+            basketToReset.setProducts(new ArrayList<ItemEntity>());
+            basketToReset.setBasketStatus(BasketStatus.CLOSED);
+            basketToReset.setCreationDateTime(null);
+            this.basketRepository.save(basketToReset);
+        } catch (Exception e) {
+            LOGGER.warn("No present matching `baskets` entity so that we can set it to CLOSED status. No present matching respective `baskets_products` entity.");
+        }
     }
 
     public List<BasketEntity> getAllBasketsCreatedMoreThan20MinutesAgo() {

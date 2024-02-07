@@ -166,16 +166,23 @@
 
 ### SALES functionality of the store **only by employees of the store with role EMPLOYEE_SALES or the ADMIN**
 * Changing the status of an order:
-  * After a customer confirms an order, this order is processed into the database with status CONFIRMED_BY_CUSTOMER.
-  * The seller checks physically if the products are present in the store, package the products, call the courier Speedy or Econt and also changes the status of the order manually to CONFIRMED_BY_STORE.
-  * After the customer receives the goods from the order, the seller employee (EMPLOYEE_SALES or/and ADMIN) receives a notification by the courier for successfull delivery and then changes the order status manually to DELIVERED.
+  * After a customer confirms a final order, this order is processed into the database with status CONFIRMED_BY_CUSTOMER - as shown in **The real final order** section above.
+  * The seller changes the status of the order manually to CONFIRMED_BY_STORE - after checking physically if the products are present in the store and after packaging the products, then the seller calls the courier Speedy or Econt sending the goods.
+  
+  ![order confirmed by store.png](readme_media%2Forder%20confirmed%20by%20store.png)
+
+  * After the customer receives the goods from the order, the seller employee (EMPLOYEE_SALES or/and ADMIN) receives a notification by the courier for successful delivery and then changes the order status manually to DELIVERED.
+  
+  ![order delivered.png](readme_media%2Forder%20delivered.png)
+
 * Status order - only for logged users - each user can see an order status - CONFIRMED_BY_CUSTOMER, CONFIRMED_BY_STORE or DELIVERED - but depending on the level of authorization - as we said users with roles EMPLOYEE_SALES and/or ADMIN can see all orders for all customers, but a user with role CUSTOMER can see only his/her own orders (if any).
 
+![my orders status of order changed to final DELIVERED.png](readme_media%2Fmy%20orders%20status%20of%20order%20changed%20to%20final%20DELIVERED.png)
 
 
 
 ### Tracing the count of total orders done
-* In the upper left corner of the webpage we can see the total number of orders done so far
+* In the upper left corner of the webpage we can see the total number of orders done so far by all customers
 
 ![total orders count.png](readme_media%2Ftotal%20orders%20count.png)
 
