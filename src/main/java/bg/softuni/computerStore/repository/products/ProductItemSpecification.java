@@ -4,7 +4,11 @@ import bg.softuni.computerStore.model.binding.product.SearchProductItemDTO;
 import bg.softuni.computerStore.model.entity.products.ItemEntity;
 import org.springframework.data.jpa.domain.Specification;
 
-import javax.persistence.criteria.*;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 
 public class ProductItemSpecification implements Specification<ItemEntity> {
     private final SearchProductItemDTO searchProductItemDTO;
@@ -22,28 +26,27 @@ public class ProductItemSpecification implements Specification<ItemEntity> {
         predicate.getExpressions().add(cb.equal(root.get("type"), type));
 
         if (searchProductItemDTO.getModel() != null && !searchProductItemDTO.getModel().isBlank()) {
-//            Path<Object> model = root.get("model");
+//            Path<String> model = root.get("model");
             Expression<String> model = root.get("model").as(String.class);
+
             predicate.getExpressions().add(
                     //!!!!! when we have two relationally connected tables
 //                    cb.and(cb.equal(root.join("model").get("name"), searchProductItemDTO.getModel()));
 
-                    //when all fields are from the same table ItemEntity:::: the like works `case insensitive`
-                    cb.and(cb.like(model, "%" + searchProductItemDTO.getModel() + "%"))
+                    //when all fields are from the same table ItemEntity
+                    cb.and(cb.like(cb.lower(model), "%" + searchProductItemDTO.getModel().toLowerCase() + "%"))
             );
         }
 
         if (searchProductItemDTO.getMinPrice() != null) {
             predicate.getExpressions().add(
-                    cb.and(cb.greaterThanOrEqualTo(root.get("sellingPrice"),
-                            searchProductItemDTO.getMinPrice()))
+                    cb.and(cb.greaterThanOrEqualTo(root.get("sellingPrice"), searchProductItemDTO.getMinPrice()))
             );
         }
 
         if (searchProductItemDTO.getMaxPrice() != null) {
             predicate.getExpressions().add(
-                    cb.and(cb.lessThanOrEqualTo(root.get("sellingPrice"),
-                            searchProductItemDTO.getMaxPrice()))
+                    cb.and(cb.lessThanOrEqualTo(root.get("sellingPrice"), searchProductItemDTO.getMaxPrice()))
             );
         }
 

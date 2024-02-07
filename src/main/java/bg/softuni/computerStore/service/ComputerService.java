@@ -141,13 +141,11 @@ public class ComputerService implements InitializableProductService {
 
 
     //Complicated use
-    public Page<ComputerViewGeneralModel> getAllComputersPageableAndSearched(
-            Pageable pageable, SearchProductItemDTO searchProductItemDTO, String type) {
+    public Page<ComputerViewGeneralModel> getAllComputersPageableAndSearched(Pageable pageable, SearchProductItemDTO searchProductItemDTO, String type) {
 
         return this.allItemsRepository
                 .findAll(new ProductItemSpecification(searchProductItemDTO, type), pageable)
-                .map(comp -> this.structMapper
-                        .computerEntityToComputerSalesViewGeneralModel((ComputerEntity) comp));
+                .map(comp -> this.structMapper.computerEntityToComputerSalesViewGeneralModel((ComputerEntity) comp));
     }
 
     public Long saveNewComputer(AddUpdateComputerBindingDTO addUpdateComputerBindingDTO) {

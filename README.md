@@ -2,13 +2,6 @@
 # Online store for selling computers and computer components
 
 ## I. User functionality of the system
-### Initialization of initial data
-* Initialization of the initial data - via InitialazbleService interfaces according to the  Open-Close SOLID principle - at init/AppInit.java class in @PostConstruct annotated method.
-* Initialization from data.sql - see the end of this Readme file
-
-
-
-
 ### Test credentials for the different users
 * **!!!!! Please, do not delete the already defaultly created items/do not upload new photo for the already defaultly created items !!!!!!**
 * **!!!!! You can create your own new Computer or Monitor that can edit and delete and upload photos to - when you log with user with role EMPLOYEE_PURCHASES - quickest way is to use username: purchase!!!!!!**
@@ -200,14 +193,20 @@
 ![search orders.png](readme_media%2Fsearch%20orders.png)
 
 
-* Implemented server-side combined search for finding computers and integrated with Pagination and default sorted by price ASCENDING - the combined search criteria is by model name CASE SENSITIVE for now (brand name is always a part of the model name) and by minSellingPrice and maxSellingPrice
+* Implemented server-side combined search for finding computers and integrated with Pagination and default sorted by price ASCENDING - the combined search criteria is by model name **caseInsensitive** (brand name is always a part of the model name) and by minSellingPrice and maxSellingPrice
 
-![combined search computers.png](readme_media%2Fcombined%20search%20computers.png)
+![combined search computers 1.png](readme_media%2Fcombined%20search%20computers%201.png)
+
+![combined search computers 2.png](readme_media%2Fcombined%20search%20computers%202.png)
 
 
 
 
 ## II. SoftUni Requirements done
+### Initialization of initial data
+* Initialization of the initial data - via InitialazbleService interfaces according to the  Open-Close SOLID principle - at init/AppInit.java class in @PostConstruct annotated method.
+* Initialization from data.sql - see the end of this Readme file
+
 ### Used data structures
 * Sets - for the user roles
 * Lists - and we also return Unmodifiable when needed
@@ -218,7 +217,7 @@
 * Manually - via constructor и setters
 
 ### Validating user html input data
-* client-side via HTML
+* client-side via HTML (required, minlength="3", etc)
 * server-side via @Valid annotation
 
 ### 3 custom annotation validations
@@ -341,6 +340,7 @@
 * Server-side rendering implementation on the computers - with @Controller and in the Thymeleaf model
 * Default page size 3
 * Default sorting by sellingPrice ascending
+* caseInsensitive search implemented
 
 ### Host the application in a cloud environment
 * Deployed project via GitHub and manual deployment of only the current "main" branch

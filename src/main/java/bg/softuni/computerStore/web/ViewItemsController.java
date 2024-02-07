@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -45,9 +44,8 @@ public class ViewItemsController {
     }
 
     @GetMapping("/computer")
-    public String viewAllComputers(Model model, @Valid SearchProductItemDTO searchProductItemDTO,
-                                   @PageableDefault(page = 0, size = 3, sort = "sellingPrice",
-                                           direction = Sort.Direction.ASC) Pageable pageable,
+    public String viewAllComputers(Model model, SearchProductItemDTO searchProductItemDTO,
+                                   @PageableDefault(page = 0, size = 3, sort = "sellingPrice", direction = Sort.Direction.ASC) Pageable pageable,
                                    RedirectAttributes redirectAttributes) {
 
         if (!model.containsAttribute("searchProductItemDTO")) {
@@ -55,8 +53,7 @@ public class ViewItemsController {
         }
 
 //      List<ComputerViewGeneralModel> computers = this.computerService.findAllComputers();
-        Page<ComputerViewGeneralModel> computers = this.computerService
-                .getAllComputersPageableAndSearched(pageable, searchProductItemDTO, "computer");
+        Page<ComputerViewGeneralModel> computers = this.computerService.getAllComputersPageableAndSearched(pageable, searchProductItemDTO, "computer");
         model.addAttribute("computers", computers);
 
         redirectAttributes.addFlashAttribute("searchProductItemDTO", searchProductItemDTO);
