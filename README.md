@@ -161,7 +161,8 @@
   * upload/change the photo of each item product. Each uploaded photo deletes automatically (also in the Cloudinary system) the previous uploaded photo for that computer item
   
   ![upload photo of item 1.png](readme_media%2Fupload%20photo%20of%20item%201.png)
-  
+
+
 
 
 ### SALES functionality of the store **only by employees of the store with role EMPLOYEE_SALES or the ADMIN**
@@ -181,6 +182,7 @@
 
 
 
+
 ### Tracing the count of total orders done
 * In the upper left corner of the webpage we can see the total number of orders done so far by all customers
 
@@ -193,7 +195,7 @@
 * Implemented client-side search for displaying/finding orders by order number via REST and Fetch API - for logged-in users:
   * Each user with roles either ADMIN and/or EMPLOYEE_SALES has access to change the order status - for all existing orders possible.
   * Each user with role CUSTOMER or with role EMPLOYEE_PURCHASES & CUSTOMER  has only the standard access - i.e. only access to his/her own orders, and not access to all orders.
-  * It works sorted by default (by created datetime DESCENDING) and the last added order appears first in the result list.
+  * It works sorted by default (by created datetime DESCENDING) **caseInsensitive** and the last added order appears first in the result list.
 
 ![search orders.png](readme_media%2Fsearch%20orders.png)
 

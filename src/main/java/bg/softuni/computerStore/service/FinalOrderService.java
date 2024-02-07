@@ -196,10 +196,10 @@ public class FinalOrderService implements InitializableFinalOrderService {
     }
 
     public List<FinalOrderEntity> searchAllOrdersLazyByOrderNumber(String searchByOrderNumber) {
-        return this.finalOrderRepository.findAllOrdersLazyByOrderNumber(searchByOrderNumber);
+        return this.finalOrderRepository.findAllOrdersLazyByOrderNumber(searchByOrderNumber.toLowerCase());
     }
 
     public List<FinalOrderEntity> searchAllOrdersByUserIdAndOrderNumber(Long userId, String searchByOrderNumber) {
-        return this.finalOrderRepository.findAllOrdersLazyByUserIdAndOrderNumber(userId, searchByOrderNumber);
+        return this.finalOrderRepository.findAllOrdersLazyByUserIdAndOrderNumber(userId, searchByOrderNumber.toLowerCase());
     }
 }
