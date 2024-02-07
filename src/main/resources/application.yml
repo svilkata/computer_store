@@ -10,13 +10,20 @@ spring:
 #    username: postgres
 #    password: 1111
 
+#    heroku deployment
+#    driverClassName: org.postgresql.Driver
+#    url: ${JDBC_DATABASE_URL:} #Heroku uses only this variable. Username and password is automatic
+#    username: ${JDBC_DATABASE_USERNAME:}
+#    password: ${JDBC_DATABASE_PASSWORD:}
+#    hikari:
+#      connection-timeout: 30000
+#      maximum-pool-size: 10
+
+    #    railway deployment
     driverClassName: org.postgresql.Driver
-    url: ${JDBC_DATABASE_URL:}
+    url: ${JDBC_DATABASE_URL:} #Railway uses only this variable. Username and password is automatic
     username: ${JDBC_DATABASE_USERNAME:}
     password: ${JDBC_DATABASE_PASSWORD:}
-    hikari:
-      connection-timeout: 30000
-      maximum-pool-size: 10
 
   mvc:
     hiddenmethod:
