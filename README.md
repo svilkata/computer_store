@@ -199,7 +199,7 @@
 
 ![combined search computers 2.png](readme_media%2Fcombined%20search%20computers%202.png)
 
-
+![combined search computers 3.png](readme_media%2Fcombined%20search%20computers%203.png)
 
 
 ## II. SoftUni Requirements done
