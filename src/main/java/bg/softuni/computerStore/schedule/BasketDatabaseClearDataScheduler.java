@@ -22,7 +22,7 @@ public class BasketDatabaseClearDataScheduler {
 
     //<second><minute><hour><day-of-month><month><day-of-week>
     //on each 15 minutes
-    @Scheduled(fixedRate  = 300000, initialDelay = 60000)
+//    @Scheduled(fixedRate  = 300000, initialDelay = 60000) //disabled so that the deployed app to sleep and not to cost money
     public void resetBaskets(){
         LOGGER.info("Baskets resetting/clearing operation started at {}", LocalDateTime.now());
         List<BasketEntity> basketsCreatedMoreThan20MinutesAgo = this.basketService.getAllBasketsCreatedMoreThan20MinutesAgo();
