@@ -5,7 +5,8 @@
 ### Test credentials for the different users
 * **!!!!! Please, do not delete the already defaultly created items/do not upload new photo for the already defaultly created items !!!!!!**
 * **!!!!! You can create your own new Computer or Monitor that can edit and delete and upload photos to - when you log with user with role EMPLOYEE_PURCHASES - quickest way is to use username: purchase!!!!!!**
-* Link to the website **https://computerstoreproject.herokuapp.com/**
+* Main link to the website **https://web-production-08b5.up.railway.app/**
+* Link to the website **https://computerstoreproject.herokuapp.com/** (will be removed soon)
 * username: admin  password: 11111 - please do not delete the default items/please do not upload new photo for the default items
 * username: customer  password: 11111
 * username: sales  password: 11111 
@@ -348,7 +349,8 @@
 
 ### Host the application in a cloud environment
 * Deployed project via GitHub and manual deployment of only the current "main" branch
-* Link to the website **https://computerstoreproject.herokuapp.com/**
+* Main link to the website **https://web-production-08b5.up.railway.app/**
+* Link to the website **https://computerstoreproject.herokuapp.com/** (will be removed soon)
 * **!!!!! Please, do not delete the already defaultly created items/do not upload new photo for the already defaultly created items !!!!!!**
 * **Important:** For re-deploying the project again, we should keep temporary somewhere the tests folders. We should delete the test folders from the github repo branch "main", then start the deployment, and after a successfull manual deployment of the current branch "main" state, we can add afterward the tests again in the github repo
 
