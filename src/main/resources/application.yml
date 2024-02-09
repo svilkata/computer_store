@@ -21,9 +21,9 @@ spring:
 
     #    railway deployment
     driverClassName: org.postgresql.Driver
-    url: ${JDBC_DATABASE_URL:} #Railway uses only this variable. Username and password is automatic
-    username: ${JDBC_DATABASE_USERNAME:}
-    password: ${JDBC_DATABASE_PASSWORD:}
+    url: ${JDBC_DATABASE_URL} #Railway uses only this variable. Username and password is automatic
+    username: ${JDBC_DATABASE_USERNAME}
+    password: ${JDBC_DATABASE_PASSWORD}
     hikari:
       connection-timeout: 30000
       maximum-pool-size: 10
