@@ -13,8 +13,8 @@ import bg.softuni.computerStore.model.view.product.MonitorViewGeneralModel;
 import bg.softuni.computerStore.repository.products.AllItemsRepository;
 import bg.softuni.computerStore.service.picturesServices.PictureService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -36,6 +36,7 @@ public class MonitorService implements InitializableProductService {
     }
 
     @Override
+    @Transactional
     public void init() {
         if (allItemsRepository.findCountItemsByType("monitor") < 1) {
             initOneMonitor("LG", "LG 29WP500-B - 29 LG 29WP500-B", 430.87, 521.69, 7,
@@ -103,6 +104,7 @@ public class MonitorService implements InitializableProductService {
         return allMonitorsView;
     }
 
+    @Transactional
     public Long saveNewMonitor(AddUpdateMonitorBindingDTO addUpdateMonitorBindingDTO) {
         //From ItemEntity
         MonitorEntity toAdd = new MonitorEntity(addUpdateMonitorBindingDTO.getBrand(), addUpdateMonitorBindingDTO.getModel(),
@@ -175,6 +177,7 @@ public class MonitorService implements InitializableProductService {
         return addUpdateMonitorBindingDTO;
     }
 
+    @Transactional
     public Long updateExistingMonitor(AddUpdateMonitorBindingDTO addUpdateMonitorBindingDTO) {
         Long id = addUpdateMonitorBindingDTO.getItemId();
 

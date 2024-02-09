@@ -27,6 +27,10 @@
 
 ![add item to basket.png](readme_media%2Fadd%20item%20to%20basket.png)
 
+* If available stock quantity is zero, customers can add that item into their basket
+
+![item with zero quantity.png](readme_media%2Fitem%20with%20zero%20quantity.png)
+
 * Facebook social login feature implemented for customers only - in order this feature to work, it is necessary a Facebook Login for Business and advanced access to public_profile - i.e. business meta facebook account to be created and verified.
 * When user is registered, we send a Welcome registration e-mail to the user - disabled in the deployed version of the project as currently sending to local MailHog email client.
 

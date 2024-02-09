@@ -1,9 +1,9 @@
 package bg.softuni.computerStore.service;
 
 import bg.softuni.computerStore.config.mapper.StructMapper;
-import bg.softuni.computerStore.exception.ObjectIdNotANumberException;
 import bg.softuni.computerStore.exception.ItemNotFoundException;
 import bg.softuni.computerStore.exception.ItemsWithTypeNotFoundException;
+import bg.softuni.computerStore.exception.ObjectIdNotANumberException;
 import bg.softuni.computerStore.initSeed.InitializableProductService;
 import bg.softuni.computerStore.model.entity.picture.PictureEntity;
 import bg.softuni.computerStore.model.entity.products.ItemEntity;
@@ -12,6 +12,7 @@ import bg.softuni.computerStore.model.view.product.LaptopViewGeneralModel;
 import bg.softuni.computerStore.repository.products.AllItemsRepository;
 import bg.softuni.computerStore.service.picturesServices.PictureService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -33,6 +34,7 @@ public class LaptopService implements InitializableProductService {
     }
 
     @Override
+    @Transactional
     public void init() {
         if (allItemsRepository.findCountItemsByType("laptop") < 1) {
             initOneLaptop("Dell", "Dell Mobile Vostro 1234", 1300, 1400, 6,

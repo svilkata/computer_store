@@ -13,7 +13,6 @@ import bg.softuni.computerStore.repository.orders.BasketRepository;
 import bg.softuni.computerStore.repository.orders.QuantitiesItemsInBasketRepository;
 import bg.softuni.computerStore.repository.products.AllItemsRepository;
 import bg.softuni.computerStore.repository.users.UserRepository;
-import bg.softuni.computerStore.schedule.BasketDatabaseClearDataScheduler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.jpa.repository.Modifying;
@@ -44,6 +43,7 @@ public class BasketService implements InitializableBasketService {
     }
 
     @Override
+    @Transactional
     public void init() {
         if (basketRepository.count() == 0) {
             basketsInit();
@@ -142,8 +142,7 @@ public class BasketService implements InitializableBasketService {
     }
 
 
-//    @Transactional
-//    @Modifying
+//  No transaction here so to assure the whole chain of transactions either will pass or not
     public void resetOneBasketWhenFinalOrderConfirmed(Long basketId) {
         this.quantitiesItemsInBasketRepository.deleteAllByBasket_Id(basketId);
         BasketEntity basketToReset = this.basketRepository.findBasketByIdEager(basketId).orElseThrow();
@@ -153,6 +152,7 @@ public class BasketService implements InitializableBasketService {
         this.basketRepository.save(basketToReset);
     }
 
+    @Transactional
     public int addNewItemToBasket(Long itemId, Long basketId) {
         BasketEntity basketOrder = this.basketRepository.findBasketOrderEntitiesById(basketId).orElseThrow();
 //        BasketOrderEntity basketOrder = this.basketRepository.findBasketByIdEager(basketId).orElseThrow();
@@ -239,12 +239,14 @@ public class BasketService implements InitializableBasketService {
     }
 
 
+    @Transactional
     public int changeOrderedQuantity(Long basketId, Long itemId, Long newQuantity) {
         BasketEntity basketOrder = this.basketRepository.findBasketOrderEntitiesById(basketId).orElseThrow();
         ItemEntity basketOrderOneItem = this.allItemsRepository.findById(itemId).orElseThrow();
 
         return changeItemQuantityInBasket(basketOrder, basketOrderOneItem, Integer.parseInt(newQuantity + ""));
     }
+
 
     private int changeItemQuantityInBasket(BasketEntity basketOrder, ItemEntity basketOrderOneItem,
                                            int newQtityOfItemInBasket) {

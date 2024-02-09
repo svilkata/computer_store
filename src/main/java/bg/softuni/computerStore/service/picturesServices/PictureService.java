@@ -8,6 +8,7 @@ import bg.softuni.computerStore.repository.cloudinary.PictureRepository;
 import bg.softuni.computerStore.repository.products.AllItemsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Optional;
@@ -28,6 +29,7 @@ public class PictureService implements InitializablePictureService {
     }
 
     @Override
+    @Transactional
     public void init() {
         if (pictureRepository.count() == 0) {
             initOnePicture(1L, IMAGE_PUBLIC_ID_COMPUTER_1, IMAGE_URL_COMPUTER_1);
@@ -61,6 +63,7 @@ public class PictureService implements InitializablePictureService {
                 .setItemId(itemId);
     }
 
+    @Transactional
     public void savePhoto(PictureEntity picture) {
         Optional<PictureEntity> pictureEntityOpt =
                 this.pictureRepository.findPictureEntitiesByItemId(picture.getItemId());

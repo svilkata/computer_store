@@ -5,11 +5,11 @@ import bg.softuni.computerStore.exception.OrderNotFoundException;
 import bg.softuni.computerStore.initSeed.InitializableFinalOrderService;
 import bg.softuni.computerStore.model.binding.order.ClientOrderExtraInfoGetViewModel;
 import bg.softuni.computerStore.model.entity.orders.BasketEntity;
+import bg.softuni.computerStore.model.entity.orders.ClientOrderExtraInfoEntity;
 import bg.softuni.computerStore.model.entity.orders.FinalOrderEntity;
 import bg.softuni.computerStore.model.entity.orders.ItemQuantityInBasketEntity;
 import bg.softuni.computerStore.model.entity.orders.ItemQuantityInOrderEntity;
 import bg.softuni.computerStore.model.entity.products.ItemEntity;
-import bg.softuni.computerStore.model.entity.orders.ClientOrderExtraInfoEntity;
 import bg.softuni.computerStore.model.enums.OrderStatusEnum;
 import bg.softuni.computerStore.repository.orders.FinalOrderRepository;
 import bg.softuni.computerStore.repository.orders.QuantitiesItemsInOrderRepository;
@@ -46,6 +46,7 @@ public class FinalOrderService implements InitializableFinalOrderService {
     }
 
     @Override
+    @Transactional
     public void init() {
         if (finalOrderRepository.count() == 0) {
             ClientOrderExtraInfoGetViewModel clientOrderExtraInfoGetViewModel = new ClientOrderExtraInfoGetViewModel();
@@ -143,6 +144,7 @@ public class FinalOrderService implements InitializableFinalOrderService {
         return savedFinalOrder.getOrderNumber();
     }
 
+    @Transactional
     public void confirmOrderByStore(String orderNumber) {
         //It also works:
 //        UUID uuid
@@ -155,6 +157,7 @@ public class FinalOrderService implements InitializableFinalOrderService {
         this.finalOrderRepository.save(currentOrder);
     }
 
+    @Transactional
     public void markOrderAsDelivered(String orderNumber) {
         UUID uuid = this.finalOrderRepository.findByOrderNumber(orderNumber).get().getId();
 

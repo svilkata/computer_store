@@ -17,15 +17,21 @@ import bg.softuni.computerStore.service.picturesServices.PictureService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static bg.softuni.computerStore.constants.Constants.*;
+import static bg.softuni.computerStore.constants.Constants.IMAGE_PUBLIC_ID_COMPUTER_1;
+import static bg.softuni.computerStore.constants.Constants.IMAGE_PUBLIC_ID_COMPUTER_2;
+import static bg.softuni.computerStore.constants.Constants.IMAGE_PUBLIC_ID_COMPUTER_3;
+import static bg.softuni.computerStore.constants.Constants.IMAGE_PUBLIC_ID_COMPUTER_4;
+import static bg.softuni.computerStore.constants.Constants.IMAGE_PUBLIC_ID_COMPUTER_5;
+import static bg.softuni.computerStore.constants.Constants.IMAGE_PUBLIC_ID_COMPUTER_6;
+import static bg.softuni.computerStore.constants.Constants.IMAGE_PUBLIC_ID_COMPUTER_7;
 
 @Service
 public class ComputerService implements InitializableProductService {
@@ -40,6 +46,7 @@ public class ComputerService implements InitializableProductService {
     }
 
     @Override
+    @Transactional
     public void init() {
         if (allItemsRepository.findCountItemsByType("computer") < 1) {
             initOneComputer("Dell", "Dell Vostro 3681 SFF", 1000, 1150, 5,
@@ -148,6 +155,7 @@ public class ComputerService implements InitializableProductService {
                 .map(comp -> this.structMapper.computerEntityToComputerSalesViewGeneralModel((ComputerEntity) comp));
     }
 
+    @Transactional
     public Long saveNewComputer(AddUpdateComputerBindingDTO addUpdateComputerBindingDTO) {
         //From ItemEntity
         ComputerEntity toAdd = new ComputerEntity(addUpdateComputerBindingDTO.getBrand(), addUpdateComputerBindingDTO.getModel(),
@@ -218,6 +226,7 @@ public class ComputerService implements InitializableProductService {
         return addUpdateComputerBindingDTO;
     }
 
+    @Transactional
     public Long updateExistingComputer(AddUpdateComputerBindingDTO addUpdateComputerBindingDTO) {
         Long id = addUpdateComputerBindingDTO.getItemId();
 
