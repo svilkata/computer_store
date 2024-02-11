@@ -24,9 +24,9 @@ spring:
     url: jdbc:postgresql://${PG_HOST}:${PG_PORT}/${POSTGRES_DB_NAME}
     username: ${POSTGRES_USER}
     password: ${POSTGRES_PASSWORD}
-    hikari:
-      connection-timeout: 30000
-      maximum-pool-size: 10
+#    hikari:
+#      connection-timeout: 30000
+#      maximum-pool-size: 10
 
   mvc:
     hiddenmethod:
