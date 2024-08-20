@@ -375,9 +375,9 @@ Currently working with MySQL out of the box.
 
 
 ### Docker implemented
-* Dockerfile created from which a Docker image created **computer_store:v9**
+* Dockerfile created from which a Docker image created **computer_store:v11** - in order the Dockerfile to work, we should have run initially the **'mvn clean package'** command which will create the .jar file.
 * Docker image uploaded publicly to https://hub.docker.com/repository/docker/svilenvelikov/computer_store
-* In the folder docker, a Docker-compose.yaml file used to run 2 containers: MySQL9 and my app the Computer Store
+* In the folder docker, a Docker-compose.yaml file used to run 2 containers: MySQL:lastest and my app the Computer Store
 
 
 

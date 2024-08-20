@@ -1,17 +1,17 @@
 spring:
   datasource:
     #    Normal local setup for MySQL
-    #    driverClassName: com.mysql.cj.jdbc.Driver
-    #    url: jdbc:mysql://localhost:3306/computerStore?allowPublicKeyRetrieval=true&useSSL=false&createDatabaseIfNotExist=true&serverTimezone=UTC
-    #    username: root
-    #    password: 1111
+#    driverClassName: com.mysql.cj.jdbc.Driver
+#    url: jdbc:mysql://localhost:3306/computerStore?allowPublicKeyRetrieval=true&useSSL=false&createDatabaseIfNotExist=true&serverTimezone=UTC
+#    username: root
+#    password: 1111
 
 
     #    Setup for building jar which to be executed by Dockerfile and a docker image to be burnt/created
-    #    driverClassName: com.mysql.cj.jdbc.Driver
-    #    url: jdbc:mysql://${MYSQL_HOST}:${MYSQL_PORT}/computerStore?allowPublicKeyRetrieval=true&useSSL=false&createDatabaseIfNotExist=true&serverTimezone=UTC
-    #    username: ${MYSQL_USER}
-    #    password:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${MYSQL_HOST}:${MYSQL_PORT}/computerStore?allowPublicKeyRetrieval=true&useSSL=false&createDatabaseIfNotExist=true&serverTimezone=UTC
+    username: ${MYSQL_USER}
+    password:
 
 
     #    Normal local setup for PostgreSQL
@@ -32,13 +32,13 @@ spring:
 
 
     #    railway deployment
-    driverClassName: org.postgresql.Driver
-    url: jdbc:postgresql://${PG_HOST}:${PG_PORT}/${POSTGRES_DB_NAME}
-    username: ${POSTGRES_USER}
-    password: ${POSTGRES_PASSWORD}
-    hikari:
-      connection-timeout: 30000
-      maximum-pool-size: 10
+  #    driverClassName: org.postgresql.Driver
+  #    url: jdbc:postgresql://${PG_HOST}:${PG_PORT}/${POSTGRES_DB_NAME}
+  #    username: ${POSTGRES_USER}
+  #    password: ${POSTGRES_PASSWORD}
+  #    hikari:
+  #      connection-timeout: 30000
+  #      maximum-pool-size: 10
 
   mvc:
     hiddenmethod:
@@ -49,8 +49,8 @@ spring:
       max-file-size: 10MB
       max-request-size: 10MB
   jpa:
-    #    database-platform: org.hibernate.dialect.MySQL8Dialect
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    #    database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: update
     defer-datasource-initialization: true
@@ -82,7 +82,7 @@ app:
 cloudinary:
   cloud_name: "dtfd8gw16"
   api_key: "218356847735493"
-  api_secret: ${CLOUDINARY_SECRET}
+  api_secret: ${CLOUDINARY_SECRET:123}
 
 #logging:
 #  level:

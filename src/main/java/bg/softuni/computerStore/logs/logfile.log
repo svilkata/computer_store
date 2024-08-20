@@ -29,3 +29,6 @@
 07-02-2024 14:08:53 The latency for adding item to basket is: 32ms
 07-02-2024 14:09:19 The latency for create order is: 163ms
 07-02-2024 14:14:50 The latency for adding item to basket is: 29ms
+20-08-2024 17:09:38 The latency for get sales statistics is: 15ms
+20-08-2024 17:20:20 The latency for adding item to basket is: 140ms
+20-08-2024 17:20:50 The latency for get sales statistics is: 22ms
