@@ -1,18 +1,34 @@
 # Computer Store - diploma web project on JAVA and SPRING
 # Online store for selling computers and computer components
 
-## I. User functionality of the system
-### Test credentials for the different users
+## First things to know
 * **!!!!! Please, do not delete the already defaultly created items/do not upload new photo for the already defaultly created items !!!!!!**
-* **!!!!! You can create your own new Computer or Monitor that can edit and delete and upload photos to - when you log with user with role EMPLOYEE_PURCHASES - quickest way is to use username: purchase!!!!!!**
-* Main link to the website **https://web-production-08b5.up.railway.app/**
-* Link to the website **https://computerstoreproject.herokuapp.com/** (will be removed soon)
+* **!!!!! You can create your own new Computer or Monitor that can edit and delete and upload photos to - when you log with user with role EMPLOYEE_PURCHASES - quickest way is to use username: purchase and password: 11111!!!!!!**
+
+* Main link to the website **https://web-production-08b5.up.railway.app/** (currently inactive)
+* Link to the website **https://computerstoreproject.herokuapp.com/** (currently inactive)
+
+
+## How to run the project locally
+* **Option 1** - start your Docker engine/Docker Desktop, then from the terminal go to docker folder and run the **docker-compose up** command to execute the **docker-compose.yaml** file.
+Currently working with MySQL out of the box.
+
+
+* **Option 2** - when you have a local db installed or when you want db instance on a local Docker - it could be MySQL or PostgreSQL.
+
+
+* Some remarks:
+  * On Windows or on Linux when using the local Docker db instance scenario, beware that the local db process/service should be disabled so the db port is free for the Docker db instance! 
+  * On all local runs, the cloudinary functionality will not work as I am not sharing the CLOUDINARY_SECRET.
+
+
+## I. User functionality of the system
+### Login functionality - credentials for the different users
 * username: admin  password: 11111 - please do not delete the default items/please do not upload new photo for the default items
 * username: customer  password: 11111
 * username: sales  password: 11111 
 * username: purchase  password: 11111 - please do not delete the default items/please do not upload new photo for the default items
-
-
+* Also a **Facebook login** functionality for customers is implemented
 
 
 ### Customer functionality - **only for users who have a role CUSTOMER**
@@ -207,6 +223,8 @@
 ![combined search computers 3.png](readme_media%2Fcombined%20search%20computers%203.png)
 
 
+
+
 ## II. SoftUni Requirements done
 ### Initialization of initial data
 * Initialization of the initial data - via InitialazbleService interfaces according to the  Open-Close SOLID principle - at init/AppInit.java class in @PostConstruct annotated method.
@@ -222,7 +240,7 @@
 * Manually - via constructor и setters
 
 ### Validating user html input data
-* client-side via HTML (required, minlength="3", etc)
+* client-side via HTML (**required**, minlength="3", etc)
 * server-side via @Valid annotation
 
 ### 3 custom annotation validations
@@ -248,7 +266,6 @@
 ### Interceptors
 * Report for http request from anonymous users and authenticated users
 * I18N – change language - just a demo for the header part and some title/paragraphs of pages - from English to Bulgarian and vice versa
-* //ТODO  How many active users there are at the moment - we can display it on commons.html (or how many people visited the website)
 
 ### Generating HTML
 * with Thymeleaf engine secured 
@@ -294,7 +311,7 @@
 4. Nobody can see other baskets and/or the page confirming the basket into a final order - except his/her own basket.
 5. Only users who have roles EMPLOYEE_SALES and ADMIN can see all the final orders. EMPLOYEE_PURCHASES and CUSTOMER can see only their own orders.
 
-### Loading data with FETCH api in the Thymeleaf html
+### Loading data asynchronously with FETCH api in the Thymeleaf html
 * Adding, deleting and changing item quantities in the basket - via Rest and FETCH Api (jQuery and/or Vanilla JS)
 * Calling dialog boxes based on the response status of the RestController:
   - for adding a new item in the basket (when successfully added new item, when we have already added this model in the basket, or when trying to add an item with zero quantity in the store available stock)
@@ -339,7 +356,6 @@
   - first, disable in the class AppSeedInit.java  the @PostConstrict annotated method beginInit()
   - second, copy the real CLOUDINARY_SECRET in the application.yml in the test section // or other option is to set Enviromental Variables for every test class manually
 * For testing - do not use columnDefinition @Column(name = "more_info", columnDefinition = "TEXT") - (in the ItemEntity class for field moreInfo, I removed the columnDefinition so that the in-memory HyperSQL / H2 grammar is satisfied)
-* Testing with BasketServiceTest.java  - test each method separately as I am using @Transactional to re-enable the Hibernate session
 
 ### Pageable and sorted
 * Server-side rendering implementation on the computers - with @Controller and in the Thymeleaf model
@@ -348,29 +364,35 @@
 * caseInsensitive search implemented
 
 ### Host the application in a cloud environment
+* **Important:** Tests currently are not done in a way a **'mvn clean package'** command to pass successfully. For re-deploying the project again, we should keep temporary somewhere the tests folders. We should delete the test folders from the github repo branch "main", then start the deployment, and after a successful manual deployment of the current branch "main" state, we can add afterward the tests again in the github repo
 * Deployed project via GitHub and manual deployment of only the current "main" branch
-* Main link to the website **https://web-production-08b5.up.railway.app/**
-* Link to the website **https://computerstoreproject.herokuapp.com/** (will be removed soon)
-* **!!!!! Please, do not delete the already defaultly created items/do not upload new photo for the already defaultly created items !!!!!!**
-* **Important:** For re-deploying the project again, we should keep temporary somewhere the tests folders. We should delete the test folders from the github repo branch "main", then start the deployment, and after a successfull manual deployment of the current branch "main" state, we can add afterward the tests again in the github repo
+* Main link to the website **https://web-production-08b5.up.railway.app/** (currently inactive)
+* Link to the website **https://computerstoreproject.herokuapp.com/** (currently inactive)
 
 
 ### Demo with MailHog and javamail with Spring
 * When user register, an automatic e-mail is sent to MailHog (Attention - disabled in the deployed version)
 
 
-
+### Docker implemented
+* Dockerfile created from which a Docker image created **computer_store:v9**
+* Docker image uploaded publicly to https://hub.docker.com/repository/docker/svilenvelikov/computer_store
+* In the folder docker, a Docker-compose.yaml file used to run 2 containers: MySQL9 and my app the Computer Store
 
 
 
 ## III. General MORE TODOs
+* More interceptors - how many active users there are at the moment, forbidden access endpoints tracing functionality
+* More filters - RateLimitFilter of requests - if too many http requests do some action
+
+
 * Client-side rendering using Rest and @RestController and JS - the case when we have a form with POST http request and when we need to facilitate the CSRF in order such operation to be possible when Spring security with csrf enabled
 
 
 * Initialization from data.sql file - possible
   sql:
   init:
-  mode: never
+  mode: always
 
 
 * We can add more types of tiems, and it becomes easy
@@ -383,6 +405,9 @@ Ram
 
 
 * A chat feature
+
+
+* Comments, likes, favourites feature
 
 
 * Possibility for non-logged user to add products in his/her basket. But in order to final-order them, he/she must log in – after a registration and a logging, the user basket should be preserved.

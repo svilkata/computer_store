@@ -1,0 +1,26 @@
+services:
+  db:
+    image: mysql
+    ports:
+      - "3306:3306"
+    expose:
+      - '3306'
+    command: ['--character-set-server=utf8mb4', '--collation-server=utf8mb4_bin']
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+  computer_store:
+    depends_on:
+      db:
+        condition: service_healthy
+    image: svilenvelikov/computer_store:v9
+    ports:
+      - "8080:8080"
+    environment:
+      - MYSQL_HOST=db
+      - MYSQL_PORT=3306
+      - MYSQL_USER=root

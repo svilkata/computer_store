@@ -1,23 +1,35 @@
 spring:
   datasource:
-#    driverClassName: com.mysql.cj.jdbc.Driver
-#    url: jdbc:mysql://localhost:3306/computerStore?allowPublicKeyRetrieval=true&useSSL=false&createDatabaseIfNotExist=true&serverTimezone=UTC
-#    username: root
-#    password:
+    #    Normal local setup for MySQL
+    #    driverClassName: com.mysql.cj.jdbc.Driver
+    #    url: jdbc:mysql://localhost:3306/computerStore?allowPublicKeyRetrieval=true&useSSL=false&createDatabaseIfNotExist=true&serverTimezone=UTC
+    #    username: root
+    #    password: 1111
 
-#    driverClassName: org.postgresql.Driver
-#    url: jdbc:postgresql://localhost:5432/computerstore?allowPublicKeyRetrieval=true&useSSL=false&createDatabaseIfNotExist=true&serverTimezone=UTC
-#    username: postgres
-#    password: 1111
 
-#    heroku deployment
-#    driverClassName: org.postgresql.Driver
-#    url: ${JDBC_DATABASE_URL:} #Heroku uses only this variable. Username and password is automatic
-#    username: ${JDBC_DATABASE_USERNAME:}
-#    password: ${JDBC_DATABASE_PASSWORD:}
-#    hikari:
-#      connection-timeout: 30000
-#      maximum-pool-size: 10
+    #    Setup for building jar which to be executed by Dockerfile and a docker image to be burnt/created
+    #    driverClassName: com.mysql.cj.jdbc.Driver
+    #    url: jdbc:mysql://${MYSQL_HOST}:${MYSQL_PORT}/computerStore?allowPublicKeyRetrieval=true&useSSL=false&createDatabaseIfNotExist=true&serverTimezone=UTC
+    #    username: ${MYSQL_USER}
+    #    password:
+
+
+    #    Normal local setup for PostgreSQL
+    #    driverClassName: org.postgresql.Driver
+    #    url: jdbc:postgresql://localhost:5432/computerstore?allowPublicKeyRetrieval=true&useSSL=false&createDatabaseIfNotExist=true&serverTimezone=UTC
+    #    username: postgres
+    #    password: 1111
+
+
+    #    heroku deployment
+    #    driverClassName: org.postgresql.Driver
+    #    url: ${JDBC_DATABASE_URL:} #Heroku uses only this variable. Username and password is automatic
+    #    username: ${JDBC_DATABASE_USERNAME:}
+    #    password: ${JDBC_DATABASE_PASSWORD:}
+    #    hikari:
+    #      connection-timeout: 30000
+    #      maximum-pool-size: 10
+
 
     #    railway deployment
     driverClassName: org.postgresql.Driver
