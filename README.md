@@ -19,7 +19,8 @@ Currently working with MySQL out of the box.
 
 * Some remarks:
   * On Windows or on Linux when using the local Docker db instance scenario, beware that the local db process/service should be disabled so the db port is free for the Docker db instance! 
-  * On all local runs, the cloudinary functionality will not work as I am not sharing the CLOUDINARY_SECRET.
+  * On all local runs, the cloudinary functionality will not work as I am not sharing the CLOUDINARY_SECRET. But you could create/delete items!
+  * When Option 1 and due to the way I created the docker image - in TrackLatencyAspect the Around Advice to create/write the file **logs/logfile.log** is **disabled** and messages are logged in the console instead!
 
 
 ## I. User functionality of the system
@@ -375,7 +376,7 @@ Currently working with MySQL out of the box.
 
 
 ### Docker implemented
-* Dockerfile created from which a Docker image created **computer_store:v11** - in order the Dockerfile to work, we should have run initially the **'mvn clean package'** command which will create the .jar file.
+* Dockerfile created from which a Docker image created **computer_store:v12** - in order the Dockerfile to work, we should have run initially the **'mvn clean package'** command which will create the .jar file.
 * Docker image uploaded publicly to https://hub.docker.com/repository/docker/svilenvelikov/computer_store
 * In the folder docker, a Docker-compose.yaml file used to run 2 containers: MySQL:lastest and my app the Computer Store
 
