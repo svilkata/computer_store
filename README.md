@@ -29,7 +29,7 @@ Currently working with MySQL out of the box.
 * username: customer  password: 11111
 * username: sales  password: 11111 
 * username: purchase  password: 11111 - please do not delete the default items/please do not upload new photo for the default items
-* Also a **Facebook login** functionality for customers is implemented
+* Also a **Facebook login** functionality for customers is implemented with **OAuth** library
 
 
 ### Customer functionality - **only for users who have a role CUSTOMER**
