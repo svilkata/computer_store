@@ -7,6 +7,8 @@ import bg.softuni.computerStore.service.oauth2.OAuthSuccessHandler;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -17,7 +19,8 @@ import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 
 @Configuration
-//@EnableGlobalMethodSecurity(prePostEnabled = true) - we will not use @PreAuthorize on method level
+//@EnableMethodSecurity - we will not use @PreAuthorize on method level
+//@EnableGlobalMethodSecurity(prePostEnabled = true) //- we will not use @PreAuthorize on method level
 //@EnableWebSecurity - we will not use @PreAuthorize on method level
 public class SecurityConfig {
     //Here we have to expose 3 things:
